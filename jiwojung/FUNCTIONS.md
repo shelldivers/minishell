@@ -163,7 +163,7 @@ sig_t	signal(int sig, sig_t func);
 ```
 sigaction(2) 의 간소화된 인터페이스 버전   
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/signal.3.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/signal.3.html)
 ## [sigaction]
 ```c
 int	sigaction(int sig, const struct sigaction *restrict act, struct sigaction *restrict oact);
@@ -173,7 +173,7 @@ int	sigaction(int sig, const struct sigaction *restrict act, struct sigaction *r
 	
 이전 시그널도 조작이 가능하나 선택적이다   
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/sigaction.2.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/sigaction.2.html)
 ## [sigemptyset]
 ```c
 int	sigemptyset(sigset_t *set);
@@ -246,7 +246,7 @@ struct stat {
 
 성공시 `0` 반환 실패시 `-1` 반환	
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/stat.2.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/stat.2.html)
 ## [lstat]
 ```c
 #include <sys/stat.h>
@@ -272,7 +272,7 @@ dirname 라는 이름의 폴더를 열고 해당 디렉토리 stream 과 연결
 후속에 있을 작업을 위한 dirname 식별에 사용할 포인터를 반환   
 dirname 이 접근 불가 이거나 할당할 메모리가 부족하면 `NULL` 을 반환   
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/opendir.3.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/opendir.3.html)
 ## [readdir]
 ```c
 #include  <dirent.h>
@@ -302,7 +302,7 @@ int	isatty(int  fildes);
 *!)* 여기에서의 fildes 는 기존의 STD I/O 가 아니다 [터미널](#https://www.unix.com/man-page/linux/4/ttyS/)   
 참조된게 터미널이면 `1` 반환 아니면 `0` 반환   
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/isatty.3.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/isatty.3.html)
 ## [ttyname]
 ```c
 #include  <unistd.h>
@@ -335,14 +335,14 @@ char	*getenv(const char *name);
 ```
 name 과 일치하는 환경변수의 값을 가져온다   
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/getenv.3.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/getenv.3.html)
 ## [tcsetattr]
 ```c
 #include <termios.h>
 
 int	tcgetattr(int fildes, struct termios *termios_p);
 ```
-[termios structure](#https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 getting 한다  
+[termios structure](https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 getting 한다  
 
 구조체는 다음과 같다
 ```c
@@ -361,14 +361,14 @@ struct termios {
 };
 ```
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/tcsetattr.3.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/tcsetattr.3.html)
 ## [tcgetattr]
 ```c
 #include <termios.h>
 
 int	tcsetattr(int fildes, int optional_actions, const struct termios *termios_p);
 ```
-[termios structure](#https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 setting 한다  
+[termios structure](https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 setting 한다  
 
 ## [tgetent]
 ```c
@@ -383,7 +383,7 @@ name 항목을 termifo 항목 내에서 bp에 로드
 성공시 `1` 없을시 `0` 실패시 `-1` 반환 및 bp 무시
 
 *!)* -ltermcap 옵션을 필요로 한다
-[man termcat](#https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html)
+[man termcat](https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html)
 ## [tgetflag]
 ```c
 #include <curses.h>
@@ -438,4 +438,4 @@ int tputs(const char *str, int affcnt, int (*putc)(int));
 ```
 str 을 실행하여 affcnt 라는 효과를 주고 putc 로 그 결과를 출력한다   
 
-[man tputs](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/curs_terminfo.3x.html#//apple_ref/doc/man/3/curs_terminfo)
+[man tputs](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/curs_terminfo.3x.html#//apple_ref/doc/man/3/curs_terminfo)
