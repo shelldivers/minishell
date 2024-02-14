@@ -1,8 +1,13 @@
+# Shell Grammar
+
+본 문서는 [The Open Group Base Specifications Issue 6 IEEE Std 1003.1, 2004 Edition](https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html#tag_02_10_02)을 참고하여 작성하였습니다.
+
+## BNF Expression
+
 ```BNF
 /* -------------------------------------------------------
    The grammar symbols
    ------------------------------------------------------- */
-
 
 %token  WORD
 %token  ASSIGNMENT_WORD
@@ -25,6 +30,9 @@
 /* -------------------------------------------------------
    The Grammar
    ------------------------------------------------------- */
+
+/* A list is a sequence of one or more AND-OR lists separated by 
+   the operators ';' and '&' and optionally terminated by ';', '&', or <newline>. */
 
 %start  complete_command
 %%
@@ -70,9 +78,9 @@ simple_command   : cmd_prefix cmd_word cmd_suffix
                  | cmd_name cmd_suffix
                  | cmd_name
                  ;
-cmd_name         : WORD                   /* Apply rule 7a */
+cmd_name         : WORD                   /* Apply rule 7-1 */
                  ;
-cmd_word         : WORD                   /* Apply rule 7b */
+cmd_word         : WORD                   /* Apply rule 7-2 */
                  ;
 cmd_prefix       :            io_redirect
                  | cmd_prefix io_redirect
