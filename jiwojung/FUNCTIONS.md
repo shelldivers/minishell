@@ -126,7 +126,7 @@ prompt :
 prompt :
 ```
 
-[man page](#https://tiswww.case.edu/php/chet/readline/readline.html#index-rl_005fredisplay)
+[man page](https://tiswww.case.edu/php/chet/readline/readline.html#index-rl_005fredisplay)
 
 ---
 
