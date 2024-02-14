@@ -170,29 +170,20 @@ int	sigaction(int sig, const struct sigaction *restrict act, struct sigaction *r
 ```
 프로세스가 운영체제로부터 전달받는 signal 에 대한 동작을    
 정의하거나 변경하는데 사용되는 system call    
-
-signal 은 비동기적으로 발생하는 소프트웨어 interrupt 이다   
-
-	sig == 처리하려는 신호의 종류
-	sigaction
-	act
 	
+이전 시그널도 조작이 가능하나 선택적이다   
 
 [man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/sigaction.2.html)
 ## [sigemptyset]
 ```c
-
+int	sigemptyset(sigset_t *set);
 ```
-```c
-
-```
+시그널 집합을 초기화해준다 init 과 같은 의미   
 ## [sigaddset]
 ```c
-
+int	sigaddset(sigset_t *set, int signo);
 ```
-```c
-
-```
+시그널 집합에 signo 를 추가해준다
 ## [kill]
 ```c
 #include <signal.h>
@@ -325,7 +316,7 @@ char	*ttyname(int  fildes);
 
 int	ttyslot(void);
 ```
-보류
+`/dev` 위치에서 `/dev/ttyxx` 의 형태로 된 특수 장치 파일이 발견되면 `장치번호` 를 반환, 찾지 못하면 `0` 을 반환한다    
 ## [ioctl]
 ```c
 #include <sys/ioctl.h>
@@ -347,56 +338,104 @@ name 과 일치하는 환경변수의 값을 가져온다
 [man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/getenv.3.html)
 ## [tcsetattr]
 ```c
+#include <termios.h>
 
+int	tcgetattr(int fildes, struct termios *termios_p);
+```
+[termios structure](#https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 getting 한다  
+
+구조체는 다음과 같다
+```c
+typedef unsigned long	tcflag_t;
+typedef unsigned char	cc_t;
+typedef long		speed_t;	/* XXX should be unsigned long */
+
+struct termios {
+	tcflag_t	c_iflag;	/* input flags */
+	tcflag_t	c_oflag;	/* output flags */
+	tcflag_t	c_cflag;	/* control flags */
+	tcflag_t	c_lflag;	/* local flags */
+	cc_t		c_cc[NCCS];	/* control chars */
+	speed_t		c_ispeed;	/* input speed */
+	speed_t		c_ospeed;	/* output speed */
+};
 ```
 
 [man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/tcsetattr.3.html)
 ## [tcgetattr]
 ```c
+#include <termios.h>
 
+int	tcsetattr(int fildes, int optional_actions, const struct termios *termios_p);
 ```
-```c
+[termios structure](#https://opensource.apple.com/source/xnu/xnu-792/bsd/sys/termios.h.auto.html) 를 setting 한다  
 
-```
 ## [tgetent]
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+int tgetent(char *bp, const char *name);
 ```
-```c
+name 항목을 termifo 항목 내에서 bp에 로드
 
-```
+성공시 `1` 없을시 `0` 실패시 `-1` 반환 및 bp 무시
+
+*!)* -ltermcap 옵션을 필요로 한다
+[man termcat](#https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html)
 ## [tgetflag]
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+int tgetflag(char *id);
 ```
-```c
-
-```
+id 의 boolean 정보를 가져온다    
+`0` 반환시 not available id
 ## [tgetnum]
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+int tgetnum(char *id);
 ```
-```c
-
-```
+termcap 데이터베이스에서 id 에 해당하는 숫자 항목을 찾아 그 값을 가져온다   
+만약 해당하는 항목이 없을 경우 `-1` 을 반환   
 ## [tgetstr]
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+char *tgetstr(char *id, char **area);
 ```
-```c
+termcap 데이터베이스에서 id 에 해당하는 string 항목을 찾아 그 값을 반환하며 area 에는 해당 값의 null 다음을 가리키게 된다        
+만약 해당하는 항목이 없을 경우 `0` 을 반환   
 
-```
+*!)* Only the first two characters of the id parameter of tgetflag,  tgetnum and tgetstr are compared in lookups.
 ## [tgoto]
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+char *tgoto(const char *cap, int col, int row);
 ```
-```c
+주어진 cap 을 col, row 값에 맞게 실행한다   
+또한 이 루틴의 출력은 tputs 에 전달된다   
 
-```
+인스턴스화된 cap 의 출력 문자열을 반환
 ## [tputs] 
 ```c
+#include <curses.h>
+#include <term.h>
+extern char PC; extern char *UP;  extern char *BC;  extern  short ospeed;
 
+int tputs(const char *str, int affcnt, int (*putc)(int));
 ```
-```c
+str 을 실행하여 affcnt 라는 효과를 주고 putc 로 그 결과를 출력한다   
 
-```
+[man tputs](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/curs_terminfo.3x.html#//apple_ref/doc/man/3/curs_terminfo)
