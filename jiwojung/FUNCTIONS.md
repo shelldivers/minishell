@@ -277,7 +277,7 @@ int	isatty(int  fildes);
 ```
 해당 fildes 가 참조하고 있는 터미널이 유효한지 검사   
 
-*!)* 여기에서의 fildes 는 기존의 STD I/O 가 아니다 [터미널](#https://www.unix.com/man-page/linux/4/ttyS/)   
+*!)* 여기에서의 fildes 는 기존의 STD I/O 가 아니다 [터미널](https://www.unix.com/man-page/linux/4/ttyS/)   
 참조된게 터미널이면 `1` 반환 아니면 `0` 반환   
 
 [man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/isatty.3.html)
@@ -304,7 +304,7 @@ int	ioctl(int fildes, unsigned long request, ...);
 터미널을 제어한다   
 fildes 는 열려있어야 한다
 
-[man page](#https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ioctl.2.html)
+[man page](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ioctl.2.html)
 ## [getenv]
 ```c
 #include  <stdlib.h>
