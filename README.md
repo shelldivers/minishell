@@ -44,7 +44,7 @@ D-.->Z[Builtin]
 
 ## [jeongwpa]
 
-### [**`Builtins`** 구현]
+### [Builtins 구현]
 
 #### **`echo`** with option -n   
 -n 옵션을 사용할 수 있는 echo
@@ -69,7 +69,7 @@ D-.->Z[Builtin]
 
 ## [jiwojung]
 
-### [**`Parse Tree`** 구현]
+### [Parse Tree 구현]
 
 ```bnf
 /* -------------------------------------------------------
