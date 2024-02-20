@@ -6,6 +6,8 @@ project(${NAME} C CXX)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
+add_subdirectory(libft)
+
 enable_testing()
 
 # add_subdirectory(googletest)
@@ -21,6 +23,7 @@ FetchContent_MakeAvailable(googletest)
 set(SRCS includes/minishell.h srcs/minishell.c)
 
 add_library(${NAME} STATIC ${SRCS})
-target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes)
+target_link_libraries(${NAME} libft)
 
 add_subdirectory(test)
