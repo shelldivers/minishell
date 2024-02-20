@@ -1,3 +1,4 @@
+```bnf
 /* -------------------------------------------------------
    The grammar symbols
    ------------------------------------------------------- */
@@ -207,3 +208,4 @@ separator        : separator_op linebreak
 sequential_sep   : ';' linebreak
 				 | newline_list
 				 ;
+```
