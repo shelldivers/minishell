@@ -18,6 +18,8 @@
 
 t_bool	is_option(char *str)
 {
+	if (!str)
+		return (FALSE);
 	if (ft_strncmp(str, "-n", 2) == 0)
 	{
 		if (str[2] == '\0' || str[2] == ' ')

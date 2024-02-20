@@ -23,3 +23,10 @@ TEST(echo, invalid_option)
 	int argc = 4;
 	echo(argc, argv);
 }
+
+TEST(echo, no_argv)
+{
+	char *argv[] = {"echo", NULL};
+	int argc = 1;
+	echo(argc, argv);
+}
