@@ -5,7 +5,7 @@
 extern "C" {
 # endif
 
-// here
+int	cd(int argc, char** argv);
 
 # ifdef __cplusplus
 }
