@@ -1,39 +1,38 @@
-```ebnf
+```bnf
 /* -------------------------------------------------------
    The grammar symbols
    ------------------------------------------------------- */
 
 
-%token  WORD                // 일반 명령어
+%token  WORD                // 일반 명령어, 인수
 %token  ASSIGNMENT_WORD     // 환경 변수
-%token  NAME                //
-%token  NEWLINE             //
-%token  IO_NUMBER           //
+%token  NEWLINE             // 개행문자
+%token  IO_NUMBER           // 입출력 파일 디스크립터 번호
 
 
 /* The following are the operators mentioned above. */
 
 
-%token  AND_IF    OR_IF    DSEMI
+%token  AND_IF    OR_IF    !DSEMI
 /*      '&&'      '||'     ';;'    */
 
 
-%token  DLESS  DGREAT  LESSAND  GREATAND  LESSGREAT  DLESSDASH
-/*      '<<'   '>>'    '<&'     '>&'      '<>'       '<<-'   */
+%token  DLESS  DGREAT  !LESSAND  !GREATAND  LESSGREAT  !DLESSDASH
+/*      '<<'   '>>'      '<&'       '>&'       '<>'       '<<-'   */
 
 
-%token  CLOBBER
-/*      '>|'   */
+%token  !CLOBBER
+/*        '>|'   */
 
 
 /* The following are the reserved words. */
 
 
-%token  If    Then    Else    Elif    Fi    Do    Done
+%token  If    Then    Else    Elif    Fi    !Do    !Done
 /*      'if'  'then'  'else'  'elif'  'fi'  'do'  'done'   */
 
 
-%token  Case    Esac    While    Until    For
+%token  !Case    !Esac    !While    !Until    !For
 /*      'case'  'esac'  'while'  'until'  'for'   */
 
 
@@ -41,11 +40,11 @@
    recognized when reserved words are recognized. */
 
 
-%token  Lbrace    Rbrace    Bang
+%token  Lbrace    Rbrace    !Bang
 /*      '{'       '}'       '!'   */
 
 
-%token  In
+%token  !In
 /*      'in'   */
 
 
@@ -67,7 +66,6 @@ and_or           :                         pipeline
 				 | and_or OR_IF  linebreak pipeline
 				 ;
 pipeline         :      pipe_sequence
-				 | Bang pipe_sequence
 				 ;
 pipe_sequence    :                             command
 				 | pipe_sequence '|' linebreak command
@@ -120,11 +118,6 @@ case_item_ns     :     pattern ')'               linebreak
 				 |     pattern ')' compound_list linebreak
 				 | '(' pattern ')'               linebreak
 				 | '(' pattern ')' compound_list linebreak
-				 ;
-case_item        :     pattern ')' linebreak     DSEMI linebreak
-				 |     pattern ')' compound_list DSEMI linebreak
-				 | '(' pattern ')' linebreak     DSEMI linebreak
-				 | '(' pattern ')' compound_list DSEMI linebreak
 				 ;
 pattern          :             WORD         /* Apply rule 4 */
 				 | pattern '|' WORD         /* Do not apply rule 4 */
@@ -181,15 +174,12 @@ io_redirect      :           io_file
 io_file          : '<'       filename
 				 | LESSAND   filename
 				 | '>'       filename
-				 | GREATAND  filename
 				 | DGREAT    filename
 				 | LESSGREAT filename
-				 | CLOBBER   filename
 				 ;
 filename         : WORD                      /* Apply rule 2 */
 				 ;
 io_here          : DLESS     here_end
-				 | DLESSDASH here_end
 				 ;
 here_end         : WORD                      /* Apply rule 3 */
 				 ;
