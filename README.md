@@ -15,17 +15,14 @@
 
 ```mermaid
 gantt
-dateFormat 2024-02-19
+dateFormat YYYY-MM-DD
 title minishell
 
-
 section jeongwpa
-
-Builtin : active, des1, 2024-02-19,4d
+	Builtin : active, des1, 2024-02-19, 2024-02-23
 
 section jiwojung
-Parse Tree : active, des1, 2024-02-19,4d
-
+	Parse Tree : active, des1, 2024-02-19, 2024-02-23
 
 ```
 
