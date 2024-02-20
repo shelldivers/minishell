@@ -38,8 +38,12 @@ int	echo(int argc, char **argv)
 	if (n_flag == TRUE)
 		i++;
 	while (i < argc)
-		printf("%s ", argv[i++]);
-	if (n_flag == TRUE)
+	{
+		printf("%s", argv[i++]);
+		if (i != argc)
+			printf(" ");
+	}
+	if (n_flag == FALSE)
 		printf("\n");
 	return (0);
 }
