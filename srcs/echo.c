@@ -45,5 +45,5 @@ int	echo(int argc, char **argv)
 	}
 	if (n_flag == FALSE)
 		printf("\n");
-	return (0);
+	return (EXIT_SUCCESS);
 }
