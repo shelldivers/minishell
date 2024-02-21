@@ -4,28 +4,28 @@
 
 TEST(cd, cd_test)
 {
-	int status = cd(1, (char *[]){"cd", NULL});
+	int status = ms_cd(1, (char *[]){"cd", NULL});
 	char *cwd = getcwd(NULL, 0);
 	printf("[%d] cwd: %s\n", status, cwd);
 }
 
 TEST(cd, tilde_test)
 {
-	int status = cd(2, (char *[]){"cd", "~/projects", NULL});
+	int status = ms_cd(2, (char *[]){"cd", "~/projects", NULL});
 	char *cwd = getcwd(NULL, 0);
 	printf("[%d] cwd: %s\n", status, cwd);
 }
 
 TEST(cd, absolute_test)
 {
-	int status = cd(2, (char *[]){"cd", "/Users/jeongwpa/projects/server", NULL});
+	int status = ms_cd(2, (char *[]){"cd", "/Users/jeongwpa/projects/server", NULL});
 	char *cwd = getcwd(NULL, 0);
 	printf("[%d] cwd: %s\n", status, cwd);
 }
 
 TEST(cd, relative_test)
 {
-	int status = cd(2, (char *[]){"cd", "../../../server", NULL});
+	int status = ms_cd(2, (char *[]){"cd", "../../../server", NULL});
 	char *cwd = getcwd(NULL, 0);
 	printf("[%d] cwd: %s\n", status, cwd);
 }

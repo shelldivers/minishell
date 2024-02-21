@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "libft.h"
 #include <stdlib.h>
 
 t_env	*ms_env_push_back(t_env **head, t_env *env)
@@ -90,17 +89,17 @@ t_env	**ms_env_deserialize(char **envp)
 	t_env	*env;
 
 	if (!envp)
-		return (FALSE);
+		return (NULL);
 	head = (t_env **)malloc(sizeof(t_env *));
 	*head = NULL;
-	while (*envp++)
+	while (*envp)
 	{
 		env = ms_str_to_env(*envp);
 		if (!env)
 		{
 			ms_env_clear(head);
 			free(head);
-			return (FALSE);
+			return (NULL);
 		}
 		ms_env_push_back(head, env);
 		envp++;
