@@ -6,6 +6,7 @@ extern "C" {
 # endif
 
 // here
+int	ms_pwd(int argc, char **argv);
 
 # ifdef __cplusplus
 }
