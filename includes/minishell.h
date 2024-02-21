@@ -8,6 +8,7 @@ extern "C" {
 extern int	errno;
 
 int	cd(int argc, char **argv);
+int	ms_pwd(int argc, char **argv);
 
 # ifdef __cplusplus
 }
