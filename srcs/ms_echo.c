@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-t_bool	is_option(char *str)
+static t_bool	is_option(char *str)
 {
 	if (!str)
 		return (FALSE);
@@ -28,7 +28,7 @@ t_bool	is_option(char *str)
 	return (FALSE);
 }
 
-int	echo(int argc, char **argv)
+int	ms_echo(int argc, char **argv)
 {
 	int		i;
 	t_bool	n_flag;

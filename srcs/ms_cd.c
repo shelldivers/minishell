@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int	cd_home(void)
+static int	ms_cd_home(void)
 {
 	char		*path;
 
@@ -22,7 +22,7 @@ int	cd_home(void)
 	return (EXIT_SUCCESS);
 }
 
-int	cd_tilde(char *argv)
+static int	ms_cd_tilde(char *argv)
 {
 	char	*path;
 
@@ -41,16 +41,16 @@ int	cd_tilde(char *argv)
 	return (EXIT_SUCCESS);
 }
 
-int	cd(int argc, char **argv)
+int	ms_cd(int argc, char **argv)
 {
 	if (argc < 1 || argv == NULL)
 		return (EXIT_FAILURE);	// todo : error message
 	if (argc == 1 || argv[1] == NULL)
-		return (cd_home());
+		return (ms_cd_home());
 	if (*argv[1] == '~' && *(argv[1] + 1) == '\0')
-		return (cd_home());
+		return (ms_cd_home());
 	if (*argv[1] == '~' && *(argv[1] + 1) == '/')
-		return (cd_tilde(argv[1]));
+		return (ms_cd_tilde(argv[1]));
 	if (chdir(argv[1]) == -1)
 	{
 		perror("cd");	// todo : error message
