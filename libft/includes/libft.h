@@ -28,6 +28,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strndup(char const *str, size_t len);
 void	ft_strncpy(void *dst, const void *src, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
