@@ -13,6 +13,10 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 # include <stdlib.h>
 # include "ft_type.h"
 
@@ -26,6 +30,7 @@ void	ft_strncpy(void *dst, const void *src, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
+char	*ft_strrchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char const *s, char c);
@@ -39,5 +44,9 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif

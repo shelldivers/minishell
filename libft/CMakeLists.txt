@@ -42,6 +42,7 @@ set(SRCS
         srcs/ft_strdup.c
         srcs/ft_split.c
         srcs/ft_strtrim.c
+        srcs/ft_strrchr.c
         includes/libft.h
         includes/ft_type.h
         includes/ft_printf.h

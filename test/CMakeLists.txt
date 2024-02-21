@@ -7,7 +7,7 @@ set(SRCS minishell_test.cpp cd_test.cpp)
 
 add_executable(${NAME} ${SRCS})
 
-target_link_libraries(${NAME} PUBLIC minishell gtest_main)
+target_link_libraries(${NAME} PUBLIC minishell libft gtest_main)
 
 add_test(
         NAME ${NAME}
