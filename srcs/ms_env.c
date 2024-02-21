@@ -1,58 +1,48 @@
 #include "minishell.h"
+#include "libft.h"
 #include <stdlib.h>
 
-t_env	*ms_env_push_back(t_env **head, t_env *env)
-{
-	t_env	*node;
+static t_env	*ms_assign_env(char *key, char *value);
 
-	if (!head || !env)
+t_bool	ms_setenv(t_env **head, char *key, char *value)
+{
+	t_env	*env;
+	char	*tmp;
+
+	if (!head || !key || !value)
+		return (FALSE);
+	env = *head;
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+		{
+			tmp = ft_strdup(value);
+			if (!tmp)
+				return (FALSE);
+			free(env->value);
+			env->value = tmp;
+			return (TRUE);
+		}
+		env = env->next;
+	}
+	env = ms_assign_env(key, value);
+	if (!env)
+		return (FALSE);
+	ms_env_push_back(head, env);
+	return (TRUE);
+}
+
+char	*ms_getenv(t_env *env, char *key)
+{
+	if (!env || !key)
 		return (NULL);
-	if (*head == NULL)
-		*head = env;
-	else
+	while (env)
 	{
-		node = *head;
-		while (node->next)
-			node = node->next;
-		node->next = env;
+		if (ft_strcmp(env->key, key) == 0)
+			return (env->value);
+		env = env->next;
 	}
-	return (env);
-}
-
-void	ms_env_clear(t_env **head)
-{
-	t_env	*node;
-	t_env	*next;
-
-	if (!head || !*head)
-		return ;
-	node = *head;
-	while (node)
-	{
-		next = node->next;
-		free(node->key);
-		free(node->value);
-		free(node);
-		node = next;
-	}
-	*head = NULL;
-}
-
-size_t	ms_env_size(t_env *head)
-{
-	t_env	*node;
-	size_t	size;
-
-	if (!head)
-		return (0);
-	node = head;
-	size = 0;
-	while (node)
-	{
-		size++;
-		node = node->next;
-	}
-	return (size);
+	return (NULL);
 }
 
 char	**ms_env_serialize(t_env *env)
@@ -105,4 +95,28 @@ t_env	**ms_env_deserialize(char **envp)
 		envp++;
 	}
 	return (head);
+}
+
+static t_env	*ms_assign_env(char *key, char *value)
+{
+	t_env	*env;
+
+	env = (t_env *)malloc(sizeof(t_env));
+	if (!env)
+		return (FALSE);
+	env->key = ft_strdup(key);
+	if (!env->key)
+	{
+		free(env);
+		return (FALSE);
+	}
+	env->value = ft_strdup(value);
+	if (!env->value)
+	{
+		free(env->key);
+		free(env);
+		return (FALSE);
+	}
+	env->next = NULL;
+	return (env);
 }

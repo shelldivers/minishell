@@ -2,20 +2,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-static t_bool	ms_assign_env(t_env *env, char *str, char *sep)
-{
-	env->key = ft_strndup(str, sep - str);
-	if (!env->key)	// todo : malloc error
-		return (FALSE);
-	env->value = ft_strdup(sep + 1);
-	if (!env->value)	// todo : malloc error
-	{
-		free(env->key);
-		return (FALSE);
-	}
-	env->next = NULL;
-	return (TRUE);
-}
+static t_bool	ms_str_assign_env(t_env *env, char *str, char *sep);
 
 t_env	*ms_str_to_env(char *str)
 {
@@ -33,7 +20,7 @@ t_env	*ms_str_to_env(char *str)
 		free(env);
 		return (NULL);
 	}
-	if (!ms_assign_env(env, str, sep))
+	if (!ms_str_assign_env(env, str, sep))
 	{
 		free(env);
 		return (NULL);
@@ -58,4 +45,19 @@ char	*ms_env_to_str(t_env *env)
 	str[key_length] = '=';
 	ft_memcpy(str + key_length + 1, env->value, val_length + 1);
 	return (str);
+}
+
+static t_bool	ms_str_assign_env(t_env *env, char *str, char *sep)
+{
+	env->key = ft_strndup(str, sep - str);
+	if (!env->key)	// todo : malloc error
+		return (FALSE);
+	env->value = ft_strdup(sep + 1);
+	if (!env->value)	// todo : malloc error
+	{
+		free(env->key);
+		return (FALSE);
+	}
+	env->next = NULL;
+	return (TRUE);
 }

@@ -1,5 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "ft_bool.h"
 # include <stdlib.h>
 
 # ifdef __cplusplus
@@ -20,15 +21,19 @@ typedef struct s_env
 }	t_env;
 
 /* ms_env.c */
-t_env	**ms_env_deserialize(char **envp);
+t_bool	ms_setenv(t_env **head, char *key, char *value);
+char	*ms_getenv(t_env *env, char *key);
 char	**ms_env_serialize(t_env *env);
-size_t	ms_env_size(t_env *head);
-void	ms_env_clear(t_env **head);
-t_env	*ms_env_push_back(t_env **head, t_env *env);
+t_env	**ms_env_deserialize(char **envp);
 
 /* ms_env_utils.c */
 t_env	*ms_str_to_env(char *str);
 char	*ms_env_to_str(t_env *env);
+
+/* ms_env_utils2.c */
+void	ms_env_clear(t_env **head);
+size_t	ms_env_size(t_env *head);
+t_env	*ms_env_push_back(t_env **head, t_env *env);
 
 # ifdef __cplusplus
 }
