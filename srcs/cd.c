@@ -11,12 +11,12 @@ int	cd_home(void)
 	path = getenv("HOME");
 	if (!path)
 	{
-		write(2, "cd: HOME not set\n", 17);
+		write(2, "cd: HOME not set\n", 17);	// todo : error message
 		return (EXIT_FAILURE);
 	}
 	if (chdir(path) == -1)
 	{
-		perror("cd");
+		perror("cd");	// todo : error message
 		return (errno);
 	}
 	return (EXIT_SUCCESS);
@@ -29,12 +29,12 @@ int	cd_tilde(char *argv)
 	path = ft_strjoin(getenv("HOME"), argv + 1);
 	if (!path)
 	{
-		perror("cd");
+		perror("cd");	// todo : error message
 		return (EXIT_FAILURE);
 	}
 	if (chdir(path) == -1)
 	{
-		perror("cd");
+		perror("cd");	// todo : error message
 		return (errno);
 	}
 	free(path);
@@ -44,7 +44,7 @@ int	cd_tilde(char *argv)
 int	cd(int argc, char **argv)
 {
 	if (argc < 1 || argv == NULL)
-		return (EXIT_FAILURE);
+		return (EXIT_FAILURE);	// todo : error message
 	if (argc == 1 || argv[1] == NULL)
 		return (cd_home());
 	if (*argv[1] == '~' && *(argv[1] + 1) == '\0')
@@ -53,7 +53,7 @@ int	cd(int argc, char **argv)
 		return (cd_tilde(argv[1]));
 	if (chdir(argv[1]) == -1)
 	{
-		perror("cd");
+		perror("cd");	// todo : error message
 		return (errno);
 	}
 	return (EXIT_SUCCESS);
