@@ -8,17 +8,11 @@ int	ms_pwd(int argc, char **argv)
 	char	*pwd;
 
 	(void)argv;
-	if (argc > 1)
-	{
-		// todo : error message
+	if (argc > 1)	// todo : error message
 		return (EXIT_FAILURE);
-	}
 	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		perror("pwd");
+	if (!pwd)	// todo : error message
 		return (EXIT_FAILURE);
-	}
 	printf("%s\n", pwd);
 	free(pwd);
 	return (EXIT_SUCCESS);
