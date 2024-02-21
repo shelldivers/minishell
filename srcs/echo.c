@@ -34,7 +34,7 @@ int	echo(int argc, char **argv)
 	t_bool	n_flag;
 
 	if (argc < 1)
-		return (EXIT_FAILURE);
+		return (EXIT_FAILURE);	// todo : error message
 	n_flag = is_option(argv[1]);
 	i = 1;
 	if (n_flag == TRUE)
