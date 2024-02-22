@@ -1,0 +1,14 @@
+# Editor
+*.vscode
+
+# Object
+*.o
+
+# Excute
+*.out
+
+# Debug
+*.dSYM
+
+# Other
+*.DS_Store
