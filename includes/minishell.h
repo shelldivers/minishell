@@ -10,7 +10,7 @@ extern "C" {
 extern int	errno;
 
 int	ms_cd(int argc, char **argv);
-int	ms_pwd(int argc, char **argv);
+int	ms_pwd(int argc, char **argv, char **envp);
 int	ms_echo(int argc, char **argv);
 
 typedef struct s_env
