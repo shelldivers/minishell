@@ -1,14 +1,28 @@
-## [워크플로우](#work-flow)
-## [설계도](#design)
+# creating a simple shell :shell:
 
-## [WORKS](#todo-1)
+This project is about creating a simple shell by simple [rules](SUBJECT.md)   
 
-### [jeongwpa](#jeongwpa)
-#### [Builtins 구현](#Builtins-구현)
+Minishell is a project to creating a lightweight shell capable of parsing and executing **simple commands**, **pipe line**, **redirections** from a single line input.   
 
-### [jiwojung](#jiwojung)
-#### [Parse Tree 구현](#parse-tree-구현)
+It features custom-built built-in commands(`cd`, `echo` ...), handles environment variables, maintains command history, and effectively manages signals and errors.   
 
+This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-106/doc/bashref.html)   
+
+Yeah, we make own little bash :trollface:
+
+
+## [Work Flow](#work-flow)
+## [Architecture](#design)
+
+## [Works](#todo-1)
+
+### [**jeongwpa**](#jeongwpa)
+#### [Builtins](#Builtins)
+
+### [**jiwojung**](#jiwojung)
+#### [Parse Tree](#parse-tree)
+
+## [Rules](#rules)
 ---
 
 ## [WORK FLOW]
@@ -19,11 +33,16 @@ dateFormat YYYY-MM-DD
 title minishell
 
 section jeongwpa
-	Builtin : active, des1, 2024-02-19, 2024-02-23
+	Builtin : active, 2024-02-19, 2024-02-23
+	add dev : done, 2024-02-20, 1d
 
 section jiwojung
-	Parse Tree : active, des1, 2024-02-19, 2024-02-23
+	Parse Tree : active, 2024-02-19, 2024-02-23
+	set main : done, 2024-02-19, 1d
 
+section works
+	start : milestone, 2024-02-19, 0d
+	goal : milestone, 2024-02-29, 0d
 ```
 
 ## [Design]
@@ -44,242 +63,77 @@ D-.->Z[Builtin]
 ### [Builtins 구현]
 
 #### **`echo`** with option -n   
--n 옵션을 사용할 수 있는 echo
 
 #### **`cd`** with only a relative or absolute path
-오직 상대 또는 절대경로만 사용하는 cd
 
 #### **`pwd`** with no options
-옵션이 없는 pwd
 
 #### **`export`** with no options
-옵션이 없는 export
 
 #### **`unset`** with no options
-옵션이 없는 unset
 
 #### **`env`** with no options or arguments
-옵션이나 인자값이 없는 env
 
 #### **`exit`** with no options
-옵션이 없는 exit
 
 ## [jiwojung]
 
-### [Parse Tree 구현]
-
+### [Parse Tree]
 ```bnf
-/* -------------------------------------------------------
-   The grammar symbols
-   ------------------------------------------------------- */
+/* ------------------------------------------------------- The grammar symbols ------------------------------------------------------- */ %token WORD 
+%token ASSIGNMENT_WORD 
 
+/* The following are the operators (see XBD Operator) containing more than one character. */
 
-%token  WORD
-%token  ASSIGNMENT_WORD
-%token  NAME
-%token  NEWLINE
-%token  IO_NUMBER
+%token AND_IF  OR_IF  PIPE  LBRACE  RBRACE 
+/*      '&&'   '||'   '|'    '('     ')'   */
 
+%token DLESS  DGREAT  DREAD  DWRITE
+/*     '<<'    '>>'    '<'    '>' */
 
-/* The following are the operators mentioned above. */
-
-
-%token  AND_IF    OR_IF    DSEMI
-/*      '&&'      '||'     ';;'    */
-
-
-%token  DLESS  DGREAT  LESSAND  GREATAND  LESSGREAT  DLESSDASH
-/*      '<<'   '>>'    '<&'     '>&'      '<>'       '<<-'   */
-
-
-%token  CLOBBER
-/*      '>|'   */
-
-
-/* The following are the reserved words. */
-
-
-%token  If    Then    Else    Elif    Fi    Do    Done
-/*      'if'  'then'  'else'  'elif'  'fi'  'do'  'done'   */
-
-
-%token  Case    Esac    While    Until    For
-/*      'case'  'esac'  'while'  'until'  'for'   */
-
-
-/* These are reserved words, not operator tokens, and are
-   recognized when reserved words are recognized. */
-
-
-%token  Lbrace    Rbrace    Bang
-/*      '{'       '}'       '!'   */
-
-
-%token  In
-/*      'in'   */
-
-
-/* -------------------------------------------------------
-   The Grammar
-   ------------------------------------------------------- */
-
-
-%start  complete_command
-%%
-complete_command : list separator
-                 | list
-                 ;
-list             : list separator_op and_or
-                 |                   and_or
-                 ;
-and_or           :                         pipeline
-                 | and_or AND_IF linebreak pipeline
-                 | and_or OR_IF  linebreak pipeline
-                 ;
-pipeline         :      pipe_sequence
-                 | Bang pipe_sequence
-                 ;
-pipe_sequence    :                             command
-                 | pipe_sequence '|' linebreak command
-                 ;
-command          : simple_command
-                 | compound_command
-                 | compound_command redirect_list
-                 | function_definition
-                 ;
-compound_command : brace_group
-                 | subshell
-                 | for_clause
-                 | case_clause
-                 | if_clause
-                 | while_clause
-                 | until_clause
-                 ;
-subshell         : '(' compound_list ')'
-                 ;
-compound_list    :              term
-                 | newline_list term
-                 |              term separator
-                 | newline_list term separator
-                 ;
-term             : term separator and_or
-                 |                and_or
-                 ;
-for_clause       : For name linebreak                            do_group
-                 | For name linebreak in          sequential_sep do_group
-                 | For name linebreak in wordlist sequential_sep do_group
-                 ;
-name             : NAME                     /* Apply rule 5 */
-                 ;
-in               : In                       /* Apply rule 6 */
-                 ;
-wordlist         : wordlist WORD
-                 |          WORD
-                 ;
-case_clause      : Case WORD linebreak in linebreak case_list    Esac
-                 | Case WORD linebreak in linebreak case_list_ns Esac
-                 | Case WORD linebreak in linebreak              Esac
-                 ;
-case_list_ns     : case_list case_item_ns
-                 |           case_item_ns
-                 ;
-case_list        : case_list case_item
-                 |           case_item
-                 ;
-case_item_ns     :     pattern ')'               linebreak
-                 |     pattern ')' compound_list linebreak
-                 | '(' pattern ')'               linebreak
-                 | '(' pattern ')' compound_list linebreak
-                 ;
-case_item        :     pattern ')' linebreak     DSEMI linebreak
-                 |     pattern ')' compound_list DSEMI linebreak
-                 | '(' pattern ')' linebreak     DSEMI linebreak
-                 | '(' pattern ')' compound_list DSEMI linebreak
-                 ;
-pattern          :             WORD         /* Apply rule 4 */
-                 | pattern '|' WORD         /* Do not apply rule 4 */
-                 ;
-if_clause        : If compound_list Then compound_list else_part Fi
-                 | If compound_list Then compound_list           Fi
-                 ;
-else_part        : Elif compound_list Then else_part
-                 | Else compound_list
-                 ;
-while_clause     : While compound_list do_group
-                 ;
-until_clause     : Until compound_list do_group
-                 ;
-function_definition : fname '(' ')' linebreak function_body
-                 ;
-function_body    : compound_command                /* Apply rule 9 */
-                 | compound_command redirect_list  /* Apply rule 9 */
-                 ;
-fname            : NAME                            /* Apply rule 8 */
-                 ;
-brace_group      : Lbrace compound_list Rbrace
-                 ;
-do_group         : Do compound_list Done           /* Apply rule 6 */
-                 ;
-simple_command   : cmd_prefix cmd_word cmd_suffix
-                 | cmd_prefix cmd_word
-                 | cmd_prefix
-                 | cmd_name cmd_suffix
-                 | cmd_name
-                 ;
-cmd_name         : WORD                   /* Apply rule 7a */
-                 ;
-cmd_word         : WORD                   /* Apply rule 7b */
-                 ;
-cmd_prefix       :            io_redirect
-                 | cmd_prefix io_redirect
-                 |            ASSIGNMENT_WORD
-                 | cmd_prefix ASSIGNMENT_WORD
-                 ;
-cmd_suffix       :            io_redirect
-                 | cmd_suffix io_redirect
-                 |            WORD
-                 | cmd_suffix WORD
-                 ;
-redirect_list    :               io_redirect
-                 | redirect_list io_redirect
-                 ;
-io_redirect      :           io_file
-                 | IO_NUMBER io_file
-                 |           io_here
-                 | IO_NUMBER io_here
-                 ;
-io_file          : '<'       filename
-                 | LESSAND   filename
-                 | '>'       filename
-                 | GREATAND  filename
-                 | DGREAT    filename
-                 | LESSGREAT filename
-                 | CLOBBER   filename
-                 ;
-filename         : WORD                      /* Apply rule 2 */
-                 ;
-io_here          : DLESS     here_end
-                 | DLESSDASH here_end
-                 ;
-here_end         : WORD                      /* Apply rule 3 */
-                 ;
-newline_list     :              NEWLINE
-                 | newline_list NEWLINE
-                 ;
-linebreak        : newline_list
-                 | /* empty */
-                 ;
-separator_op     : '&'
-                 | ';'
-                 ;
-separator        : separator_op linebreak
-                 | newline_list
-                 ;
-sequential_sep   : ';' linebreak
-                 | newline_list
-                 ;
+/* ------------------------------------------------------- The Grammar ------------------------------------------------------- */ 
+complete_command : and_or 
+				 ; 
+and_or 			 : pipeline 
+				 | and_or AND_IF pipeline 
+				 | and_or OR_IF pipeline 
+				 ;
+pipeline 		 : simple_command 
+		 		 | pipeline PIPE simple_command 
+				 ; 
+subshell 		 : LBRACE and_or RBRACE 
+				 ; 
+simple_command 	 : cmd_prefix WORD cmd_suffix 
+				 | cmd_prefix WORD 
+				 | cmd_prefix 
+				 | WORD cmd_suffix 
+				 | WORD 
+				 ;
+cmd_prefix 		 : io_redirect 
+				 | cmd_prefix io_redirect
+				 | ASSIGNMENT_WORD
+				 | cmd_prefix ASSIGNMENT_WORD
+				 ;
+cmd_suffix 		 : io_redirect
+				 | cmd_suffix io_redirect
+				 | WORD
+				 | cmd_suffix WORD 
+				 ; 
+io_redirect 	 : io_file 
+				 | io_here 
+				 ; 
+io_file 		 : DREAD WORD 
+				 | DWRITE WORD 
+				 | DGREAT WORD 
+				 ; 
+io_here 		 : DLESS WORD 
+;
 ```
 
+# [Rules]
+
+이식성이 높고 자주 사용하기 용이한 함수의 경우 ft_ 를 prefix 에 붙여서 `libft` 에 추가   
+ex) ft_strcmp   
 
 
 
