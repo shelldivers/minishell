@@ -132,8 +132,10 @@ io_here 		 : DLESS WORD
 
 # [Rules]
 
-이식성이 높고 자주 사용하기 용이한 함수의 경우 ft_ 를 prefix 에 붙여서 `libft` 에 추가   
+1. 이식성이 높고 자주 사용하기 용이한 함수의 경우 ft_ 를 prefix 에 붙여서 `libft` 에 추가   
 ex) ft_strcmp   
+
+2. 단위 테스트는 필수, **CMAKE** 사용으로 Unit test
 
 
 
