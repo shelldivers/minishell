@@ -127,7 +127,7 @@ io_file 		 : DREAD WORD
 				 | DGREAT WORD 
 				 ; 
 io_here 		 : DLESS WORD 
-;
+				 ;
 ```
 
 # [Rules]
