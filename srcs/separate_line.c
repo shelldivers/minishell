@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/25 19:03:06 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/02/26 21:07:37 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-static char		*extract_word2(char *line, size_t *start, size_t i);
-static char		*extract_word(\
-char *line, size_t *start, size_t quote_cnt, size_t dquote_cnt);
-static size_t	count_word(char *line, size_t quote_cnt, size_t dquote_cnt);	
+static void	count_word(char *line, size_t *words_cnt);
+static char	*extract_word(char *line, size_t *start);
+static char	*extract_word2(char *line, size_t *start, size_t end);
+static void	close_delimiter(char *line, size_t *start, char delimiter);
 
 /*==================LIBFT_START===========================*/
 
@@ -90,88 +90,105 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 /*==================LIBFT_END===========================*/
 
+/**
+ * separateWords - 주어진 문자열을 단어로 분리합니다.
+ * 
+ * @param line 단어로 분리할 문자열
+ * @return void
+ * @todo separate_words 를 사용한 후에는 syntax.words, syntax.line 메모리를 해제해야 합니다.
+ */
 void	separate_words(t_syntax *syntax)
 {
-	const size_t	words_cnt = count_word(syntax->line, 0, 0);
 	size_t			i;
 	size_t			start;
 
-	syntax->word_list = (char **)malloc(sizeof(char *) * (words_cnt + 1));
-	if (!syntax->word_list)
+	count_word(syntax->line, &syntax->words_cnt);
+	syntax->words = (char **)malloc(sizeof(char *) * (syntax->words_cnt + 1));
+	if (!syntax->words)
 		exit(EXIT_FAILURE);
+	syntax->words[syntax->words_cnt] = NULL;
 	i = 0;
 	start = 0;
-	// printf("words_cnt : %zu\n", words_cnt);
-	while (i < words_cnt)
+	printf("words_cnt: %zu\n", syntax->words_cnt);
+	while (i < syntax->words_cnt)
 	{
 		while (syntax->line[start] == ' ' && syntax->line[start] != '\0')
 			start++;
-		syntax->word_list[i] = extract_word(syntax->line, &start, 0, 0);
+		syntax->words[i] = extract_word(syntax->line, &start);
 		i++;
 	}
-	// testcase
-	// i = 0;
-	// while (i < words_cnt)
-	// {
-	// 	printf("syntax->word_list[%zu] : %s\n", i, syntax->word_list[i]);
-	// 	i++;
-	// }
-}
-
-static size_t	count_word(char *line, size_t quote_cnt, size_t dquote_cnt)
-{
-	size_t			words_cnt;
-	size_t			i;
-	const size_t	len = ft_strlen(line);
-
-	words_cnt = 0;
 	i = 0;
-	while (i < len)
+	while (i <= syntax->words_cnt)
 	{
-		if (line[i] == '"' && quote_cnt % 2 == 0)
-			dquote_cnt++;
-		else if (line[i] == '\'' && dquote_cnt % 2 == 0)
-			quote_cnt++;
-		if (line[i] != ' ' && (line[i + 1] == ' ' || line[i + 1] == '\0') \
-		&& quote_cnt % 2 == 0 && dquote_cnt % 2 == 0)
-			words_cnt++;
-		else if (line[i] != ' ' && line[i + 1] == '\0' \
-		&& (quote_cnt % 2 == 1 || dquote_cnt % 2 == 1))
-			words_cnt++;
+		printf("syntax->words[%zu]: %s\n", i, syntax->words[i]);
 		i++;
 	}
-	return (words_cnt);
 }
 
-static char	*extract_word(\
-char *line, size_t *start, size_t quote_cnt, size_t dquote_cnt)
+static void	count_word(char *line, size_t *words_cnt)
 {
 	size_t	i;
 
 	i = 0;
-	while (line[*start + i])
+	while (line[i])
 	{
-		if (line[*start + i] == '"' && quote_cnt % 2 == 0)
-			dquote_cnt++;
-		else if (line[*start + i] == '\'' && dquote_cnt % 2 == 0)
-			quote_cnt++;
-		if (line[*start + i] != ' ' \
-		&& (line[*start + i + 1] == ' ' || line[*start + i + 1] == '\0') \
-		&& quote_cnt % 2 == 0 && dquote_cnt % 2 == 0)
+		if (line[i] == '\'' || line[i] == '"' || line[i] == '(')
+			close_delimiter(line, &i, line[i]);
+		if ((line[i] != ' ' && line[i] != '\0' && line[i] != '|') \
+		&& (line[i + 1] == ' ' || line[i + 1] == '\0' || line[i + 1] == '|'))
+			(*words_cnt)++;
+		else if (line[i] == '|')
+			(*words_cnt)++;
+		i++;
+	}
+}
+
+static char	*extract_word(char *line, size_t *start)
+{
+	size_t	i;
+
+	i = *start;
+	while (line[i])
+	{
+		if (line[i] == '\'' || line[i] == '"' \
+		|| line[i] == '(')
+			close_delimiter(line, &i, line[i]);
+		if ((line[i] != ' ' && line[i] != '\0' \
+		&& line[i] != '|') \
+		&& (line[i + 1] == ' ' || line[i + 1] == '\0' \
+		|| line[i + 1] == '|'))
 			return (extract_word2(line, start, i));
-		else if (line[*start + i] != ' ' && line[*start + i + 1] == '\0' \
-		&& (quote_cnt % 2 == 1 || dquote_cnt % 2 == 1))
+		else if (line[i] == '|')
 			return (extract_word2(line, start, i));
 		i++;
 	}
 	return (NULL);
 }
 
-static char	*extract_word2(char *line, size_t *start, size_t i)
+static char	*extract_word2(char *line, size_t *start, size_t end)
 {
 	char	*word;
 
-	word = ft_substr(line, *start, i + 1);
-	*start += i + 1;
+	word = NULL;
+	word = ft_substr(line, *start, end - *start + 1);
+	*start = end + 1;
 	return (word);
+}
+
+static void	close_delimiter(char *line, size_t *start, char delimiter)
+{
+	size_t	i;
+
+	i = 1;
+	if (delimiter == '(')
+		delimiter = ')';
+	while (line[*(start) + i])
+	{
+		if (line[*(start) + i] == delimiter)
+		{
+			*start += i;
+			return ;
+		}
+		i++;
+	}
 }
