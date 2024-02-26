@@ -1,2 +1,12 @@
+### Editor ###
+*.vscode
+*.idea
+### Object ###
+*.o
+### Excute ###
+*.out
+### Debug ###
+*.dSYM
 cmake-build-debug
-.idea
+### Other ###
+*.DS_Store
