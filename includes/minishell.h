@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/28 17:10:01 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:56:25 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_parser
 	t_token			*token;
 	struct s_parser	*left;
 	struct s_parser	*right;
-	enum e_type		operator;
+	size_t			cmd_cnt;
 }				t_parser;
 
 /*================seperate_line.c================*/
