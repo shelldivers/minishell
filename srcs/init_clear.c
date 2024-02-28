@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   init_clear.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/26 19:19:12 by jiwojung         ###   ########.fr       */
+/*   Created: 2024/02/28 16:44:20 by jiwojung          #+#    #+#             */
+/*   Updated: 2024/02/28 17:23:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,38 @@ void	init_syntax(t_syntax *syntax)
 
 void	clear_syntax(t_syntax *syntax)
 {
+	int	i;
+
+	i = 0;
 	if (syntax->line)
 		free(syntax->line);
 	if (syntax->words)
 	{
-		while (syntax->words_cnt--)
-			free(syntax->words[syntax->words_cnt]);
-		free(syntax->words);
+		while (syntax->words[i])
+		{
+			free(syntax->words[i++]);
+			syntax->words[i] = NULL;
+		}
 	}
 	syntax->words_cnt = 0;
 }
 
-int	main(int argc, char **argv, char **envp)
+void	clear_token(t_token **token)
 {
-	t_syntax	syntax;
+	int	i;
 
-	init_syntax(&syntax);
-	while (1)
+	i = 0;
+	if (token)
 	{
-		syntax.line = readline("minishell$ ");
-		if (!syntax.line)
-			break ;
-		add_history(syntax.line);
-		separate_words(&syntax);
-		clear_syntax(&syntax);
+		while (token[i])
+		{
+			free(token[i]->value);
+			token[i]->value = NULL;
+			free(token[i]);
+			token[i] = NULL;
+			i++;
+		}
+		free(token);
+		token = NULL;
 	}
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/26 21:07:37 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:14:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
  * @return void
  * @todo separate_words 를 사용한 후에는 syntax.words, syntax.line 메모리를 해제해야 합니다.
  */
-void	separate_words(t_syntax *syntax)
+void	lexer(t_syntax *syntax)
 {
 	size_t			i;
 	size_t			start;
@@ -109,18 +109,11 @@ void	separate_words(t_syntax *syntax)
 	syntax->words[syntax->words_cnt] = NULL;
 	i = 0;
 	start = 0;
-	printf("words_cnt: %zu\n", syntax->words_cnt);
 	while (i < syntax->words_cnt)
 	{
 		while (syntax->line[start] == ' ' && syntax->line[start] != '\0')
 			start++;
 		syntax->words[i] = extract_word(syntax->line, &start);
-		i++;
-	}
-	i = 0;
-	while (i <= syntax->words_cnt)
-	{
-		printf("syntax->words[%zu]: %s\n", i, syntax->words[i]);
 		i++;
 	}
 }
@@ -137,7 +130,7 @@ static void	count_word(char *line, size_t *words_cnt)
 		if ((line[i] != ' ' && line[i] != '\0' && line[i] != '|') \
 		&& (line[i + 1] == ' ' || line[i + 1] == '\0' || line[i + 1] == '|'))
 			(*words_cnt)++;
-		else if (line[i] == '|')
+		else if (line[i] == '|' || line[i] == ')')
 			(*words_cnt)++;
 		i++;
 	}
@@ -158,7 +151,7 @@ static char	*extract_word(char *line, size_t *start)
 		&& (line[i + 1] == ' ' || line[i + 1] == '\0' \
 		|| line[i + 1] == '|'))
 			return (extract_word2(line, start, i));
-		else if (line[i] == '|')
+		else if (line[i] == '|' || line[i] == ')')
 			return (extract_word2(line, start, i));
 		i++;
 	}

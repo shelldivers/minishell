@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/26 19:17:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:10:01 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 // # ifdef __cplusplus
 // extern "C" {
 // # endif
+
+# include <stdlib.h>
 
 enum e_type
 {
@@ -28,8 +30,7 @@ enum e_type
 	DGREAT,
 	DREAD,
 	DWRITE,
-	LBRACKET,
-	RBRACKET
+	SUBSHELL
 };
 
 typedef struct s_token
@@ -45,9 +46,22 @@ typedef struct s_syntax
 	size_t	words_cnt;
 }				t_syntax;
 
-/*================seperate_line.c================*/
-void	separate_words(t_syntax *syntax);
+typedef struct s_parser
+{
+	t_token			*token;
+	struct s_parser	*left;
+	struct s_parser	*right;
+	enum e_type		operator;
+}				t_parser;
 
+/*================seperate_line.c================*/
+void	lexer(t_syntax *syntax);
+/*================init_clear_line.c================*/
+void	init_syntax(t_syntax *syntax);
+void	clear_syntax(t_syntax *syntax);
+/*================tokenize.c================*/
+t_token	**tokenize(t_syntax *syntax);
+void	clear_token(t_token **token);
 // # ifdef __cplusplus
 // }
 // # endif

@@ -13,11 +13,15 @@ RM = rm -rf
 
 B_FILES = \
 separate_line.c \
-parse.c
+minishell.c \
+init_clear.c \
+tokenize.c
 
 M_FILES = \
 separate_line.c \
-parse.c
+minishell.c \
+init_clear.c \
+tokenize.c
 
 H_FILES = \
 minishell.h
@@ -32,19 +36,19 @@ OBJS = $(SRCS:.c=.o)
 HEADER = $(addprefix $(INCLUDES), $(H_FILES))
 endif
 
-CASE = 
+CASE =
+
 
 all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
 # 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 # lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
 # sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)
 
 test: $(NAME)
-	./$(NAME) 
-	$(CASE)
+	./$(NAME) $(CASE)
 
 leak: $(NAME)
 	valgrind --leak-check=full ./$(NAME) $(CASE)
