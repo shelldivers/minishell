@@ -1,39 +1,19 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "ft_bool.h"
-# include <stdlib.h>
+# include "ms_env.h"
 
 # ifdef __cplusplus
 extern "C" {
 # endif
 
-extern int	errno;
-
-int	ms_cd(int argc, char **argv);
-int	ms_pwd(int argc, char **argv, char **envp);
+int	ms_cd(int argc, char **argv, t_env **env);
+int	ms_pwd(int argc, char **argv);
 int	ms_echo(int argc, char **argv);
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-/* ms_env.c */
-t_bool	ms_setenv(t_env **head, char *key, char *value);
-char	*ms_getenv(t_env *env, char *key);
-char	**ms_env_serialize(t_env *env);
-t_env	**ms_env_deserialize(char **envp);
-
-/* ms_env_utils.c */
-t_env	*ms_str_to_env(char *str);
-char	*ms_env_to_str(t_env *env);
-
-/* ms_env_utils2.c */
-void	ms_env_clear(t_env **head);
-size_t	ms_env_size(t_env *head);
-t_env	*ms_env_push_back(t_env **head, t_env *env);
+int	ms_export(int argc, char **argv, t_env **env);
+int	ms_unset(int argc, char **argv, t_env **env);
+int	ms_env(int argc, char **argv, char **envp);
+int	ms_exit(int argc, char **argv);
 
 # ifdef __cplusplus
 }

@@ -1,5 +1,7 @@
-#include "minishell.h"
+#include "ms_env.h"
+#include "libft.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * @notice You must free head node after calling this function
@@ -40,7 +42,6 @@ size_t	ms_env_size(t_env *head)
 	return (size);
 }
 
-
 t_env	*ms_env_push_back(t_env **head, t_env *env)
 {
 	t_env	*node;
@@ -57,4 +58,29 @@ t_env	*ms_env_push_back(t_env **head, t_env *env)
 		node->next = env;
 	}
 	return (env);
+}
+
+void	ms_env_print_all(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=\"%s\"\n", env->key, env->value);
+		env = env->next;
+	}
+}
+
+t_bool	ms_is_valid_env_key(char *key)
+{
+	if (!key)
+		return (FALSE);
+	if (!ft_isalpha(*key) && *key != '_')
+		return (FALSE);
+	key++;
+	while (*key)
+	{
+		if (!ft_isalpha(*key) && !ft_isdigit(*key) && *key != '_')
+			return (FALSE);
+		key++;
+	}
+	return (TRUE);
 }

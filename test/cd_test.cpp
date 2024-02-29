@@ -1,60 +1,95 @@
-#include "minishell.h"
 #include "libft.h"
+#include "minishell.h"
+#include "ms_env.h"
 #include <gtest/gtest.h>
 
 TEST(cd, cd_test)
 {
-	int status = ms_cd(1, (char *[]){"cd", NULL});
-	char *cwd = getcwd(NULL, 0);
-	printf("[%d] cwd: %s\n", status, cwd);
+	// given
+	int argc = 1;
+	char *argv[] = {"cd", NULL};
+	char *pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+	char *home = ft_strjoin("HOME=", getenv("HOME"));
+	char *envp[] = {pwd, home, NULL};
+	t_env **env = ms_env_deserialize(envp);
+	char *old_pwd = ms_getenv(*env, "PWD");
+
+	// when
+	int status = ms_cd(argc, argv, env);
+
+	// then
+	EXPECT_EQ(status, 0);
+	EXPECT_STREQ(getcwd(NULL, 0), ms_getenv(*env, "PWD"));
+	EXPECT_STREQ(old_pwd, ms_getenv(*env, "OLDPWD"));
 }
 
 TEST(cd, tilde_test)
 {
-	int status = ms_cd(2, (char *[]){"cd", "~/projects", NULL});
-	char *cwd = getcwd(NULL, 0);
-	printf("[%d] cwd: %s\n", status, cwd);
+	// given
+	int argc = 2;
+	char *argv[] = {"cd", "~", NULL};
+	char *pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+	char *home = ft_strjoin("HOME=", getenv("HOME"));
+	char *envp[] = {pwd, home, NULL};
+	t_env **env = ms_env_deserialize(envp);
+	char *old_pwd = ft_strdup(ms_getenv(*env, "PWD"));
+
+	// when
+	int status = ms_cd(argc, argv, env);
+
+	// then
+	EXPECT_EQ(status, 0);
+	EXPECT_STREQ(getcwd(NULL, 0), ms_getenv(*env, "PWD"));
+	EXPECT_STREQ(old_pwd, ms_getenv(*env, "OLDPWD"));
+}
+
+TEST(cd, tilde_with_path_test)
+{
+	int argc = 2;
+	char *argv[] = {"cd", "~/projects/minishell", NULL};
+	char *pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+	char *home = ft_strjoin("HOME=", getenv("HOME"));
+	char *envp[] = {pwd, home, NULL};
+	t_env **env = ms_env_deserialize(envp);
+	char *old_pwd = ft_strdup(ms_getenv(*env, "PWD"));
+
+	int status = ms_cd(argc, argv, env);
+
+	EXPECT_EQ(status, 0);
+	EXPECT_STREQ(getcwd(NULL, 0), ms_getenv(*env, "PWD"));
+	EXPECT_STREQ(old_pwd, ms_getenv(*env, "OLDPWD"));
 }
 
 TEST(cd, absolute_test)
 {
-	int status = ms_cd(2, (char *[]){"cd", "/Users/jeongwpa/projects/server", NULL});
+	int argc = 2;
+	char *argv[] = {"cd", "/Users/jeongwpa/projects", NULL};
+	char *pwd = ft_strjoin("PATH=", getcwd(NULL, 0));
+	char *home = ft_strjoin("HOME=", getenv("HOME"));
+	char *envp[] = {pwd, home, NULL};
+
+	t_env **env = ms_env_deserialize(envp);
+	int status = ms_cd(argc, argv, env);
+	EXPECT_EQ(status, 0);
 	char *cwd = getcwd(NULL, 0);
 	printf("[%d] cwd: %s\n", status, cwd);
 }
 
 TEST(cd, relative_test)
 {
-	int status = ms_cd(2, (char *[]){"cd", "../../../server", NULL});
-	char *cwd = getcwd(NULL, 0);
-	printf("[%d] cwd: %s\n", status, cwd);
-}
+	char *root = "/Users/jeongwpa/projects/minishell/cmake-build-debug/test";
+	chdir(root);
+	int argc = 2;
+	char *argv[] = {"cd", "../../../minishell", NULL};
+	char *pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+	char *home = ft_strjoin("HOME=", getenv("HOME"));
+	char *envp[] = {pwd, home, NULL};
+	t_env **env = ms_env_deserialize(envp);
+	char *old_pwd = ft_strdup(ms_getenv(*env, "PWD"));
 
-TEST(cd, perror_test)
-{
-	chdir("asdf");
-	perror("cd");
-}
+	int status = ms_cd(argc, argv, env);
 
-TEST(cd, chdir_test)
-{
-	char *cwd;
-	int status;
-
-	status = chdir("ASDf");
-	cwd = getcwd(NULL, 0);
-	printf("cwd: %s [%d]\n", cwd, status);
-}
-
-TEST(cd, getenv_test)
-{
-	char *env = getenv("HOME");
-	printf("env: %s\n", env);
-}
-
-TEST(cd, ft_strrchr_test)
-{
-	char const *path = "/home/user";
-	char *ptr = ft_strrchr(path, '/');
-	printf("ptr: %s\n", ptr);
+	EXPECT_EQ(status, 0);
+	EXPECT_STREQ(getcwd(NULL, 0), ms_getenv(*env, "PWD"));
+	EXPECT_STREQ(old_pwd, ms_getenv(*env, "OLDPWD"));
 }

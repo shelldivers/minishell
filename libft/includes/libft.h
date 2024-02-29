@@ -20,6 +20,7 @@ extern "C" {
 # include <stdlib.h>
 # include "ft_type.h"
 
+int     ft_atoi(const char *str);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
