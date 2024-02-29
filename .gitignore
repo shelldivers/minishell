@@ -1,2 +1,15 @@
 cmake-build-debug
 .idea
+
+### Editor ###
+*.vscode
+*.idea
+### Object ###
+*.o
+### Excute ###
+*.out
+### Debug ###
+*.dSYM
+cmake-build-debug
+### Other ###
+*.DS_Store
