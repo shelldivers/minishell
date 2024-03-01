@@ -75,7 +75,6 @@ Assignment to the name within a returned ASSIGNMENT_WORD token shall occur as sp
    The grammar symbols
    ------------------------------------------------------- */
 %token  WORD			// 명령어
-%token  ASSIGNMENT_WORD	// 환경 변수
 
 /* The following are the operators (see XBD Operator)
    containing more than one character. */
@@ -91,42 +90,46 @@ Assignment to the name within a returned ASSIGNMENT_WORD token shall occur as sp
 /* -------------------------------------------------------
    The Grammar
    ------------------------------------------------------- */
-%start program
+%start and_or
 %%
-complete_command : and_or
-                 ;
-and_or           :               pipeline
+and_or :               		     pipeline
                  | and_or AND_IF pipeline
                  | and_or OR_IF  pipeline
                  ;
-pipeline         :               simple_command
-                 | pipeline PIPE simple_command
+pipeline         :               command
+                 | pipeline PIPE command
 				 ;
+command          : simple_command
+                 | subshell
+				 | subshell io_redirect
+                 ;
 subshell         : LBRACE and_or RBRACE
                  ;
-simple_command   : cmd_prefix WORD cmd_suffix
-                 | cmd_prefix WORD
-                 | cmd_prefix
+simple_command   : redirect_list WORD cmd_suffix
+                 | redirect_list WORD
+                 | redirect_list
                  | WORD cmd_suffix
                  | WORD
-                 ;
-cmd_prefix       :            io_redirect
-                 | cmd_prefix io_redirect
-                 |            ASSIGNMENT_WORD
-                 | cmd_prefix ASSIGNMENT_WORD
                  ;
 cmd_suffix       :            io_redirect
                  | cmd_suffix io_redirect
                  |            WORD
                  | cmd_suffix WORD
                  ;
+redirect_list    :               io_redirect
+                 | redirect_list io_redirect
+                 ;
 io_redirect      : io_file
                  | io_here
                  ;
-io_file          : DREAD     WORD
-                 | DWRITE    WORD
-                 | DGREAT    WORD
+io_file          : DREAD     filename
+                 | DWRITE    filename
+                 | DGREAT    filename
                  ;
-io_here          : DLESS     WORD
+filename 		 : WORD
+				 ;
+io_here          : DLESS     is_here
                  ;
+is_here			 : WORD
+				 ;
 ```

@@ -103,23 +103,23 @@ static t_token	*new_token(char *value)
 		exit(1);
 	token->value = ft_strdup(value);
 	if (ft_strcmp(value, "&&") == 0)
-		token->type = AND_IF;
+		token->type = TAND_IF;
 	else if (ft_strcmp(value, "||") == 0)
-		token->type = OR_IF;
+		token->type = TOR_IF;
 	else if (ft_strcmp(value, "|") == 0)
-		token->type = PIPE;
+		token->type = TPIPE;
 	else if (value[0] == '(' && value[ft_strlen(value) - 1] == ')')
-		token->type = SUBSHELL;
+		token->type = TBRACKET;
 	else if (ft_strcmp(value, "<<") == 0)
-		token->type = DLESS;
+		token->type = TDLESS;
 	else if (ft_strcmp(value, ">>") == 0)
-		token->type = DGREAT;
+		token->type = TDGREAT;
 	else if (ft_strcmp(value, "<") == 0)
-		token->type = DREAD;
+		token->type = TDREAD;
 	else if (ft_strcmp(value, ">") == 0)
-		token->type = DWRITE;
+		token->type = TDWRITE;
 	else
-		token->type = WORD;
+		token->type = TWORD;
 	return (token);
 }
 

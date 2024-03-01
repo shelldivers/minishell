@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:44:20 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/28 17:23:51 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:31:30 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ void	init_syntax(t_syntax *syntax)
 	syntax->line = NULL;
 	syntax->words = NULL;
 	syntax->words_cnt = 0;
+}
+
+void	init_parse(t_parser **parser, t_token **token, size_t size)
+{
+	parser = (t_parser *)malloc(sizeof(t_parser));
+	if (!parser)
+		exit (1);
+	parser->grammar = GNONE;
+	parser->token = token;
+	parser->token_size = size;
+	parser->left = NULL;
+	parser->right = NULL;
 }
 
 void	clear_syntax(t_syntax *syntax)
@@ -43,22 +55,19 @@ void	clear_syntax(t_syntax *syntax)
 	syntax->words_cnt = 0;
 }
 
-void	clear_token(t_token **token)
+void	clear_parse_tree(t_parse_tree *parser_head)
 {
-	int	i;
-
-	i = 0;
-	if (token)
+	if (parser_head)
 	{
-		while (token[i])
-		{
-			free(token[i]->value);
-			token[i]->value = NULL;
-			free(token[i]);
-			token[i] = NULL;
-			i++;
-		}
-		free(token);
-		token = NULL;
+		clear_parse_tree(parser_head->left);
+		clear_parse_tree(parser_head->right);
+		free(parser_head);
 	}
+}
+
+void	clear_all(t_syntax *syntax, t_token **token, t_parse_tree *parser_head)
+{
+	clear_syntax(syntax);
+	clear_token(token);
+	clear_parse_tree(parser_head);
 }

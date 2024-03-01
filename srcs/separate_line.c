@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/28 17:14:19 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:54:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void	lexer(t_syntax *syntax)
 		syntax->words[i] = extract_word(syntax->line, &start);
 		i++;
 	}
+	i = 0;
 }
 
 static void	count_word(char *line, size_t *words_cnt)
