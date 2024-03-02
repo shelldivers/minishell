@@ -8,7 +8,8 @@ set(SRCS minishell_test.cpp
         ft_memmove_test.cpp
         expand_quote_test.cpp
         expand_dquote_test.cpp
-        ms_expand_escape_test.cpp)
+        expand_escape_test.cpp
+        expand_env_test.cpp)
 
 add_executable(${NAME} ${SRCS})
 
