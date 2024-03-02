@@ -23,7 +23,8 @@ FetchContent_MakeAvailable(googletest)
 set(SRCS includes/minishell.h srcs/minishell.c
         srcs/ms_expand.c
         srcs/ms_expand_qv.c
-        includes/ms_expand.h)
+        includes/ms_expand.h
+        srcs/ms_expand_qv_utils.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)
