@@ -12,7 +12,9 @@
 
 #ifndef LIBFT_H
 # define LIBFT_H
-
+# ifdef __cplusplus
+extern "C" {
+# endif
 # include <stdlib.h>
 # include "ft_type.h"
 
@@ -20,6 +22,7 @@ int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memset(void *b, int c, size_t len);
+void	*ft_memmove(void *dst, const void *src, size_t len);
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(char const *str, size_t len);
 void	ft_strncpy(void *dst, const void *src, size_t n);
@@ -39,5 +42,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-
+# ifdef __cplusplus
+}
+# endif
 #endif

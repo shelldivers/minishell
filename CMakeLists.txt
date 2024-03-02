@@ -20,7 +20,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # 소스파일 및 헤더파일 목록
-set(SRCS includes/minishell.h srcs/minishell.c)
+set(SRCS includes/minishell.h srcs/minishell.c
+        srcs/ms_expand.c
+        srcs/ms_expand_qv.c
+        includes/ms_expand.h)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)
