@@ -21,6 +21,8 @@ void	ms_expand_escape(char *arg, int *index);
 int		ms_expand_quote(char *arg, int *index);
 void	ms_expand_dquote(char *arg, int *index);
 
+/* ms_expand_aster.c */
+char	**ms_expand_aster(char **args);
 
 # ifdef __cplusplus
 }
