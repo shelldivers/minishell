@@ -13,24 +13,17 @@
 #include "ms_builtin.h"
 #include "ms_env.h"
 #include "ms_error.h"
-#include <unistd.h>
 
 static void	ms_export_env(t_env **env, char *str);
 
 int	ms_export(int argc, char **argv, t_env **env)
 {
-	if (argc < 1 || argv == NULL || env == NULL)
-		return (EXIT_FAILURE);	// error message
-	if (argc == 1 || argv[1] == NULL)
-	{
+	if (argc == 1)
 		ms_env_print_all(*env);
-		return (EXIT_SUCCESS);
-	}
-	argv++;
-	while (*argv)
+	else
 	{
-		ms_export_env(env, *argv);
-		argv++;
+		while (*(++argv))
+			ms_export_env(env, *argv);
 	}
 	return (EXIT_SUCCESS);
 }
