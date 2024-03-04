@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
+/*   Updated: 2024/03/04 15:50:07 by jiwojung         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -109,7 +121,7 @@ static t_token	*new_token(char *value)
 	else if (ft_strcmp(value, "|") == 0)
 		token->type = TPIPE;
 	else if (value[0] == '(' && value[ft_strlen(value) - 1] == ')')
-		token->type = TBRACKET;
+		token->type = TSUBSHELL;
 	else if (ft_strcmp(value, "<<") == 0)
 		token->type = TDLESS;
 	else if (ft_strcmp(value, ">>") == 0)

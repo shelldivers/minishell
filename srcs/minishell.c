@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/01 19:23:22 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:50:57 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,153 +18,108 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-// enum e_grammar
-// {
-// 	GNONE,
-// 	GCOMPLETE_COMMAND,
-// 	GPIPELINE,
-// 	GSUBSHELL,
-// 	GSIMPLE_COMMAND,
-// 	GCMD_NAME,
-// 	GCMD_WORD,
-// 	GCMD_PREFIX,
-// 	GCMD_SUFFIX,
-// 	GIO_REDIRECT,
-// 	GIO_FILE,
-// 	GIO_HERE,
-//	GWORD
-// };
-
-// enum e_type
-// {
-// 	TPIPE,
-// 	TWORD,
-// 	TASSIGNMENT_WORD,
-// 	TAND_IF,
-// 	TOR_IF,
-// 	TDLESS,
-// 	TDGREAT,
-// 	TDREAD,
-// 	TDWRITE,
-// 	TSUBSHELL
-// };
-
-// typedef struct s_syntax
-// {
-// 	char	*line;
-// 	char	**words;
-// 	size_t	words_cnt;
-// }				t_syntax;
-
-// typedef struct s_token
-// {
-// 	enum e_type	type;
-// 	char		*value;
-// }				t_token;
-
-// typedef struct s_parse
-// {
-// 	enum e_grammar	grammar;
-// 	struct s_parser	*left;
-// 	struct s_parser	*right;
-// 	struct s_token	*token;
-// 	size_t			token_size;
-// }				t_parse;
-
-enum t_grammar	is_cmd_suffix(t_token *token, size_t size)
+size_t	is_simple_command(t_token **token)
 {
-	if (size == 1 && token[0].type == TWORD \
-	&& (is_io_redirect(token, size) == GIO_REDIRECT)
-		return (GCMD_SUFFIX);
-	return (GNONE);
-}
+	size_t	i;
 
-enum t_grammar	is_io_redirect(t_token *token, size_t size)
-{
-	if (size == 2 && token[1].type == TWORD \
-	&& (is_io_file(token, size) == GIO_FILE \
-	|| is_io_here(token, size) == GIO_HERE))
-		return (GIO_REDIRECT);
-	return (GNONE);
-}
-
-enum t_grammar	is_io_file(t_token *token, size_t size)
-{
-	if (size == 2 && token[1].type == TWORD \
-	&& (token[0].type == TDLESS \
-	|| token[0].type == TDWRITE \
-	|| token[0].type == DGREAT))
-		return (GIO_HERE);
-	return (GNONE);
-}
-
-enum t_grammar	is_io_here(t_token *token, size_t size)
-{
-	if (size == 2 && token[1].type == TWORD \
-	&& token[0].type == TDLESS)
-		return (GIO_HERE);
-	return (GNONE);
-}
-
-enum t_grammar	is_grammar(t_token *token, size_t size)
-{
-	if (is_pipeline(token, size) == GPIPELINE)
-		return (GPIPELINE);
-	if (is_subshell(token, size) == GSUBSHELL)
-		return (GSUBSHELL);
-	if (is_simple_command(token, size) == GSIMPLE_COMMAND)
-		return (GSIMPLE_COMMAND);
-	if (is_cmd_name(token, size) == GCMD_NAME)
-		return (GCMD_NAME);
-	if (is_cmd_word(token, size) == GCMD_WORD)
-		return (GCMD_WORD);
-	if (is_cmd_prefix(token, size) == GCMD_PREFIX)
-		return (GCMD_PREFIX);
-	if (is_cmd_suffix(token, size) == GCMD_SUFFIX)
-		return (GCMD_SUFFIX);
-	if (is_io_redirect(token, size) == GIO_REDIRECT)
-		return (GIO_REDIRECT);
-	if (is_io_file(token, size) == GIO_FILE)
-		return (GIO_FILE);
-	if (is_io_here(token, size) == GIO_HERE)
-		return (GIO_HERE);
-	return (GNONE);
-}
-
-void	recursive_descent_parsing(t_parse *parse_head)
-{
-	parse_head->grammar = is_grammar(parse_head->token, parse_head->token_size);
-	if (parse_head->grammar == GNONE)
+	i = 0;
+	if (is_redirect_list(token))
 	{
-		printf("Syntax error\n");
-		exit(1);
+		i += is_redirect_list(token);
+		token += i;
 	}
+	return (i);
+
 }
 
-void	parse(t_parse *parse_head, t_token **token, size_t size)
+size_t	is_word(t_token **token)
 {
-	init_parse(parse_head, token, syntax.words_cnt);
-	recursive_descent_parsing(parse_head);
+	if (token[0] && token[0]->type == TWORD)
+		return (1);
+	return (0);
+}
+
+size_t	is_cmd_suffix(t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_redirect_list(token))
+	{
+		i += is_redirect_list(token);
+		token += i;
+	}
+	else if (is_word(token))
+	{
+		while (is_word(token + i))
+			i += is_word(token + i);
+	}
+	return (i);
+}
+
+size_t	is_redirect_list(t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	while (is_io_redirect(token))
+		i += is_io_redirect(token + i);
+	return (i);
+}
+
+size_t	is_io_redirect(t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_io_file(token) || is_io_here(token))
+		return (2);
+	return (0);
+}
+
+size_t	is_io_file(t_token **token)
+{
+	if (token[0] && (token[0]->type == TDREAD \
+	|| token[0]->type == TDWRITE \
+	|| token[0]->type == TDGREAT) \
+	&& token[1] && token[1]->type == TWORD)
+		return (2);
+	return (0);
+}
+
+size_t	is_io_here(t_token **token)
+{
+	if (token[0] && token[0]->type == TDLESS \
+	&& token[1] && token[1]->type == TWORD)
+		return (2);
+	return (0);
+}
+
+void	parser(t_parse *parse, t_token **token, size_t size)
+{
+	init_parse(parse, token, size);
+	isand_or(parse);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_syntax	syntax;
 	t_token		**token;
-	t_parse		*parse_head;
+	t_parse		*parse;
 
 	init_syntax(&syntax);
 	while (1)
 	{
+		parse = NULL;
 		syntax.line = readline("minishell$ ");
-		if (!syntax.line)
-			break ;
+		if (!(syntax.line))
+			exit (1);
 		add_history(syntax.line);
 		lexer(&syntax);
 		token = tokenize(&syntax);
-		parse(parse_head, token, syntax.words_cnt);
-		execute_tree(parse_head);
-		clear_all(&syntax, token, parse_head);
+		parser(parse, token, syntax.words_cnt);
+		execute_tree(parse);
+		clear_all(&syntax, token, parse);
 	}
 	return (0);
 }

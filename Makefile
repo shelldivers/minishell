@@ -12,15 +12,17 @@ AR = ar rcs
 RM = rm -rf
 
 B_FILES = \
-separate_line.c \
 minishell.c \
-init_clear.c \
+separate_line.c \
+init.c \
+clear.c \
 tokenize.c
 
 M_FILES = \
-separate_line.c \
 minishell.c \
-init_clear.c \
+separate_line.c \
+init.c \
+clear.c \
 tokenize.c
 
 H_FILES = \
@@ -42,7 +44,7 @@ CASE =
 all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
+	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
 # 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 # lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
 # sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)
