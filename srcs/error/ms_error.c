@@ -24,6 +24,7 @@ void	ms_puterror_cmd_arg(t_env *env, char *cmd, char *arg)
 	shell = ms_getenv(env, SHELL);
 	str_error = strerror(errno);
 	ft_dprintf(2, "%s: %s: %s: %s\n", shell, cmd, arg, str_error);
+	errno = 0;
 }
 
 void	ms_puterror_cmd(t_env *env, char *cmd)
@@ -34,6 +35,7 @@ void	ms_puterror_cmd(t_env *env, char *cmd)
 	shell = ms_getenv(env, SHELL);
 	str_error = strerror(errno);
 	ft_dprintf(2, "%s: %s: %s\n", shell, cmd, str_error);
+	errno = 0;
 }
 
 void	ms_puterror_arg(t_env *env, char *arg)
@@ -44,4 +46,5 @@ void	ms_puterror_arg(t_env *env, char *arg)
 	shell = ms_getenv(env, SHELL);
 	str_error = strerror(errno);
 	ft_dprintf(2, "%s: %s: %s\n", shell, arg, str_error);
+	errno = 0;
 }
