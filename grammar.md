@@ -111,8 +111,7 @@ simple_command   : redirect_list WORD cmd_suffix
                  | WORD cmd_suffix
                  | WORD
                  ;
-cmd_suffix       :            io_redirect
-                 | cmd_suffix io_redirect
+cmd_suffix       : redirect_list
                  |            WORD
                  | cmd_suffix WORD
                  ;
@@ -122,14 +121,10 @@ redirect_list    :               io_redirect
 io_redirect      : io_file
                  | io_here
                  ;
-io_file          : DREAD     filename
-                 | DWRITE    filename
-                 | DGREAT    filename
+io_file          : DREAD     WORD
+                 | DWRITE    WORD
+                 | DGREAT    WORD
                  ;
-filename 		 : WORD
-				 ;
-io_here          : DLESS     is_here
+io_here          : DLESS     WORD
                  ;
-is_here			 : WORD
-				 ;
 ```
