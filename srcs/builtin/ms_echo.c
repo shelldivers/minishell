@@ -33,8 +33,6 @@ int	ms_echo(int argc, char **argv, t_env **env)
 	int		i;
 	t_bool	n_flag;
 
-	if (argc < 1)	// todo : error message
-		return (EXIT_FAILURE);
 	n_flag = is_option(argv[1]);
 	i = 1;
 	if (n_flag == TRUE)
