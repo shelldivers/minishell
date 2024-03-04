@@ -1,18 +1,20 @@
-#include "minishell.h"
-#include <stdio.h>
+#include "ms_builtin.h"
+#include "ms_error.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 
-int	ms_pwd(int argc, char **argv)
+int	ms_pwd(int argc, char **argv, t_env **env)
 {
 	char	*pwd;
 
 	(void)argv;
-	if (argc < 1)
-		return (EXIT_FAILURE);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return (EXIT_FAILURE);	// error message
+	{
+		ms_puterror_cmd(*env, "pwd");
+		return (EXIT_FAILURE);
+	}
 	printf("%s\n", pwd);
 	return (EXIT_SUCCESS);
 }
