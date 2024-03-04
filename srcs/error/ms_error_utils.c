@@ -44,3 +44,13 @@ void	ms_puterror_too_many_args(t_env *env, char *cmd)
 	ft_dprintf(2, "%s: %s: %s\n", shell, cmd, msg);
 	errno = 0;
 }
+
+void	ms_puterror_env_not_set(t_env *env, char *cmd, char *key)
+{
+	char		*shell;
+	const char	*msg = "not set";
+
+	shell = ms_getenv(env, SHELL);
+	ft_dprintf(2, "%s: %s: %s %s\n", shell, cmd, key, msg);
+	errno = 0;
+}
