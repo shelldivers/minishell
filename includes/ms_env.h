@@ -6,7 +6,7 @@
 # define HOME "HOME"
 # define PWD "PWD"
 # define OLDPWD "OLDPWD"
-# define PATH "PATH"
+# define SHELL "SHELL"
 
 # ifdef __cplusplus
 extern "C" {

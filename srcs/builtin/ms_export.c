@@ -1,5 +1,6 @@
-#include "minishell.h"
+#include "ms_builtin.h"
 #include "ms_env.h"
+#include "ms_error.h"
 #include <unistd.h>
 
 static t_bool	ms_export_env(t_env **env, char *str);
@@ -29,10 +30,8 @@ static t_bool	ms_export_env(t_env **env, char *str)
 	node = ms_str_to_env(str);
 	if (!node)
 		return (FALSE);
-	if (ms_is_valid_env_key(node->key) == FALSE)
-		write(2, "export: not a valid identifier\n", 31);	// error message
-	else
-		ms_setenv(env, node->key, node->value);
+	if (!ms_setenv(env, node->key, node->value))
+		ms_puterror_cmd_arg(*env, "export", node->key);
 	free(node->key);
 	free(node->value);
 	free(node);

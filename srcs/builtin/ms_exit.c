@@ -1,21 +1,31 @@
-#include "minishell.h"
 #include "libft.h"
+#include "ms_builtin.h"
+#include "ms_error.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-int	ms_exit(int argc, char **argv)
+int	ms_exit(int argc, char **argv, t_env **env)
 {
 	char	exit_code;
 
-	if (argc < 1)
-		exit(0);
-	if (argc > 2)
+	(void)argc;
+	argv++;
+	if (*argv == NULL)
+		exit_code = 0;
+	else
 	{
-		write(2, "exit: too many arguments\n", 25);	// todo : error message
-		return (EXIT_FAILURE);
+		if (ft_isnumeric(*argv) == 0)
+		{
+			ms_puterror_numeric(*env, "exit", *argv);
+			exit(255);
+		}
+		if (*(argv + 1) != NULL)
+		{
+			ms_puterror_too_many_args(*env, "exit");
+			return (EXIT_FAILURE);
+		}
+		exit_code = (char)ft_atoi(*argv);
 	}
-	exit_code = 0;
-	if (*(++argv) != NULL)
-		exit_code = (char) ft_atoi(*argv);
+	write(1, "exit\n", 5);
 	exit(exit_code);
 }

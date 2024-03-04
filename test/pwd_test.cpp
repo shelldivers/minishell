@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "minishell.h"
+#include "ms_builtin.h"
 #include <gtest/gtest.h>
 
 TEST(pwd, basic)
@@ -22,7 +23,7 @@ TEST(pwd, basic)
 	int argc = 1;
 	char *argv[] = {"pwd"};
 
-	int status = ms_pwd(argc, argv);
+	int status = ms_pwd(argc, argv, NULL);
 
 	buffer[ft_strlen(buffer) - 1] = '\0';	// remove newline
 
@@ -53,7 +54,7 @@ TEST(pwd, too_many_args) {
 	int	argc = 2;
 	char *argv[] = {"pwd", "test"};
 
-	int status = ms_pwd(argc, argv);
+	int status = ms_pwd(argc, argv, NULL);
 
 	buffer[ft_strlen(buffer) - 1] = '\0';	// remove newline
 

@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "ms_builtin.h"
 #include <gtest/gtest.h>
 
 TEST(export_test, basic_case)

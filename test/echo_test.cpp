@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "ms_builtin.h"
 #include <gtest/gtest.h>
 
 TEST(echo, basic_case)
@@ -20,7 +21,7 @@ TEST(echo, basic_case)
 	int argc = 3;
 
 	// when
-	ms_echo(argc, argv);
+	ms_echo(argc, argv, NULL);
 
 	// close stream
 	fclose(string_stream);
@@ -49,7 +50,7 @@ TEST(echo, with_option)
 	int argc = 4;
 
 	// when
-	ms_echo(argc, argv);
+	ms_echo(argc, argv, NULL);
 
 	// close stream
 	fclose(string_stream);
@@ -78,7 +79,7 @@ TEST(echo, invalid_option)
 	int argc = 4;
 
 	// when
-	ms_echo(argc, argv);
+	ms_echo(argc, argv, NULL);
 
 	// close stream
 	fclose(string_stream);
@@ -107,7 +108,7 @@ TEST(echo, no_argv)
 	int argc = 1;
 
 	// when
-	ms_echo(argc, argv);
+	ms_echo(argc, argv, NULL);
 
 	// close stream
 	fclose(string_stream);
@@ -136,7 +137,7 @@ TEST(echo, no_argv_n_option)
 	int argc = 2;
 
 	// when
-	ms_echo(argc, argv);
+	ms_echo(argc, argv, NULL);
 
 	// close stream
 	fclose(string_stream);

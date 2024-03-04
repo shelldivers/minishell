@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ms_builtin.h"
 #include "ft_bool.h"
 #include "libft.h"
 #include <stdio.h>
@@ -28,7 +28,7 @@ static t_bool	is_option(char *str)
 	return (FALSE);
 }
 
-int	ms_echo(int argc, char **argv)
+int	ms_echo(int argc, char **argv, t_env **env)
 {
 	int		i;
 	t_bool	n_flag;
