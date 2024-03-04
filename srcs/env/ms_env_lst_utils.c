@@ -76,6 +76,9 @@ void	ms_env_print_all(t_env *env)
 	}
 }
 
+/**
+ * @errno EINVAL
+ */
 t_bool	ms_is_valid_env_key(char *key)
 {
 	if (!ft_isalpha(*key) && *key != '_')
