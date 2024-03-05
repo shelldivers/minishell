@@ -1,6 +1,10 @@
 #include "ms_expand.h"
+#include "ms_error.h"
 #include <stdlib.h>
 
+/**
+ * @errno ENOMEM
+ */
 char	*ms_expand_qv_exchange(char **str, t_env **env)
 {
 	int		i;
@@ -31,7 +35,10 @@ t_bool	ms_expand_qv(char **args, t_env **env)
 	{
 		ms_expand_qv_exchange(args, env);
 		if (!*args)
+		{
+			ms_puterror_arg(*env, *args);
 			return (FALSE);
+		}
 		args++;
 	}
 	return (TRUE);
