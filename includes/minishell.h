@@ -6,12 +6,14 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/05 14:07:57 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:34:40 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "ft_bool.h"
+# include "ms_env.h"
 
 # include <stdlib.h>
 
@@ -88,4 +90,4 @@ size_t	is_cmd_suffix(t_token **token);
 size_t	is_word(t_token **token);
 /*================parse_tree.c================*/
 t_parse	*new_parse(t_parse *parse, t_token **token, size_t size);
-#endif
+#endi

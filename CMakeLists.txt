@@ -16,12 +16,32 @@ include(FetchContent)
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        v1.14.x
+        GIT_TAG v1.14.x
 )
 FetchContent_MakeAvailable(googletest)
 
 # 소스파일 및 헤더파일 목록
-set(SRCS includes/minishell.h srcs/minishell.c srcs/init_clear.c srcs/separate_line.c srcs/tokenize.c)
+set(SRCS srcs/init_clear.c 
+srcs/separate_line.c 
+srcs/tokenize.c 
+includes/minishell.h 
+includes/ms_env.h 
+srcs/minishell.c 
+srcs/builtin/ms_cd.c 
+srcs/builtin/ms_pwd.c 
+srcs/builtin/ms_echo.c 
+srcs/env/ms_env_lst.c 
+srcs/env/ms_env_serialize_utils.c 
+srcs/env/ms_env_lst_utils.c 
+srcs/builtin/ms_export.c 
+srcs/env/ms_env_serialize.c 
+srcs/builtin/ms_unset.c 
+srcs/builtin/ms_env.c 
+srcs/builtin/ms_exit.c 
+srcs/error/ms_error.c 
+includes/ms_error.h 
+includes/ms_builtin.h 
+srcs/error/ms_error_utils.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)
