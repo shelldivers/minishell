@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "ms_builtin.h"
 #include "ms_env.h"
 #include "ms_error.h"
 #include <unistd.h>
-#include <sys/errno.h>
 
 static int		ms_env_exec(char **argv, char **envp);
-static t_bool	ms_env_convert(t_env **new, char **argv, t_env **env);
+static char		**ms_env_convert(t_env **new_env, char **argv);
 
 int	ms_env(int argc, char **argv, t_env **env)
 {
@@ -27,11 +27,12 @@ int	ms_env(int argc, char **argv, t_env **env)
 	(void)argc;
 	new_env = (t_env **)malloc(sizeof(t_env *));
 	if (!new_env)
-		return (ENOMEM);
+		return (EXIT_FAILURE);
 	*new_env = NULL;
-	if (!ms_env_convert(new_env, argv + 1, env))
+	argv = ms_env_convert(new_env, argv + 1);
+	if (!argv)
 	{
-		ms_env_clear(new_env);
+		ms_puterror_cmd(*env, "env");
 		free(new_env);
 		return (EXIT_FAILURE);
 	}
@@ -45,33 +46,33 @@ int	ms_env(int argc, char **argv, t_env **env)
 	}
 	ms_env_clear(new_env);
 	free(new_env);
-	return (ms_env_exec(argv + 1, envp));
+	return (ms_env_exec(argv, envp));
 }
 
-static t_bool	ms_env_convert(t_env **new, char **argv, t_env **env)
+/**
+ * @errno ENOMEM
+ */
+static char	**ms_env_convert(t_env **new_env, char **argv)
 {
 	t_env	*node;
 
 	while (*argv)
 	{
-		if (!ms_is_valid_env_key(*argv))
-		{
-			ms_puterror_identifier(*env, "env", *argv);
-			return (FALSE);
-		}
+		if (ft_strchr(*argv, '=') == NULL)
+			break ;
 		else
 		{
 			node = ms_str_to_env(*argv);
 			if (!node)
 			{
-				ms_puterror_cmd(*env, "env");
-				return (FALSE);
+				ms_env_clear(new_env);
+				return (NULL);
 			}
-			ms_env_push_back(new, node);
+			ms_env_push_back(new_env, node);
 		}
 		argv++;
 	}
-	return (TRUE);
+	return (argv);
 }
 
 static int	ms_env_exec(char **argv, char **envp)

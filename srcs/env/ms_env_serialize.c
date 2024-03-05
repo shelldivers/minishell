@@ -84,9 +84,15 @@ char	**ms_env_serialize_union(t_env **env1, t_env **env2)
 	if (!envp)
 		return (NULL);
 	envp[env1_size + env2_size] = NULL;
-	if (!ms_env_move(envp, env1, 0)
-		|| !ms_env_move(envp, env2, env1_size))
+	if (!ms_env_move(envp, env1, 0))
 	{
+		free(envp);
+		return (NULL);
+	}
+	if (!ms_env_move(envp, env2, env1_size))
+	{
+		while (env1_size--)
+			free(envp[env1_size]);
 		free(envp);
 		return (NULL);
 	}

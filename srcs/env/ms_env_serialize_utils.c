@@ -36,7 +36,7 @@ t_bool	ms_env_move(char **envp, t_env **env, size_t start)
 		envp[start + i] = tmp[i];
 		i++;
 	}
-	envp[start + i] = NULL;
+	envp[start + tmp_size] = NULL;
 	free(tmp);
 	return (TRUE);
 }
