@@ -20,6 +20,7 @@ int	ms_pwd(int argc, char **argv, t_env **env)
 {
 	char	*pwd;
 
+	(void)argc;
 	(void)argv;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
