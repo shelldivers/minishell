@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 static int		ms_env_exec(char **argv, char **envp);
-static char		**ms_env_convert(t_env **new_env, char **argv);
+static char		**ms_env_convert(t_env **new_env, char **argv, t_env **env);
 
 int	ms_env(int argc, char **argv, t_env **env)
 {
@@ -29,10 +29,9 @@ int	ms_env(int argc, char **argv, t_env **env)
 	if (!new_env)
 		return (EXIT_FAILURE);
 	*new_env = NULL;
-	argv = ms_env_convert(new_env, argv + 1);
+	argv = ms_env_convert(new_env, argv + 1, env);
 	if (!argv)
 	{
-		ms_puterror_cmd(*env, "env");
 		free(new_env);
 		return (EXIT_FAILURE);
 	}
@@ -49,10 +48,7 @@ int	ms_env(int argc, char **argv, t_env **env)
 	return (ms_env_exec(argv, envp));
 }
 
-/**
- * @errno ENOMEM
- */
-static char	**ms_env_convert(t_env **new_env, char **argv)
+static char	**ms_env_convert(t_env **new_env, char **argv, t_env **env)
 {
 	t_env	*node;
 
@@ -65,6 +61,7 @@ static char	**ms_env_convert(t_env **new_env, char **argv)
 			node = ms_str_to_env(*argv);
 			if (!node)
 			{
+				ms_puterror_cmd(*env, "env");
 				ms_env_clear(new_env);
 				return (NULL);
 			}
