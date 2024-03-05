@@ -20,6 +20,30 @@ static t_bool	ms_str_assign_empty_env(t_env *env, char *str);
 /**
  * @errno ENOMEM
  */
+t_bool	ms_env_move(char **envp, t_env **env, size_t start)
+{
+	char	**tmp;
+	size_t	tmp_size;
+	size_t	i;
+
+	tmp = ms_env_serialize(*env);
+	if (!tmp)
+		return (FALSE);
+	tmp_size = ms_env_size(*env);
+	i = 0;
+	while (i < tmp_size)
+	{
+		envp[start + i] = tmp[i];
+		i++;
+	}
+	envp[start + i] = NULL;
+	free(tmp);
+	return (TRUE);
+}
+
+/**
+ * @errno ENOMEM
+ */
 char	*ms_env_to_str(t_env *env)
 {
 	char	*str;

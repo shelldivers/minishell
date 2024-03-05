@@ -68,3 +68,27 @@ t_env	**ms_env_deserialize(char **envp)
 	}
 	return (head);
 }
+
+/**
+ * @errno ENOMEM
+ */
+char	**ms_env_serialize_union(t_env **env1, t_env **env2)
+{
+	char	**envp;
+	size_t	env1_size;
+	size_t	env2_size;
+
+	env1_size = ms_env_size(*env1);
+	env2_size = ms_env_size(*env2);
+	envp = (char **)malloc(sizeof(char *) * (env1_size + env2_size + 1));
+	if (!envp)
+		return (NULL);
+	envp[env1_size + env2_size] = NULL;
+	if (!ms_env_move(envp, env1, 0)
+		|| !ms_env_move(envp, env2, env1_size))
+	{
+		free(envp);
+		return (NULL);
+	}
+	return (envp);
+}

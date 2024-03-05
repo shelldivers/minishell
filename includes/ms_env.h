@@ -33,9 +33,11 @@ void	ms_env_print_all(t_env *env);
 
 /* ms_env_serialize.c */
 char	**ms_env_serialize(t_env *env);
+char	**ms_env_serialize_union(t_env **env1, t_env **env2);
 t_env	**ms_env_deserialize(char **envp);
 
 /* ms_env_serialize_utils.c */
+t_bool	ms_env_move(char **envp, t_env **env, size_t start);
 t_env	*ms_str_to_env(char *str);
 char	*ms_env_to_str(t_env *env);
 

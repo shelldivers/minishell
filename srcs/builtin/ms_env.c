@@ -1,36 +1,76 @@
 #include "ms_builtin.h"
 #include "ms_env.h"
+#include "ms_error.h"
 #include <unistd.h>
+#include <sys/errno.h>
 
-static t_bool	ms_env_exec(char **argv, char **envp);
+static int		ms_env_exec(char **argv, char **envp);
+static t_bool	ms_env_convert(t_env **new, char **argv, t_env **env);
 
-int	ms_env(int argc, char **argv, char **envp)
+int	ms_env(int argc, char **argv, t_env **env)
 {
-	t_env	**head;
-	t_env	*env;
+	t_env	**new_env;
+	char	**envp;
 
-	if (argc < 1 || argv == NULL || envp == NULL)
-		return (EXIT_FAILURE);	// todo : error message
-	head = ms_env_deserialize(envp);
-	if (head == NULL)
-		return (EXIT_FAILURE);	// todo : error message
-	while (*argv)
+	(void)argc;
+	new_env = (t_env **)malloc(sizeof(t_env *));
+	if (!new_env)
+		return (ENOMEM);
+	*new_env = NULL;
+	if (!ms_env_convert(new_env, argv + 1, env))
 	{
-		if (ms_is_valid_env_key(*argv) == FALSE)
-			break ;
-		env = ms_str_to_env(*argv);
-		if (env == NULL)
-			return (EXIT_FAILURE);	// todo : error message
-		ms_env_push_back(head, env);
-		argv++;
+		ms_env_clear(new_env);
+		free(new_env);
+		return (EXIT_FAILURE);
 	}
-	envp = ms_env_serialize(*head);
-	ms_env_clear(head);
-	// todo : ms_env_exec(argv, envp);
-	return (EXIT_SUCCESS);
+	envp = ms_env_serialize_union(env, new_env);
+	if (!envp)
+	{
+		ms_puterror_cmd(*env, "env");
+		ms_env_clear(new_env);
+		free(new_env);
+		return (EXIT_FAILURE);
+	}
+	ms_env_clear(new_env);
+	free(new_env);
+	return (ms_env_exec(argv + 1, envp));
 }
 
-static t_bool	ms_env_exec(char **argv, char **envp)
+static t_bool	ms_env_convert(t_env **new, char **argv, t_env **env)
 {
-	// todo : execve
+	t_env	*node;
+
+	while (*argv)
+	{
+		if (!ms_is_valid_env_key(*argv))
+		{
+			ms_puterror_identifier(*env, "env", *argv);
+			return (FALSE);
+		}
+		else
+		{
+			node = ms_str_to_env(*argv);
+			if (!node)
+			{
+				ms_puterror_cmd(*env, "env");
+				return (FALSE);
+			}
+			ms_env_push_back(new, node);
+		}
+		argv++;
+	}
+	return (TRUE);
+}
+
+static int	ms_env_exec(char **argv, char **envp)
+{
+	int	status;
+
+	status = execve(*argv, argv, envp);		// execve 전에 파싱 부분 추가
+	if (status == -1)
+	{
+		ms_puterror_cmd(NULL, *argv);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

@@ -1,7 +1,32 @@
 #include "libft.h"
 #include "minishell.h"
 #include "ms_builtin.h"
+#include "ms_env.h"
 #include <gtest/gtest.h>
+
+TEST(env_test, ms_env_serialize_union)
+{
+	t_env **env = (t_env **)malloc(sizeof(t_env *));
+	*env = NULL;
+	ms_setenv(env, "PWD", "/Users/jeongwpa");
+	ms_setenv(env, "SHLVL", "1");
+	ms_setenv(env, "LOGNAME", "jeongwpa");
+	ms_setenv(env, "USER", "jeongwpa");
+
+	t_env **new_env = (t_env **)malloc(sizeof(t_env *));
+	*new_env = NULL;
+	ms_setenv(new_env, "PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/munki");
+	ms_setenv(new_env, "HOME", "/Users/jeongwpa");
+	ms_setenv(new_env, "TERM_PROGRAM", "Apple_Terminal");
+
+	char **envp = ms_env_serialize_union(env, new_env);
+	int i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+}
 
 TEST(env_test, deserialize)
 {

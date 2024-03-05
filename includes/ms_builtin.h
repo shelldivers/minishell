@@ -12,7 +12,7 @@ int	ms_pwd(int argc, char **argv, t_env **env);
 int	ms_echo(int argc, char **argv, t_env **env);
 int	ms_export(int argc, char **argv, t_env **env);
 int	ms_unset(int argc, char **argv, t_env **env);
-int	ms_env(int argc, char **argv, char **envp);
+int	ms_env(int argc, char **argv, t_env **envp);
 int	ms_exit(int argc, char **argv, t_env **env);
 
 # ifdef __cplusplus
