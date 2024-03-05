@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/05 16:34:40 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/05 19:33:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,15 @@
 
 # include <stdlib.h>
 
-enum e_grammar
+enum e_op
 {
-	GNONE,
-	GAND_OR,
-	GPIPELINE,
-	GSUBSHELL,
-	GSIMPLE_COMMAND,
-	GCMD_NAME,
-	GCMD_WORD,
-	GCMD_PREFIX,
-	GCMD_SUFFIX,
-	GIO_REDIRECT,
-	GIO_FILE,
-	GIO_HERE,
-	GWORD
+	OPNONE,
+	OPPIPE,
+	OPAND_IF,
+	OPOR_IF,
+	OPIO_HERE,
+	OPIO_FILE,
+	OPSUBSHELL
 };
 
 enum e_type
@@ -62,7 +56,7 @@ typedef struct s_token
 
 typedef struct s_parse
 {
-	enum e_grammar	grammar;
+	enum e_type		op;
 	struct s_parse	*left;
 	struct s_parse	*right;
 	struct s_token	**token;
@@ -82,12 +76,16 @@ void	clear_all(t_syntax *syntax, t_token **token, t_parse *parse);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
 /*================is_grammar.c================*/
-size_t	is_io_here(t_token **token);
-size_t	is_io_file(t_token **token);
-size_t	is_io_redirect(t_token **token);
-size_t	is_redirect_list(t_token **token);
-size_t	is_cmd_suffix(t_token **token);
-size_t	is_word(t_token **token);
+size_t	isio_here(t_parse *parse, t_token **token);
+size_t	isio_file(t_parse *parse, t_token **token);
+size_t	isio_redirect(t_parse *parse, t_token **token);
+size_t	isredirect_list(t_parse *parse, t_token **token);
+size_t	iscmd_suffix(t_parse *parse, t_token **token);
+size_t	issimple_command(t_parse *parse, t_token **token);
+size_t	issubshell(t_parse *parse, t_token **token);
+size_t	iscommand(t_parse *parse, t_token **token);
+size_t	ispipeline(t_parse *parse, t_token **token);
+size_t	isand_or(t_parse *parse, t_token **token);
 /*================parse_tree.c================*/
 t_parse	*new_parse(t_parse *parse, t_token **token, size_t size);
-#endi
+#endif
