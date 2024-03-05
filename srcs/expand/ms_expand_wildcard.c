@@ -2,7 +2,7 @@
 #include "ms_error.h"
 #include "ms_env.h"
 
-char	**ms_expand_aster(char **args, t_env **env)
+char	**ms_expand_wildcard(char **str, int *index, t_env **env)
 {
 
 }

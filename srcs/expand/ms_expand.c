@@ -1,14 +1,50 @@
 #include "ms_expand.h"
-#include <stdlib.h>
+#include "ms_error.h"
 
-char	**ms_expand(char **args, t_env **env)
+static t_bool	ms_expand_exchange(char **str, t_env **env);
+
+t_bool	ms_expand(char **argv, t_env **env)
 {
-	char	**new_args;
+	while (*argv)
+	{
+		if (!ms_expand_exchange(argv, env))
+		{
+			ms_puterror_arg(*env, *argv);
+			return (FALSE);
+		}
+		argv++;
+	}
+	return (TRUE);
+}
 
-	if (!ms_expand_qv(args, env))
-		return (NULL);
-	new_args = ms_expand_aster(args, env);
-	if (!new_args)
-		return (NULL);
-	return (new_args);
+/**
+ * @errno ENOMEM
+ */
+static t_bool	ms_expand_exchange(char **str, t_env **env)
+{
+	int		i;
+
+	i = 0;
+	while ((*str)[i] && i != -1)
+	{
+		if ((*str)[i] == '\'')
+			ms_expand_quote(*str, &i);
+		else if ((*str)[i] == '\"')
+			ms_expand_dquote(*str, &i, env);
+		else if ((*str)[i] == '\\')
+			ms_expand_escape(*str, &i);
+		else if ((*str)[i] == '$')
+		{
+			if (!ms_expand_env(str, &i, env))
+				return (FALSE);
+		}
+		else if ((*str)[i] == '*')
+		{
+			if (!ms_expand_wildcard(str, &i, env))
+				return (FALSE);
+		}
+		else
+			i++;
+	}
+	return (TRUE);
 }

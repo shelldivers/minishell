@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "ms_env.h"
+#include "ms_expand.h"
 #include <stdlib.h>
 
 /**
@@ -50,46 +51,4 @@ t_bool	ms_expand_env(char **str, int *index, t_env **env)
 	if (!ms_expand_env_exchange(str, index, value))
 		return (FALSE);
 	return (TRUE);
-}
-
-void	ms_expand_escape(char *arg, int *index)
-{
-	int	i;
-
-	i = *index;
-	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
-	*index += 1;
-}
-
-void	ms_expand_quote(char *arg, int *index)
-{
-	int		i;
-
-	i = *index;
-	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
-	while (arg[i] && arg[i] != '\'')
-		i++;
-	if (arg[i] == '\'')
-		ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
-	*index = i;
-}
-
-void	ms_expand_dquote(char *arg, int *index, t_env **env)
-{
-	int	i;
-
-	i = *index;
-	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
-	while (arg[i] && arg[i] != '\"')
-	{
-		if (arg[i] == '\\' && (arg[i + 1] == '\"' || arg[i + 1] == '\\'))
-			ms_expand_escape(arg, &i);
-		else if (arg[i] == '$')
-			ms_expand_env(&arg, &i, env);
-		else
-			i++;
-	}
-	if (arg[i] == '\"')
-		ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
-	*index = i;
 }
