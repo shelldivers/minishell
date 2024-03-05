@@ -82,7 +82,7 @@ void	ms_expand_dquote(char *arg, int *index, t_env **env)
 	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
 	while (arg[i] && arg[i] != '\"')
 	{
-		if (arg[i] == '\\')
+		if (arg[i] == '\\' && (arg[i + 1] == '\"' || arg[i + 1] == '\\'))
 			ms_expand_escape(arg, &i);
 		else if (arg[i] == '$')
 			ms_expand_env(&arg, &i, env);
