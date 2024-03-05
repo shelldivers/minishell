@@ -75,12 +75,17 @@ static char	**ms_env_convert(t_env **new_env, char **argv, t_env **env)
 static int	ms_env_exec(char **argv, char **envp)
 {
 	int	status;
+	int	exit_code;
 
+	exit_code = EXIT_SUCCESS;
 	status = execve(*argv, argv, envp);		// execve 전에 파싱 부분 추가
 	if (status == -1)
 	{
 		ms_puterror_cmd(NULL, *argv);
-		return (EXIT_FAILURE);
+		exit_code = EXIT_FAILURE;
 	}
-	return (EXIT_SUCCESS);
+	while (*envp)
+		free(*envp++);
+	free(envp);
+	return (exit_code);
 }
