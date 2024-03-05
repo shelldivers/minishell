@@ -40,7 +40,7 @@ t_bool	ms_expand_env(char **arg, int *index)
 	key = ft_substr(*arg, *index, i - *index);
 	if (key == NULL)
 		return (FALSE);
-	value = ms_getenv(key);	// todo: ms_getenv
+//	value = ms_getenv(key);	// todo: ms_getenv
 	free(key);
 	if (value == NULL)
 		value = ft_strdup("");
