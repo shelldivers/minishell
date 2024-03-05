@@ -88,7 +88,7 @@ TEST(export_test, empty_only_key)
 	ms_export(argc, argv, &env);
 
 	// then
-	EXPECT_STREQ(ms_getenv(env, "NOVAL"), "");
+	EXPECT_EQ(ms_getenv(env, "NOVAL"), (void *)0);
 	EXPECT_STREQ(ms_getenv(env, "HELLO"), "WORLD");
 }
 
