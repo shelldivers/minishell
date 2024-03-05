@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/04 17:28:07 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:07:57 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,6 @@ size_t	is_io_redirect(t_token **token);
 size_t	is_redirect_list(t_token **token);
 size_t	is_cmd_suffix(t_token **token);
 size_t	is_word(t_token **token);
+/*================parse_tree.c================*/
+t_parse	*new_parse(t_parse *parse, t_token **token, size_t size);
 #endif

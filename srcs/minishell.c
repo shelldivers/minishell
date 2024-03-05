@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/04 18:50:57 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:33:46 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,71 @@
 #include <readline/history.h>
 #include "minishell.h"
 
+size_t	is_and_or(t_parse *parse, t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	while (is_pipeline(token))
+	{
+		i += is_pipeline(token);
+	}
+	if (token[i] && (token[i]->type == TAND_IF || token[i]->type == TOR_IF))
+	{
+		i++;
+		if (is_pipeline(token + i))
+			i += is_pipeline(token + i);
+	}
+	return (i);
+}
+
+size_t	is_pipeline(t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_command(token))
+		i += is_command(token);
+	else if (is_command(token))
+	{
+
+	}
+	return (i);
+}
+
+{
+	size_t	i;
+
+	i = 0;
+	if (is_command(token))
+		i += is_command(token);
+	else if 
+	return (i);
+}
+
+size_t	is_command(t_token **token)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_simple_command(token))
+		i += is_simple_command(token);
+	else if (is_subshell(token))
+	{
+		i += is_subshell(token);
+		if (is_io_redirect(token + i))
+			i += is_io_redirect(token + i);
+	}
+	return (i);
+}
+
+size_t	is_subshell(t_token **token)
+{
+	if (token[0] && token[0]->type == TSUBSHELL)
+		return (1);
+	return (0);
+}
+
 size_t	is_simple_command(t_token **token)
 {
 	size_t	i;
@@ -26,7 +91,18 @@ size_t	is_simple_command(t_token **token)
 	if (is_redirect_list(token))
 	{
 		i += is_redirect_list(token);
-		token += i;
+		if (is_word(token + i))
+		{
+			i += is_word(token + i);
+			if (is_cmd_suffix(token + i))
+				i += is_cmd_suffix(token + i);
+		}
+	}
+	else if (is_word(token))
+	{
+		i += is_word(token + i);
+		if (is_cmd_suffix(token + i))
+			i += is_cmd_suffix(token + i);
 	}
 	return (i);
 
@@ -87,18 +163,36 @@ size_t	is_io_file(t_token **token)
 	return (0);
 }
 
-size_t	is_io_here(t_token **token)
+size_t	is_io_here(t_parse *parse)
 {
+	t_parse *new_parse;
+
+	new_parse = new_parse(token, 2);
 	if (token[0] && token[0]->type == TDLESS \
 	&& token[1] && token[1]->type == TWORD)
+	{
+		parse->grammar = GIO_HERE;
 		return (2);
+	}
 	return (0);
+}
+t_parse	*new_parse(t_token **token, size_t size)
+{
+	t_parse	*new_parse;
+
+	new_parse = (t_parse *)malloc(sizeof(t_parse));
+	new_parse->token = token;
+	new_parse->token_size = size;
+	new_parse->grammar = NULL;
+	new_parse->left = NULL;
+	new_parse->right = NULL;
+	return (new_parse);
 }
 
 void	parser(t_parse *parse, t_token **token, size_t size)
 {
 	init_parse(parse, token, size);
-	isand_or(parse);
+	is_and_or(parse);
 }
 
 int	main(int argc, char **argv, char **envp)
