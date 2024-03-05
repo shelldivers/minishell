@@ -18,26 +18,20 @@
 
 int	ms_exit(int argc, char **argv, t_env **env)
 {
-	char	exit_code;
-
 	(void)argc;
 	argv++;
 	write(1, "exit\n", 5);
 	if (*argv == NULL)
-		exit_code = 0;
-	else
+		exit(EXIT_SUCCESS);
+	if (ft_isnumeric(*argv) == 0)
 	{
-		if (ft_isnumeric(*argv) == 0)
-		{
-			ms_puterror_numeric(*env, "exit", *argv);
-			exit(255);
-		}
-		if (*(argv + 1) != NULL)
-		{
-			ms_puterror_too_many_args(*env, "exit");
-			return (EXIT_FAILURE);
-		}
-		exit_code = (char)ft_atoi(*argv);
+		ms_puterror_numeric(*env, "exit", *argv);
+		exit(255);
 	}
-	exit(exit_code);
+	if (*(argv + 1) != NULL)
+	{
+		ms_puterror_too_many_args(*env, "exit");
+		return (EXIT_FAILURE);
+	}
+	exit((char)ft_atoi(*argv));
 }
