@@ -1,48 +1,38 @@
 #include "ms_expand.h"
 #include <stdlib.h>
 
-char	*ms_expand_qv_exchange(char *arg)
+char	*ms_expand_qv_exchange(char **str, t_env **env)
 {
 	int		i;
 
-	if (arg == NULL)
-		return (NULL);
 	i = 0;
-	while (arg[i] && i != -1)
+	while ((*str)[i] && i != -1)
 	{
-		if (arg[i] == '\'')
-			ms_expand_quote(arg, &i);
-		else if (arg[i] == '\"')
-			ms_expand_dquote(arg, &i);
-		else if (arg[i] == '\\')
-			ms_expand_escape(arg, &i);
-		else if (arg[i] == '$')
+		if ((*str)[i] == '\'')
+			ms_expand_quote(*str, &i);
+		else if ((*str)[i] == '\"')
+			ms_expand_dquote(*str, &i, env);
+		else if ((*str)[i] == '\\')
+			ms_expand_escape(*str, &i);
+		else if ((*str)[i] == '$')
 		{
-			if (!ms_expand_env(&arg, &i))
+			if (!ms_expand_env(str, &i, env))
 				return (NULL);
 		}
-		else{}
+		else
 			i++;
 	}
-	return (arg);
+	return (*str);
 }
 
-t_bool	ms_expand_qv(char **args)
+t_bool	ms_expand_qv(char **args, t_env **env)
 {
-	int		i;
-	char	*tmp;
-
-	if (args == NULL)
-		return (FALSE);
-	i = 0;
-	while (args[i])
+	while (*args)
 	{
-		tmp = ms_expand_qv_exchange(args[i]);
-		if (!tmp)
+		ms_expand_qv_exchange(args, env);
+		if (!*args)
 			return (FALSE);
-		free(args[i]);
-		args[i] = tmp;
-		i++;
+		args++;
 	}
 	return (TRUE);
 }

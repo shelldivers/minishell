@@ -1,14 +1,16 @@
 #include "libft.h"
+#include "ms_env.h"
 #include <stdlib.h>
 
-t_bool	ms_expand_env_exchange(char **arg, int *index, char *value)
+/**
+ * @errno ENOMEM
+ */
+t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
 {
 	char	*tmp;
 	char	*tmp2;
 
-	if (arg == NULL || value == NULL)
-		return (FALSE);
-	tmp = ft_strndup(*arg, *index);
+	tmp = ft_strndup(*str, *index);
 	if (tmp == NULL)
 		return (FALSE);
 	tmp2 = ft_strjoin(tmp, value);
@@ -16,49 +18,44 @@ t_bool	ms_expand_env_exchange(char **arg, int *index, char *value)
 	if (tmp2 == NULL)
 		return (FALSE);
 	*index = (int)ft_strlen(tmp2);
-	tmp = ft_strjoin(tmp2, *arg + *index);
+	tmp = ft_strjoin(tmp2, *str + *index);
 	free(tmp2);
 	if (tmp == NULL)
 		return (FALSE);
-	free(*arg);
-	*arg = tmp;
+	free(*str);
+	*str = tmp;
 	return (TRUE);
 }
 
-t_bool	ms_expand_env(char **arg, int *index)
+/**
+ * @errno ENOMEM
+ */
+t_bool	ms_expand_env(char **str, int *index, t_env **env)
 {
 	int		i;
 	char	*key;
 	char	*value;
 
-	if (arg == NULL)
-		return (FALSE);
 	i = *index;
-	ft_memmove(arg + i, arg + i + 1, ft_strlen(*arg + i));
-	while (arg[i] && (ft_isalnum(*arg[i]) || *arg[i] == '_'))
+	ft_memmove((*str) + i, (*str) + i + 1, ft_strlen((*str) + i));
+	while ((*str)[i] && (ft_isalnum((*str)[i]) || (*str)[i] == '_'))
 		i++;
-	key = ft_substr(*arg, *index, i - *index);
+	key = ft_substr(*str, *index, i - *index);
 	if (key == NULL)
 		return (FALSE);
-//	value = ms_getenv(key);	// todo: ms_getenv
+	value = ms_getenv(*env, key);
 	free(key);
 	if (value == NULL)
-		value = ft_strdup("");
-	if (value == NULL)
-		return (FALSE);
-	ms_expand_env_exchange(arg, index, value);
-	free(value);
-	if (!arg)
+		value = "";
+	if (!ms_expand_env_exchange(str, index, value))
 		return (FALSE);
 	return (TRUE);
 }
 
 void	ms_expand_escape(char *arg, int *index)
 {
-	int i;
+	int	i;
 
-	if (arg == NULL)
-		return ;
 	i = *index;
 	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
 	*index += 1;
@@ -68,8 +65,6 @@ void	ms_expand_quote(char *arg, int *index)
 {
 	int		i;
 
-	if (arg == NULL)
-		return ;
 	i = *index;
 	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
 	while (arg[i] && arg[i] != '\'')
@@ -79,12 +74,10 @@ void	ms_expand_quote(char *arg, int *index)
 	*index = i;
 }
 
-void	ms_expand_dquote(char *arg, int *index)
+void	ms_expand_dquote(char *arg, int *index, t_env **env)
 {
-	int i;
+	int	i;
 
-	if (!arg)
-		return ;
 	i = *index;
 	ft_memmove(arg + i, arg + i + 1, ft_strlen(arg + i));
 	while (arg[i] && arg[i] != '\"')
@@ -92,7 +85,7 @@ void	ms_expand_dquote(char *arg, int *index)
 		if (arg[i] == '\\')
 			ms_expand_escape(arg, &i);
 		else if (arg[i] == '$')
-			ms_expand_env(arg, &i);
+			ms_expand_env(&arg, &i, env);
 		else
 			i++;
 	}
