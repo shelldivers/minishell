@@ -22,6 +22,7 @@ int	ms_exit(int argc, char **argv, t_env **env)
 
 	(void)argc;
 	argv++;
+	write(1, "exit\n", 5);
 	if (*argv == NULL)
 		exit_code = 0;
 	else
@@ -38,6 +39,5 @@ int	ms_exit(int argc, char **argv, t_env **env)
 		}
 		exit_code = (char)ft_atoi(*argv);
 	}
-	write(1, "exit\n", 5);
 	exit(exit_code);
 }
