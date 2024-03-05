@@ -15,6 +15,7 @@ void	ms_puterror_identifier(t_env *env, char *cmd, char *arg);
 void	ms_puterror_numeric(t_env *env, char *cmd, char *arg);
 void	ms_puterror_too_many_args(t_env *env, char *cmd);
 void	ms_puterror_env_not_set(t_env *env, char *cmd, char *key);
+void	ms_puterror_syntax(t_env **env, char *value);
 
 # ifdef __cplusplus
 }
