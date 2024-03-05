@@ -38,11 +38,11 @@ set(SRCS includes/minishell.h
         includes/ms_error.h
         includes/ms_builtin.h
         srcs/error/ms_error_utils.c
-        srcs/ms_expand.c
-        srcs/ms_expand_qv.c
+        srcs/expand/ms_expand.c
+        srcs/expand/ms_expand_qv.c
         includes/ms_expand.h
-        srcs/ms_expand_qv_utils.c
-        srcs/ms_expand_aster.c
+        srcs/expand/ms_expand_qv_utils.c
+        srcs/expand/ms_expand_aster.c
 )
 
 add_library(${NAME} STATIC ${SRCS})
