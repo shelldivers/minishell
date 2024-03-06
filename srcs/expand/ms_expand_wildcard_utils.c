@@ -80,3 +80,19 @@ char	*ms_wildcard_combine(char *str, char *prefix, char *suffix)
 	free(tmp);
 	return (name);
 }
+
+t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix)
+{
+	t_bool	is_dir;
+
+	if (ft_strcmp(name, ".") == 0 || ft_strcmp(name, "..") == 0)
+		return (FALSE);
+	is_dir = FALSE;
+	if (ft_strchr(suffix, '/') != NULL)
+		is_dir = TRUE;
+	if (is_dir && type != DT_DIR)
+		return (FALSE);
+	if (ft_strncmp(name, prefix, ft_strlen(prefix)) != 0){
+		return (FALSE);}
+	return (TRUE);
+}

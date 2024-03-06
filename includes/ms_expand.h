@@ -39,6 +39,7 @@ char	*ms_wildcard_get_path(char *str);
 char	*ms_wildcard_get_prefix(char *str);
 char	*ms_wildcard_get_suffix(char *str);
 char	*ms_wildcard_combine(char *str, char *prefix, char *suffix);
+t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
 
 # ifdef __cplusplus
 }

@@ -43,7 +43,7 @@ t_list	**ms_wildcard_dir_loop(DIR *dir, char *prefix, char *suffix)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (ft_strncmp(entry->d_name, prefix, ft_strlen(prefix)) != 0)
+		if (!ms_wildcard_is_match(entry->d_name, entry->d_type, prefix, suffix))
 			continue ;
 		if (!ms_wildcard_add(lst, entry->d_name, prefix, suffix))
 		{
