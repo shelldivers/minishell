@@ -8,12 +8,12 @@
 /**
  * @errno ENOMEM
  */
-t_bool	ms_wildcard_add(t_list **head, char *d_name, char *prefix, char *suffix)
+t_bool	ms_wildcard_add(t_list **head, char *d_name, char *path, char *suffix)
 {
 	char	*name;
 	t_list	*node;
 
-	name = ms_wildcard_combine(d_name, prefix, suffix);
+	name = ms_wildcard_combine(d_name, path, suffix);
 	if (!name)
 		return (FALSE);
 	node = ft_lstnew(name);

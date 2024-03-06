@@ -68,15 +68,17 @@ char	*ms_wildcard_get_suffix(char *str)
 /**
  * @errno ENOMEM
  */
-char	*ms_wildcard_combine(char *d_name, char *prefix, char *suffix)
+char	*ms_wildcard_combine(char *d_name, char *path, char *suffix)
 {
 	char	*name;
 	char	*tmp;
 
-	tmp = ft_strjoin(prefix, d_name);
+	tmp = ft_strjoin(d_name, suffix);
 	if (!tmp)
 		return (NULL);
-	name = ft_strjoin(tmp, suffix);
+	if (ft_strcmp(path, ".") == 0 || ft_strcmp(path, "..") == 0)
+		return (tmp);
+	name = ft_strjoin(path, tmp);
 	free(tmp);
 	return (name);
 }
