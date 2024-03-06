@@ -79,7 +79,7 @@ t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str)
 	return (lst);
 }
 
-void	ms_wildcard_replace(t_list **head, t_list **node, t_list **ext)
+t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 {
 	t_list	*prev;
 	t_list	*next;
@@ -87,14 +87,20 @@ void	ms_wildcard_replace(t_list **head, t_list **node, t_list **ext)
 	prev = *head;
 	while (prev->next != *node)
 		prev = prev->next;
-	prev->next = *ext;
-	next = *ext;
-	while (next->next)
-		next = next->next;
-	next->next = (*node)->next;
+	if (*extend == NULL)
+		prev->next = (*node)->next;
+	else
+	{
+		prev->next = *extend;
+		next = *extend;
+		while (next->next)
+			next = next->next;
+		next->next = (*node)->next;
+	}
 	free((*node)->content);
 	free(*node);
 	*node = NULL;
+	return (prev->next);
 }
 
 /**
@@ -127,9 +133,8 @@ t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env)
 	closedir(dir);
 	if (!extend)
 		return (FALSE);
-	ms_wildcard_replace(lst, node, extend);
+	*node = ms_wildcard_replace(lst, node, extend);
 	*idx = 0;
-	*node = *extend;
 	free(extend);
 	return (TRUE);
 }

@@ -6,12 +6,115 @@
 
 void leaks();
 
-TEST(expand_wildcard, ms_expand_wildcard_test_3)
+TEST(expand_wildcard, ms_expand_wildcard_test_6)
+{
+	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
+	t_env **env = ms_env_deserialize(envp);
+
+	char *arg = ft_strdup("./u*/l*/a*");
+	char *argv[] = {"ls", arg, NULL};
+
+	char **new_argv = ms_expand(argv, env);
+
+	free(arg);
+	ms_env_clear(env);
+	free(env);
+
+	leaks();
+
+	if (!new_argv)
+		return ;
+	int i = 0;
+	while (new_argv[i])
+	{
+		printf("%s\n", new_argv[i]);
+		i++;
+	}
+
+	i = 0;
+	while (new_argv[i])
+	{
+		free(new_argv[i]);
+		i++;
+	}
+	free(new_argv);
+}
+
+TEST(expand_wildcard, ms_expand_wildcard_test_5)
 {
 	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
 	t_env **env = ms_env_deserialize(envp);
 
 	char *arg = ft_strdup("./u*/l*");
+	char *argv[] = {"ls", arg, NULL};
+
+	char **new_argv = ms_expand(argv, env);
+
+	free(arg);
+	ms_env_clear(env);
+	free(env);
+
+	leaks();
+
+	if (!new_argv)
+		return ;
+	int i = 0;
+	while (new_argv[i])
+	{
+		printf("%s\n", new_argv[i]);
+		i++;
+	}
+
+	i = 0;
+	while (new_argv[i])
+	{
+		free(new_argv[i]);
+		i++;
+	}
+	free(new_argv);
+}
+
+TEST(expand_wildcard, ms_expand_wildcard_test_4)
+{
+	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
+	t_env **env = ms_env_deserialize(envp);
+
+	char *arg = ft_strdup("./u*/");
+	char *argv[] = {"ls", arg, NULL};
+
+	char **new_argv = ms_expand(argv, env);
+
+	free(arg);
+	ms_env_clear(env);
+	free(env);
+
+	leaks();
+
+	if (!new_argv)
+		return ;
+	int i = 0;
+	while (new_argv[i])
+	{
+		printf("%s\n", new_argv[i]);
+		i++;
+	}
+
+	i = 0;
+	while (new_argv[i])
+	{
+		free(new_argv[i]);
+		i++;
+	}
+	free(new_argv);
+}
+
+
+TEST(expand_wildcard, ms_expand_wildcard_test_3)
+{
+	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
+	t_env **env = ms_env_deserialize(envp);
+
+	char *arg = ft_strdup("./u*");
 	char *argv[] = {"ls", arg, NULL};
 
 	char **new_argv = ms_expand(argv, env);
