@@ -86,13 +86,18 @@ char	*ms_wildcard_combine(char *d_name, char *path, char *suffix)
 t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix)
 {
 	t_bool	is_dir;
+	t_bool	is_hidden;
 
-	if (ft_strcmp(name, ".") == 0 || ft_strcmp(name, "..") == 0)
-		return (FALSE);
 	is_dir = FALSE;
 	if (ft_strchr(suffix, '/') != NULL)
 		is_dir = TRUE;
 	if (is_dir && type != DT_DIR)
+		return (FALSE);
+	is_hidden = FALSE;
+	if (prefix[0] == '.')
+		is_hidden = TRUE;
+	if ((is_hidden && name[0] != '.')
+		|| (!is_hidden && name[0] == '.'))
 		return (FALSE);
 	if (ft_strncmp(name, prefix, ft_strlen(prefix)) != 0)
 		return (FALSE);
