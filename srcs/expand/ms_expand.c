@@ -56,7 +56,7 @@ static t_bool	ms_expand_proceed(t_list **head, t_env **env)
 static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 {
 	int		i;
-	t_bool	(*f)(t_list **, t_list **, int *, t_env **);
+	void	*f;
 
 	i = 0;
 	while (((char *)(*node)->content)[i] && i != -1)
@@ -66,7 +66,8 @@ static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 			i++;
 		else
 		{
-			if (!f(head, node, &i, env))
+			if (!((t_bool(*)(t_list **, t_list **, int *, t_env **))f)
+					(head, node, &i, env))
 				return (FALSE);
 		}
 	}
