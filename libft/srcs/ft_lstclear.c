@@ -12,6 +12,9 @@
 
 #include "libft.h"
 
+/**
+ * @notice You must free head node after calling this function
+ */
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
 	t_list	*node;

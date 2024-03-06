@@ -20,7 +20,7 @@ set(SRCS minishell_test.cpp
         unset_test.cpp
         error_test.cpp
         exit_test.cpp
-)
+        expand_wildcard.cpp)
 
 add_executable(${NAME} ${SRCS})
 

@@ -1,11 +1,16 @@
 #include "libft.h"
 #include "ms_expand.h"
 
-void	ms_expand_escape(char *str, int *index)
+t_bool	ms_expand_escape(t_list **lst, t_list *node, int *idx, t_env **env)
 {
-	int	i;
+	char	*str;
+	int		i;
 
-	i = *index;
+	(void)lst;
+	(void)env;
+	i = *idx;
+	str = (char *)node->content;
 	ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
-	*index += 1;
+	*idx += 1;
+	return (TRUE);
 }

@@ -31,24 +31,27 @@ t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_env(char **str, int *index, t_env **env)
+t_bool	ms_expand_env(t_list **lst, t_list *node, int *idx, t_env **env)
 {
 	int		i;
 	char	*key;
 	char	*value;
+	char	**str;
 
-	i = *index;
+	(void)lst;
+	i = *idx;
+	str = (char **)&node->content;
 	ft_memmove((*str) + i, (*str) + i + 1, ft_strlen((*str) + i));
 	while ((*str)[i] && (ft_isalnum((*str)[i]) || (*str)[i] == '_'))
 		i++;
-	key = ft_substr(*str, *index, i - *index);
+	key = ft_substr(*str, *idx, i - *idx);
 	if (key == NULL)
 		return (FALSE);
 	value = ms_getenv(*env, key);
 	free(key);
 	if (value == NULL)
 		value = "";
-	if (!ms_expand_env_exchange(str, index, value))
+	if (!ms_expand_env_exchange(str, idx, value))
 		return (FALSE);
 	return (TRUE);
 }

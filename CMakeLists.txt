@@ -42,7 +42,7 @@ set(SRCS includes/minishell.h
         includes/ms_expand.h
         srcs/expand/ms_expand_quote.c
         srcs/expand/ms_expand_wildcard.c
-        srcs/expand/ms_expand_env.c srcs/expand/ms_expand_escape.c)
+        srcs/expand/ms_expand_env.c srcs/expand/ms_expand_escape.c srcs/expand/ms_expand_lst.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)

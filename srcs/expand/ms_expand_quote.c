@@ -2,35 +2,44 @@
 #include "ms_env.h"
 #include "ms_expand.h"
 
-void	ms_expand_quote(char *str, int *index)
+t_bool	ms_expand_quote(t_list **lst, t_list *node, int *idx, t_env **env)
 {
+	char	*str;
 	int		i;
 
-	i = *index;
+	(void)lst;
+	(void)env;
+	i = *idx;
+	str = (char *)node->content;
 	ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
 	while (str[i] && str[i] != '\'')
 		i++;
 	if (str[i] == '\'')
 		ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
-	*index = i;
+	*idx = i;
+	return (TRUE);
 }
 
-void	ms_expand_dquote(char *str, int *index, t_env **env)
+t_bool	ms_expand_dquote(t_list **lst, t_list *node, int *idx, t_env **env)
 {
-	int	i;
+	char	*str;
+	int		i;
 
-	i = *index;
+	(void)lst;
+	i = *idx;
+	str = (char *)node->content;
 	ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
 	while (str[i] && str[i] != '\"')
 	{
 		if (str[i] == '\\' && (str[i + 1] == '\"' || str[i + 1] == '\\'))
-			ms_expand_escape(str, &i);
+			ms_expand_escape(lst, node, &i, env);
 		else if (str[i] == '$')
-			ms_expand_env(&str, &i, env);
+			ms_expand_env(lst, node, &i, env);
 		else
 			i++;
 	}
 	if (str[i] == '\"')
 		ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
-	*index = i;
+	*idx = i;
+	return (TRUE);
 }

@@ -1,18 +1,52 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-static t_bool	ms_expand_exchange(char **str, t_env **env);
+static t_bool	ms_expand_proceed(t_list **head, t_env **env);
+static t_bool	ms_expand_handler(t_list **head, t_list *node, t_env **env);
+static void		*ms_expand_dispatcher(char c);
 
-t_bool	ms_expand(char **argv, t_env **env)
+char	**ms_expand(char **argv, t_env **env)
 {
-	while (*argv)
+	t_list	**head;
+	char	**new_argv;
+
+	head = ms_expand_init(argv);
+	if (!head)
 	{
-		if (!ms_expand_exchange(argv, env))
+		ms_puterror_arg(*env, *argv);
+		return (NULL);
+	}
+	if (!ms_expand_proceed(head, env))
+	{
+		free(head);
+		return (NULL);
+	}
+	new_argv = ms_expand_transform(head);
+	if (!new_argv)
+	{
+		ms_puterror_arg(*env, *argv);
+		ft_lstclear(head, free);
+		free(head);
+		return (NULL);
+	}
+	ms_expand_node_clear(head);
+	return (new_argv);
+}
+
+static t_bool	ms_expand_proceed(t_list **head, t_env **env)
+{
+	t_list	*node;
+
+	node = *head;
+	while (node)
+	{
+		if (!ms_expand_handler(head, node, env))
 		{
-			ms_puterror_arg(*env, *argv);
+			ms_puterror_arg(*env, node->content);
+			ft_lstclear(head, free);
 			return (FALSE);
 		}
-		argv++;
+		node = node->next;
 	}
 	return (TRUE);
 }
@@ -20,31 +54,38 @@ t_bool	ms_expand(char **argv, t_env **env)
 /**
  * @errno ENOMEM
  */
-static t_bool	ms_expand_exchange(char **str, t_env **env)
+static t_bool	ms_expand_handler(t_list **head, t_list *node, t_env **env)
 {
 	int		i;
+	t_bool	(*f)(t_list **, t_list *, int *, t_env **);
 
 	i = 0;
-	while ((*str)[i] && i != -1)
+	while (((char *)node->content)[i] && i != -1)
 	{
-		if ((*str)[i] == '\'')
-			ms_expand_quote(*str, &i);
-		else if ((*str)[i] == '\"')
-			ms_expand_dquote(*str, &i, env);
-		else if ((*str)[i] == '\\')
-			ms_expand_escape(*str, &i);
-		else if ((*str)[i] == '$')
-		{
-			if (!ms_expand_env(str, &i, env))
-				return (FALSE);
-		}
-		else if ((*str)[i] == '*')
-		{
-			if (!ms_expand_wildcard(str, &i, env))
-				return (FALSE);
-		}
-		else
+		f = ms_expand_dispatcher(((char *)node->content)[i]);
+		if (f == NULL)
 			i++;
+		else
+		{
+			if (!f(head, node, &i, env))
+				return (FALSE);
+		}
 	}
 	return (TRUE);
+}
+
+static void	*ms_expand_dispatcher(char c)
+{
+	if (c == '\'')
+		return (ms_expand_quote);
+	else if (c == '\"')
+		return (ms_expand_dquote);
+	else if (c == '\\')
+		return (ms_expand_escape);
+	else if (c == '$')
+		return (ms_expand_env);
+	else if (c == '*')
+		return (ms_expand_wildcard);
+	else
+		return (NULL);
 }

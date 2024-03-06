@@ -4,10 +4,7 @@
 #include <cstdlib>
 #include <gtest/gtest.h>
 
-void leakss()
-{
-	system("leaks minishell_test");
-}
+void leaks();
 
 TEST(exapnd_qv_test, ms_expand_qv_dquote_test)
 {
@@ -20,18 +17,21 @@ TEST(exapnd_qv_test, ms_expand_qv_dquote_test)
 	char *arg4 = ft_strdup("\"\\\\test\"");
 	char *argv[] = {arg1, arg2, arg3, arg4, NULL};
 
-	ms_expand(argv, env);
+	char **new_argv = ms_expand(argv, env);
 
-	for (int i = 0; argv[i]; i++)
+	for (int i = 0; new_argv[i]; i++)
 	{
-		ft_printf("%s\n", argv[i]);
+		ft_printf("%s\n", new_argv[i]);
 	}
 
 	ms_env_clear(env);
 	free(env);
 	for (int i = 0; argv[i]; i++)
 		free(argv[i]);
-	atexit(leakss);
+	for (int i = 0; new_argv[i]; i++)
+		free(new_argv[i]);
+	free(new_argv);
+	atexit(leaks);
 }
 
 TEST(exapnd_qv_test, ms_expand_qv_test)
@@ -46,16 +46,19 @@ TEST(exapnd_qv_test, ms_expand_qv_test)
 
 	char *argv[] = {arg1, arg2, arg3, arg4, NULL};
 
-	ms_expand(argv, env);
+	char **new_argv = ms_expand(argv, env);
 
-	for (int i = 0; argv[i]; i++)
+	for (int i = 0; new_argv[i]; i++)
 	{
-		printf("%s\n", argv[i]);
+		printf("%s\n", new_argv[i]);
 	}
 
 	ms_env_clear(env);
 	free(env);
 	for (int i = 0; argv[i]; i++)
 		free(argv[i]);
-	atexit(leakss);
+	for (int i = 0; new_argv[i]; i++)
+		free(new_argv[i]);
+	free(new_argv);
+	atexit(leaks);
 }
