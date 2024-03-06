@@ -60,21 +60,6 @@ char	**ms_expand_transform_free(t_list **head)
 	return (argv);
 }
 
-void	ms_expand_node_clear(t_list **head)
-{
-	t_list	*node;
-	t_list	*tmp;
-
-	node = *head;
-	while (node)
-	{
-		tmp = node->next;
-		free(node);
-		node = tmp;
-	}
-	free(head);
-}
-
 /**
  * @errno ENOMEM
  */
