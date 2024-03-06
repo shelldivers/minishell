@@ -29,7 +29,7 @@ t_bool	ms_wildcard_add(t_list **head, char *d_name, char *prefix, char *suffix)
 /**
  * @errno ENOMEM
  */
-t_list	**ms_wildcard_d_loop(DIR *dir, char *prefix, char *suffix, char *match)
+t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix)
 {
 	struct dirent	*entry;
 	t_list			**lst;
@@ -43,9 +43,9 @@ t_list	**ms_wildcard_d_loop(DIR *dir, char *prefix, char *suffix, char *match)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (!ms_wildcard_is_match(entry->d_name, entry->d_type, match, suffix))
+		if (!ms_wildcard_is_match(entry->d_name, entry->d_type, prefix, suffix))
 			continue ;
-		if (!ms_wildcard_add(lst, entry->d_name, prefix, suffix))
+		if (!ms_wildcard_add(lst, entry->d_name, path, suffix))
 		{
 			ft_lstclear(lst, free);
 			free(lst);
@@ -58,11 +58,10 @@ t_list	**ms_wildcard_d_loop(DIR *dir, char *prefix, char *suffix, char *match)
 /**
  * @errno ENOMEM
  */
-t_list	**ms_wildcard_extend(DIR *dir, char *str)
+t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str)
 {
 	char			*prefix;
 	char			*suffix;
-	char			*match;
 	t_list			**lst;
 
 	prefix = ms_wildcard_get_prefix(str);
@@ -74,14 +73,7 @@ t_list	**ms_wildcard_extend(DIR *dir, char *str)
 		free(prefix);
 		return (NULL);
 	}
-	match = ms_wildcard_get_match(str);
-	if (!match)
-	{
-		free(prefix);
-		free(suffix);
-		return (NULL);
-	}
-	lst = ms_wildcard_d_loop(dir, prefix, suffix, match);
+	lst = ms_wildcard_d_loop(dir, path, prefix, suffix);
 	free(prefix);
 	free(suffix);
 	return (lst);
@@ -130,7 +122,7 @@ t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env)
 		free(path);
 		return (FALSE);
 	}
-	extend = ms_wildcard_extend(dir, (*node)->content);
+	extend = ms_wildcard_extend(dir, path, (*node)->content);
 	free(path);
 	closedir(dir);
 	if (!extend)

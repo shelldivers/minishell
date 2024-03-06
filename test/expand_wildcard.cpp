@@ -11,7 +11,7 @@ TEST(expand_wildcard, ms_expand_wildcard_test_3)
 	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
 	t_env **env = ms_env_deserialize(envp);
 
-	char *arg = ft_strdup("./u*/");
+	char *arg = ft_strdup("./u*/l*");
 	char *argv[] = {"ls", arg, NULL};
 
 	char **new_argv = ms_expand(argv, env);
@@ -171,25 +171,25 @@ TEST(expand_wildcard, ms_wildcard_get_prefix)
 
 	path = "srcs/test/*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "srcs/test/");
+	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);
 
 	path = "srcs/test/qwer*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "srcs/test/");
+	ASSERT_STREQ(str, "qwer");
 	printf("%s\n", str);
 	free(str);
 
 	path = "srcs/test/qwer*/";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "srcs/test/");
+	ASSERT_STREQ(str, "qwer");
 	printf("%s\n", str);
 	free(str);
 
 	path = "/*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "/");
+	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);
 
@@ -201,50 +201,6 @@ TEST(expand_wildcard, ms_wildcard_get_prefix)
 
 	path = "*/";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "");
-	printf("%s\n", str);
-	free(str);
-
-	atexit(leaks);
-}
-
-TEST(expand_wildcard, ms_wildcard_get_match)
-{
-	char *str;
-	char *path;
-
-	path = "srcs/test/*";
-	str = ms_wildcard_get_match(path);
-	ASSERT_STREQ(str, "");
-	printf("%s\n", str);
-	free(str);
-
-	path = "srcs/test/qwer*";
-	str = ms_wildcard_get_match(path);
-	ASSERT_STREQ(str, "qwer");
-	printf("%s\n", str);
-	free(str);
-
-	path = "srcs/test/qwer*/";
-	str = ms_wildcard_get_match(path);
-	ASSERT_STREQ(str, "qwer");
-	printf("%s\n", str);
-	free(str);
-
-	path = "/*";
-	str = ms_wildcard_get_match(path);
-	ASSERT_STREQ(str, "");
-	printf("%s\n", str);
-	free(str);
-
-	path = "*";
-	str = ms_wildcard_get_match(path);
-	ASSERT_STREQ(str, "");
-	printf("%s\n", str);
-	free(str);
-
-	path = "*/";
-	str = ms_wildcard_get_match(path);
 	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);
