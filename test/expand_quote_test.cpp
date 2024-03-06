@@ -14,7 +14,7 @@ TEST(exapnd_quote_test, ms_expand_quote_test)
 	while (arg[i])
 	{
 		if (str[i] == '\'')
-			ms_expand_quote(lst, *lst, &i, NULL);
+			ms_expand_quote(lst, lst, &i, NULL);
 		else
 			i++;
 	}

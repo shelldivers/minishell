@@ -16,7 +16,7 @@ TEST(exapnd_env_test, ms_expand_env_test)
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '$')
-			ms_expand_env(lst, *lst, &i, env);
+			ms_expand_env(lst, lst, &i, env);
 		else
 			i++;
 	}

@@ -15,7 +15,7 @@ TEST(exapnd_escape_test, ms_expand_escape_test)
 	while (arg[i])
 	{
 		if (arg[i] == '\"')
-			ms_expand_dquote(lst, *lst, &i, env);
+			ms_expand_dquote(lst, lst, &i, env);
 		else
 			i++;
 	}
@@ -38,7 +38,7 @@ TEST(exapnd_escape_test, ms_expand_escape)
 	while (str[i])
 	{
 		if (str[i] == '\\')
-			ms_expand_escape(lst, *lst, &i, NULL);
+			ms_expand_escape(lst, lst, &i, NULL);
 		else
 			i++;
 	}

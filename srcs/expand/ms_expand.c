@@ -2,7 +2,7 @@
 #include "ms_error.h"
 
 static t_bool	ms_expand_proceed(t_list **head, t_env **env);
-static t_bool	ms_expand_handler(t_list **head, t_list *node, t_env **env);
+static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env);
 static void		*ms_expand_dispatcher(char c);
 
 char	**ms_expand(char **argv, t_env **env)
@@ -21,7 +21,7 @@ char	**ms_expand(char **argv, t_env **env)
 		free(head);
 		return (NULL);
 	}
-	new_argv = ms_expand_transform(head);
+	new_argv = ms_expand_transform_free(head);
 	if (!new_argv)
 	{
 		ms_puterror_arg(*env, *argv);
@@ -29,7 +29,6 @@ char	**ms_expand(char **argv, t_env **env)
 		free(head);
 		return (NULL);
 	}
-	ms_expand_node_clear(head);
 	return (new_argv);
 }
 
@@ -40,7 +39,7 @@ static t_bool	ms_expand_proceed(t_list **head, t_env **env)
 	node = *head;
 	while (node)
 	{
-		if (!ms_expand_handler(head, node, env))
+		if (!ms_expand_handler(head, &node, env))
 		{
 			ms_puterror_arg(*env, node->content);
 			ft_lstclear(head, free);
@@ -54,15 +53,15 @@ static t_bool	ms_expand_proceed(t_list **head, t_env **env)
 /**
  * @errno ENOMEM
  */
-static t_bool	ms_expand_handler(t_list **head, t_list *node, t_env **env)
+static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 {
 	int		i;
-	t_bool	(*f)(t_list **, t_list *, int *, t_env **);
+	t_bool	(*f)(t_list **, t_list **, int *, t_env **);
 
 	i = 0;
-	while (((char *)node->content)[i] && i != -1)
+	while (((char *)(*node)->content)[i] && i != -1)
 	{
-		f = ms_expand_dispatcher(((char *)node->content)[i]);
+		f = ms_expand_dispatcher(((char *)(*node)->content)[i]);
 		if (f == NULL)
 			i++;
 		else

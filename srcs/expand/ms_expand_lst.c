@@ -33,9 +33,10 @@ t_list	**ms_expand_init(char **argv)
 /**
  * @errno ENOMEM
  */
-char	**ms_expand_transform(t_list **head)
+char	**ms_expand_transform_free(t_list **head)
 {
 	t_list	*node;
+	t_list	*tmp;
 	char	**argv;
 	size_t	size;
 	size_t	i;
@@ -48,11 +49,14 @@ char	**ms_expand_transform(t_list **head)
 	node = *head;
 	while (node)
 	{
+		tmp = node->next;
 		argv[i] = (char *)node->content;
-		node = node->next;
+		free(node);
+		node = tmp;
 		i++;
 	}
 	argv[i] = NULL;
+	free(head);
 	return (argv);
 }
 
@@ -64,9 +68,9 @@ void	ms_expand_node_clear(t_list **head)
 	node = *head;
 	while (node)
 	{
-		tmp = node;
-		node = node->next;
-		free(tmp);
+		tmp = node->next;
+		free(node);
+		node = tmp;
 	}
 	free(head);
 }

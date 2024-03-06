@@ -31,7 +31,7 @@ t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_env(t_list **lst, t_list *node, int *idx, t_env **env)
+t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env)
 {
 	int		i;
 	char	*key;
@@ -40,7 +40,7 @@ t_bool	ms_expand_env(t_list **lst, t_list *node, int *idx, t_env **env)
 
 	(void)lst;
 	i = *idx;
-	str = (char **)&node->content;
+	str = (char **)&((*node)->content);
 	ft_memmove((*str) + i, (*str) + i + 1, ft_strlen((*str) + i));
 	while ((*str)[i] && (ft_isalnum((*str)[i]) || (*str)[i] == '_'))
 		i++;

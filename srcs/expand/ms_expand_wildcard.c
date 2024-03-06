@@ -3,6 +3,99 @@
 #include "ms_expand.h"
 #include "ms_env.h"
 #include <dirent.h>
+#include <stdlib.h>
+
+/**
+ * @errno ENOMEM
+ */
+t_bool	ms_wildcard_add(t_list **head, char *ent, char *prefix, char *suffix)
+{
+	char	*name;
+	t_list	*node;
+
+	name = ms_expand_combine(ent, prefix, suffix);
+	if (!name)
+		return (FALSE);
+	node = ft_lstnew(name);
+	if (!node)
+	{
+		free(name);
+		return (FALSE);
+	}
+	ft_lstadd_back(head, node);
+	return (TRUE);
+}
+
+/**
+ * @errno ENOMEM
+ */
+t_list	**ms_wildcard_dir_loop(DIR *dir, char *prefix, char *suffix)
+{
+	struct dirent	*entry;
+	t_list			**lst;
+
+	lst = (t_list **)malloc(sizeof(t_list *));
+	if (!lst)
+		return (NULL);
+	*lst = NULL;
+	while (1)
+	{
+		entry = readdir(dir);
+		if (!entry)
+			break ;
+		if (ft_strncmp(entry->d_name, prefix, ft_strlen(prefix)) != 0)
+			continue ;
+		if (!ms_wildcard_add(lst, entry->d_name, prefix, suffix))
+		{
+			ft_lstclear(lst, free);
+			free(lst);
+			return (NULL);
+		}
+	}
+	return (lst);
+}
+
+/**
+ * @errno ENOMEM
+ */
+t_list	**ms_wildcard_extend(DIR *dir, char *str)
+{
+	char			*prefix;
+	char			*suffix;
+	t_list			**lst;
+
+	prefix = ms_wildcard_get_prefix(str);
+	if (!prefix)
+		return (NULL);
+	suffix = ms_wildcard_get_suffix(str);
+	if (!suffix)
+	{
+		free(prefix);
+		return (NULL);
+	}
+	lst = ms_wildcard_dir_loop(dir, prefix, suffix);
+	free(prefix);
+	free(suffix);
+	return (lst);
+}
+
+void	ms_wildcard_replace(t_list **head, t_list **node, t_list **ext)
+{
+	t_list	*prev;
+	t_list	*next;
+
+	prev = *head;
+	while (prev->next != *node)
+		prev = prev->next;
+	prev->next = *ext;
+	next = *ext;
+	while (next->next)
+		next = next->next;
+	next->next = (*node)->next;
+	free((*node)->content);
+	free(*node);
+	*node = NULL;
+}
 
 /**
  * @errno EACCES
@@ -13,15 +106,30 @@
  * @errno ENOMEM
  * @errno ENOTDIR
  */
-t_bool	ms_expand_wildcard(t_list **lst, t_list *node, int *idx, t_env **env)
+t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env)
 {
+	char			*path;
+	t_list			**extend;
 	DIR				*dir;
-	struct dirent	*dirent;
 
-	dir = opendir(".");
-	if (!dir)
+	(void)env;
+	path = ms_wildcard_get_path((*node)->content);
+	if (!path)
 		return (FALSE);
-	dirent = readdir(dir);
-	ft_printf("%s\n", dirent->d_name);
+	dir = opendir(path);
+	if (!dir)
+	{
+		free(path);
+		return (FALSE);
+	}
+	extend = ms_wildcard_extend(dir, (*node)->content);
+	free(path);
 	closedir(dir);
+	if (!extend)
+		return (FALSE);
+	ms_wildcard_replace(lst, node, extend);
+	*idx = 0;
+	*node = *extend;
+	free(extend);
+	return (TRUE);
 }

@@ -21,7 +21,7 @@ TEST(exapnd_dquote_test, ms_expand_dquote_test1)
 	while (str[i])
 	{
 		if (str[i] == '\"')
-			ms_expand_dquote(lst, *lst, &i, env);
+			ms_expand_dquote(lst, lst, &i, env);
 		else
 			i++;
 	}
