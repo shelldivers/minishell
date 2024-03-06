@@ -6,6 +6,40 @@
 
 void leaks();
 
+TEST(expand_wildcard, ms_expand_wildcard_test_3)
+{
+	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
+	t_env **env = ms_env_deserialize(envp);
+
+	char *arg = ft_strdup("./u*/");
+	char *argv[] = {"ls", arg, NULL};
+
+	char **new_argv = ms_expand(argv, env);
+
+	free(arg);
+	ms_env_clear(env);
+	free(env);
+
+	leaks();
+
+	if (!new_argv)
+		return ;
+	int i = 0;
+	while (new_argv[i])
+	{
+		printf("%s\n", new_argv[i]);
+		i++;
+	}
+
+	i = 0;
+	while (new_argv[i])
+	{
+		free(new_argv[i]);
+		i++;
+	}
+	free(new_argv);
+}
+
 TEST(expand_wildcard, ms_expand_wildcard_test_2)
 {
 	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
@@ -137,25 +171,25 @@ TEST(expand_wildcard, ms_wildcard_get_prefix)
 
 	path = "srcs/test/*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "");
+	ASSERT_STREQ(str, "srcs/test/");
 	printf("%s\n", str);
 	free(str);
 
 	path = "srcs/test/qwer*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "qwer");
+	ASSERT_STREQ(str, "srcs/test/");
 	printf("%s\n", str);
 	free(str);
 
 	path = "srcs/test/qwer*/";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "qwer");
+	ASSERT_STREQ(str, "srcs/test/");
 	printf("%s\n", str);
 	free(str);
 
 	path = "/*";
 	str = ms_wildcard_get_prefix(path);
-	ASSERT_STREQ(str, "");
+	ASSERT_STREQ(str, "/");
 	printf("%s\n", str);
 	free(str);
 
@@ -167,6 +201,50 @@ TEST(expand_wildcard, ms_wildcard_get_prefix)
 
 	path = "*/";
 	str = ms_wildcard_get_prefix(path);
+	ASSERT_STREQ(str, "");
+	printf("%s\n", str);
+	free(str);
+
+	atexit(leaks);
+}
+
+TEST(expand_wildcard, ms_wildcard_get_match)
+{
+	char *str;
+	char *path;
+
+	path = "srcs/test/*";
+	str = ms_wildcard_get_match(path);
+	ASSERT_STREQ(str, "");
+	printf("%s\n", str);
+	free(str);
+
+	path = "srcs/test/qwer*";
+	str = ms_wildcard_get_match(path);
+	ASSERT_STREQ(str, "qwer");
+	printf("%s\n", str);
+	free(str);
+
+	path = "srcs/test/qwer*/";
+	str = ms_wildcard_get_match(path);
+	ASSERT_STREQ(str, "qwer");
+	printf("%s\n", str);
+	free(str);
+
+	path = "/*";
+	str = ms_wildcard_get_match(path);
+	ASSERT_STREQ(str, "");
+	printf("%s\n", str);
+	free(str);
+
+	path = "*";
+	str = ms_wildcard_get_match(path);
+	ASSERT_STREQ(str, "");
+	printf("%s\n", str);
+	free(str);
+
+	path = "*/";
+	str = ms_wildcard_get_match(path);
 	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);

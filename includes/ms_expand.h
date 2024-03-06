@@ -32,14 +32,15 @@ t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env);
 void	ms_wildcard_replace(t_list **head, t_list **node, t_list **ext);
 t_list	**ms_wildcard_extend(DIR *dir, char *str);
 t_list	**ms_wildcard_dir_loop(DIR *dir, char *prefix, char *suffix);
-t_bool	ms_wildcard_add(t_list **head, char *ent, char *prefix, char *suffix);
+t_bool	ms_wildcard_add(t_list **head, char *d_name, char *prefix, char *suffix);
 
 /* ms_expand_wildcard_utils.c */
 char	*ms_wildcard_get_path(char *str);
 char	*ms_wildcard_get_prefix(char *str);
 char	*ms_wildcard_get_suffix(char *str);
-char	*ms_wildcard_combine(char *str, char *prefix, char *suffix);
-t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
+char	*ms_wildcard_get_match(char *str);
+char	*ms_wildcard_combine(char *d_name, char *prefix, char *suffix);
+t_bool	ms_wildcard_is_match(char *name, int type, char *match, char *suffix);
 
 # ifdef __cplusplus
 }
