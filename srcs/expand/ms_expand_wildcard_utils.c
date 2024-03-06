@@ -68,7 +68,7 @@ char	*ms_wildcard_get_suffix(char *str)
 /**
  * @errno ENOMEM
  */
-char	*ms_expand_combine(char *str, char *prefix, char *suffix)
+char	*ms_wildcard_combine(char *str, char *prefix, char *suffix)
 {
 	char	*name;
 	char	*tmp;

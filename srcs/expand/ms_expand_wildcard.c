@@ -13,7 +13,7 @@ t_bool	ms_wildcard_add(t_list **head, char *ent, char *prefix, char *suffix)
 	char	*name;
 	t_list	*node;
 
-	name = ms_expand_combine(ent, prefix, suffix);
+	name = ms_wildcard_combine(ent, prefix, suffix);
 	if (!name)
 		return (FALSE);
 	node = ft_lstnew(name);
