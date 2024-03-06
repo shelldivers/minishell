@@ -44,9 +44,6 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env)
 			ft_lstclear(head, free);
 			return (FALSE);
 		}
-		if (!node)
-			break ;
-		node = node->next;
 	}
 	return (TRUE);
 }
@@ -68,7 +65,6 @@ static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 	int		i;
 	void	*f;
 	t_list	**tmp;
-	t_list	**next;
 
 	i = 0;
 	while (*node && ((char *)(*node)->content)[i] && i != -1)
@@ -85,16 +81,15 @@ static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 			{
 				ft_lstclear(tmp, free);
 				free(tmp);
-				i++;
+				*node = (*node)->next;
+				return (TRUE);
 			}
 			else
 			{
-				/**
-				 * 여기서 현재 노드를 전달해야함
-				 */
 				*node = ms_wildcard_replace(head, node, tmp);
 				free(tmp);
 				i = 0;
+				return (TRUE);
 			}
 		}
 		else
@@ -104,6 +99,7 @@ static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 				return (FALSE);
 		}
 	}
+	*node = (*node)->next;
 	return (TRUE);
 }
 

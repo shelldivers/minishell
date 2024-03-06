@@ -83,51 +83,43 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 {
 	t_list	*prev;
 	t_list	*next;
-	t_list	*current;
+	t_list	*next_tmp;
 
-	next = (*node)->next;
+	next_tmp = (*node)->next;
 	prev = *head;
 	if (prev == *node)
 	{
 		if (*extend == NULL)
-		{
-			current = node;
 			*head = (*node)->next;
-		}
 		else
 		{
 			*head = *extend;
 			next = *extend;
 			while (next->next)
 				next = next->next;
-			current = next;
-			next->next = next;
+			next->next = next_tmp;
 		}
 		free((*node)->content);
 		free(*node);
-		return (current);
+		return (next_tmp);
 	}
 	else
 	{
 		while (prev->next != *node)
 			prev = prev->next;
 		if (*extend == NULL)
-		{
-			current = (*node)->next;
 			prev->next = (*node)->next;
-		}
 		else
 		{
 			prev->next = *extend;
 			next = *extend;
 			while (next->next)
 				next = next->next;
-			current = next;
-			next->next = next;
+			next->next = next_tmp;
 		}
 		free((*node)->content);
 		free(*node);
-		return (current);
+		return (next_tmp);
 	}
 }
 
