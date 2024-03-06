@@ -83,24 +83,52 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 {
 	t_list	*prev;
 	t_list	*next;
+	t_list	*current;
 
+	next = (*node)->next;
 	prev = *head;
-	while (prev->next != *node)
-		prev = prev->next;
-	if (*extend == NULL)
-		prev->next = (*node)->next;
+	if (prev == *node)
+	{
+		if (*extend == NULL)
+		{
+			current = node;
+			*head = (*node)->next;
+		}
+		else
+		{
+			*head = *extend;
+			next = *extend;
+			while (next->next)
+				next = next->next;
+			current = next;
+			next->next = next;
+		}
+		free((*node)->content);
+		free(*node);
+		return (current);
+	}
 	else
 	{
-		prev->next = *extend;
-		next = *extend;
-		while (next->next)
-			next = next->next;
-		next->next = (*node)->next;
+		while (prev->next != *node)
+			prev = prev->next;
+		if (*extend == NULL)
+		{
+			current = (*node)->next;
+			prev->next = (*node)->next;
+		}
+		else
+		{
+			prev->next = *extend;
+			next = *extend;
+			while (next->next)
+				next = next->next;
+			current = next;
+			next->next = next;
+		}
+		free((*node)->content);
+		free(*node);
+		return (current);
 	}
-	free((*node)->content);
-	free(*node);
-	*node = NULL;
-	return (prev->next);
 }
 
 /**
@@ -112,29 +140,30 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
  * @errno ENOMEM
  * @errno ENOTDIR
  */
-t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env)
+t_list	**ms_expand_wildcard(t_list **node, t_env **env)
 {
 	char			*path;
 	t_list			**extend;
 	DIR				*dir;
 
-	(void)env;
 	path = ms_wildcard_get_path((*node)->content);
 	if (!path)
-		return (FALSE);
+		return (NULL);
 	dir = opendir(path);
 	if (!dir)
 	{
 		free(path);
-		return (FALSE);
+		return (NULL);
 	}
 	extend = ms_wildcard_extend(dir, path, (*node)->content);
 	free(path);
 	closedir(dir);
 	if (!extend)
-		return (FALSE);
-	*node = ms_wildcard_replace(lst, node, extend);
-	*idx = 0;
-	free(extend);
-	return (TRUE);
+		return (NULL);
+	if (!ms_expand_proceed(extend, env))
+	{
+		free(extend);
+		return (NULL);
+	}
+	return (extend);
 }

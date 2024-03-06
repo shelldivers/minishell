@@ -12,6 +12,7 @@ extern "C" {
 
 /* ms_expand.c */
 char	**ms_expand(char **argv, t_env **env);
+t_bool	ms_expand_proceed(t_list **head, t_env **env);
 
 /* ms_expand_lst.c */
 t_list	**ms_expand_init(char **argv);
@@ -28,7 +29,7 @@ t_bool	ms_expand_escape(t_list **lst, t_list **node, int *idx, t_env **env);
 t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env);
 
 /* ms_expand_wildcard.c */
-t_bool	ms_expand_wildcard(t_list **lst, t_list **node, int *idx, t_env **env);
+t_list	**ms_expand_wildcard(t_list **node, t_env **env);
 t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend);
 t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str);
 t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix);
