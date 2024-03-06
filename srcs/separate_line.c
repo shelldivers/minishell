@@ -6,14 +6,13 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/02/29 15:54:11 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:09:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdbool.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"

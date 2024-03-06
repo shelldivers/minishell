@@ -16,14 +16,20 @@ minishell.c \
 separate_line.c \
 init.c \
 clear.c \
-tokenize.c
+tokenize.c \
+isgrammar.c \
+isgrammar2.c \
+isgrammar3.c 
 
 M_FILES = \
 minishell.c \
 separate_line.c \
 init.c \
 clear.c \
-tokenize.c
+tokenize.c \
+isgrammar.c \
+isgrammar2.c \
+isgrammar3.c 
 
 H_FILES = \
 minishell.h

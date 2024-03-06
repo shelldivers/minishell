@@ -6,176 +6,87 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/05 19:25:02 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/06 20:14:22 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdbool.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
 
-size_t	isand_or(t_parse *parse, t_token **token)
+void	show_tree(t_parse *parse)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	i += ispipeline(parse, token);
-	if (token[i] && token[i]->type == TAND_IF)
+	if (!parse)
+		return ;
+	if (parse->left)
+		show_tree(parse->left);
+	if (parse->right)
+		show_tree(parse->right);
+	printf("token: ");
+	while (i < parse->token_size)
 	{
+		printf("%s  ", parse->token[i]->value);
 		i++;
-		if (is_and_or(parse, token + i))
-			i += is_and_or(parse, token + i);
 	}
-	else if (token[i] && token[i]->type == TOR_IF)
-	{
-		i++;
-		if (is_and_or(parse, token + i))
-			i += is_and_or(parse, token + i);
-	}
-	return (i);
+	printf("\n");
+	printf("token size: %zu\n", parse->token_size);
+	if (parse->grammar == GAND_OR)
+		printf("grammar: GAND_OR\n");
+	else if (parse->grammar == GPIPELINE)
+		printf("grammar: GPIPELINE\n");
+	else if (parse->grammar == GCOMMAND)
+		printf("grammar: GCOMMAND\n");
+	else if (parse->grammar == GSUBSHELL)
+		printf("grammar: GSUBSHELL\n");
+	else if (parse->grammar == GSIMPLE_COMMAND)
+		printf("grammar: GSIMPLE_COMMAND\n");
+	else if (parse->grammar == GCMD_SUFFIX)
+		printf("grammar: GCMD_SUFFIX\n");
+	else if (parse->grammar == GREDIRECT_LIST)
+		printf("grammar: GREDIRECT_LIST\n");
+	else if (parse->grammar == GIO_REDIRECT)
+		printf("grammar: GIO_REDIRECT\n");
+	else if (parse->grammar == GIO_FILE)
+		printf("grammar: GIO_FILE\n");
+	else if (parse->grammar == GIO_HERE)
+		printf("grammar: GIO_HERE\n");
+	printf ("=================================\n");
 }
 
-size_t	ispipeline(t_parse *parse, t_token **token)
+void	parser(t_parse **parse, t_token **token, size_t size)
 {
 	size_t	i;
 
-	i = 0;
-	i += iscommand(parse, token);
-	if (token[i] && token[i]->type == TPIPE)
+	*parse = ms_new_parse(token, OPNONE);
+	init_parse(*parse, token, size);
+	i = isand_or(*parse, token);
+	(*parse)->token_size = i;
+	backtracking_free(parse);
+	printf("i: %zu\n", i);
+	if (i != size)
 	{
-		i++;
-		if (is_pipeline(parse, token + i))
-			i += is_pipeline(parse, token + i);
+		printf("syntax error %s\n", token[i]->value);
 	}
-	return (i);
 }
 
-size_t	iscommand(t_parse *parse, t_token **token)
-{
-	size_t	i;
-
-	i = 0;
-	i += issimple_command(parse, token);
-	if (!i)
-		i += issubshell(parse, token + i);
-	if (i)
-		i += isio_redirect(parse, token + i);
-	return (i);
-}
-
-size_t	issubshell(t_parse *parse, t_token **token)
-{
-	if (token[0] && token[0]->type == TSUBSHELL)
-		return (1);
-	return (0);
-}
-
-size_t	issimple_command(t_parse *parse, t_token **token)
-{
-	size_t	i;
-
-	i = 0;
-	i += is_redirect_list(token);
-	if (i)
-	{
-		if (token[i] && token[i]->type == TWORD)
-		{
-			i++;
-			i += is_cmd_suffix(token + i);
-		}
-	}
-	return (i);
-}
-
-size_t	iscmd_suffix(t_parse *parse, t_token **token)
-{
-	size_t	i;
-
-	i = 0;
-	i += is_redirect_list(token);
-	if (!i)
-	{
-		i += is_word(token);
-		if (i)
-			i += is_cmd_suffix(token + i);
-	}
-	return (i);
-}
-
-size_t	isredirect_list(t_parse *parse, t_token **token)
-{
-	size_t	i;
-
-	i = 0;
-	i += isio_redirect(parse, token);
-	if (i)
-		i += isredirect_list(parse, token + i);
-	return (i);
-}
-
-size_t	isio_redirect(t_parse *parse, t_token **token)
-{
-	size_t	i;
-
-	i = 0;
-	i += isio_file(parse, token);
-	if (!i)
-		i += isio_here(parse, token);
-	return (i);
-}
-
-size_t	isio_file(t_parse *parse, t_token **token)
-{
-	t_parse	*new_parse;
-
-	new_parse = ms_new_parse(token, 2);
-	if (token[0] && (token[0]->type == TDREAD \
-	|| token[0]->type == TDWRITE \
-	|| token[0]->type == TDGREAT) \
-	&& token[1] && token[1]->type == TWORD)
-	{
-		parse->left = new_parse;
-		new_parse->op = OPIO_FILE;
-		return (2);
-	}
-	return (0);
-}
-
-size_t	isio_here(t_parse *parse, t_token **token)
-{
-	t_parse	*new_parse;
-
-	new_parse = ms_new_parse(token, 2);
-	if (token[0] && token[0]->type == TDLESS \
-	&& token[1] && token[1]->type == TWORD)
-	{
-		parse->left = new_parse;
-		new_parse->op = OPIO_HERE;
-		return (2);
-	}
-	return (0);
-}
-t_parse	*ms_new_parse(t_token **token, size_t size)
+t_parse	*ms_new_parse(t_token **token, enum e_op op)
 {
 	t_parse	*new_parse;
 
 	new_parse = (t_parse *)malloc(sizeof(t_parse));
 	new_parse->token = token;
-	new_parse->token_size = size;
-	new_parse->op = OPNONE;
+	new_parse->token_size = 0;
+	new_parse->grammar = GNONE;
+	new_parse->op = op;
 	new_parse->left = NULL;
 	new_parse->right = NULL;
 	return (new_parse);
-}
-
-void	parser(t_parse *parse, t_token **token, size_t size)
-{
-	init_parse(parse, token, size);
-	is_and_or(parse);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -187,15 +98,14 @@ int	main(int argc, char **argv, char **envp)
 	init_syntax(&syntax);
 	while (1)
 	{
-		parse = NULL;
 		syntax.line = readline("minishell$ ");
 		if (!(syntax.line))
 			exit (1);
 		add_history(syntax.line);
 		lexer(&syntax);
 		token = tokenize(&syntax);
-		parser(parse, token, syntax.words_cnt);
-		execute_tree(parse);
+		parser(&parse, token, syntax.words_cnt);
+		show_tree(parse);
 		clear_all(&syntax, token, parse);
 	}
 	return (0);

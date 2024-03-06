@@ -6,26 +6,42 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/05 19:33:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/06 20:45:50 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include "ft_bool.h"
-# include "ms_env.h"
+// # include "ft_bool.h"
+// # include "ms_env.h"
 
 # include <stdlib.h>
 
+enum e_grammar
+{
+	GAND_OR,
+	GPIPELINE,
+	GCOMMAND,
+	GSUBSHELL,
+	GSIMPLE_COMMAND,
+	GCMD_SUFFIX,
+	GREDIRECT_LIST,
+	GIO_REDIRECT,
+	GIO_FILE,
+	GIO_HERE,
+	GWORD,
+	GNONE
+};
+
 enum e_op
 {
-	OPNONE,
 	OPPIPE,
 	OPAND_IF,
 	OPOR_IF,
+	OPSUBSHELL,
 	OPIO_HERE,
 	OPIO_FILE,
-	OPSUBSHELL
+	OPNONE
 };
 
 enum e_type
@@ -56,7 +72,8 @@ typedef struct s_token
 
 typedef struct s_parse
 {
-	enum e_type		op;
+	enum e_op		op;
+	enum e_grammar	grammar;
 	struct s_parse	*left;
 	struct s_parse	*right;
 	struct s_token	**token;
@@ -73,6 +90,7 @@ void	clear_syntax(t_syntax *syntax);
 void	clear_parse(t_parse *parse);
 void	clear_token(t_token **token);
 void	clear_all(t_syntax *syntax, t_token **token, t_parse *parse);
+void	backtracking_free(t_parse **parse);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
 /*================is_grammar.c================*/
@@ -86,6 +104,7 @@ size_t	issubshell(t_parse *parse, t_token **token);
 size_t	iscommand(t_parse *parse, t_token **token);
 size_t	ispipeline(t_parse *parse, t_token **token);
 size_t	isand_or(t_parse *parse, t_token **token);
+size_t	isword(t_parse *parse, t_token **token);
 /*================parse_tree.c================*/
-t_parse	*new_parse(t_parse *parse, t_token **token, size_t size);
+t_parse	*ms_new_parse(t_token **token, enum e_op op);
 #endif
