@@ -1,7 +1,6 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env);
 static void		*ms_expand_dispatcher(char c);
 
 char	**ms_expand(char **argv, t_env **env)
@@ -51,7 +50,7 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env)
 /**
  * @errno ENOMEM
  */
-static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
+t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 {
 	int		i;
 	void	*f;

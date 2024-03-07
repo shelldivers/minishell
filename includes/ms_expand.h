@@ -15,6 +15,7 @@ extern "C" {
 /* ms_expand.c */
 char	**ms_expand(char **argv, t_env **env);
 t_bool	ms_expand_proceed(t_list **head, t_env **env);
+t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env);
 
 /* ms_expand_lst.c */
 t_list	**ms_expand_init(char **argv);
