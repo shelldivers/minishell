@@ -1,6 +1,5 @@
 #include "libft.h"
 #include "ms_expand.h"
-#include <dirent.h>
 #include <stdlib.h>
 
 /**

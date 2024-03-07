@@ -7,8 +7,7 @@
 extern "C" {
 # endif
 
-#include "libft.h"
-#include "ft_bool.h"
+#include "ft_type.h"
 #include "ms_env.h"
 #include <dirent.h>
 

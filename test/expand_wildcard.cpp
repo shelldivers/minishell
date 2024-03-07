@@ -1,7 +1,6 @@
+#include "libft.h"
 #include "ms_expand.h"
-#include "ft_printf.h"
 #include <dirent.h>
-#include <sys/stat.h>
 #include <gtest/gtest.h>
 
 void leaks();
