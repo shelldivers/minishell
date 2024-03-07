@@ -34,6 +34,28 @@ char	*ms_wildcard_get_path(char *str)
 	return (ft_strndup(str, path_end - str + 1));
 }
 
+char	*ms_wildcard_get_last(char *str)
+{
+	char	*remain;
+	int		i;
+
+	i = 0;
+	while (str[i] && str[i] != '*')
+		i++;
+	while (str[i])
+	{
+		if (str[i] == '/')
+		{
+			remain = str + i;
+			break ;
+		}
+		i++;
+	}
+	if (str[i] == '\0')
+		return (ft_strdup(""));
+	return (ft_strdup(remain));
+}
+
 /**
  * @errno ENOMEM
  */
@@ -63,6 +85,7 @@ char	*ms_wildcard_get_prefix(char *str)
 char	*ms_wildcard_get_suffix(char *str)
 {
 	int		i;
+	int		len;
 
 	i = 0;
 	while (str[i])
@@ -71,20 +94,23 @@ char	*ms_wildcard_get_suffix(char *str)
 			break ;
 		i++;
 	}
-	if (str[i] == '\0')
+	if (str[i] == '\0' || str[i + 1] == '/')
 		return (ft_strdup(""));
-	return (ft_strdup(str + i + 1));
+	len = 0;
+	while (str[i + len + 1] && str[i + len + 1] != '/')
+		len++;
+	return (ft_strndup(str + i + 1, len));
 }
 
 /**
  * @errno ENOMEM
  */
-char	*ms_wildcard_combine(char *d_name, char *path, char *suffix)
+char	*ms_wildcard_combine(char *d_name, char *path, char *last)
 {
 	char	*name;
 	char	*tmp;
 
-	tmp = ft_strjoin(d_name, suffix);
+	tmp = ft_strjoin(d_name, last);
 	if (!tmp)
 		return (NULL);
 	if (ft_strcmp(path, ".") == 0 || ft_strcmp(path, "..") == 0)

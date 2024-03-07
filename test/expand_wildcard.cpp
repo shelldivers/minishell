@@ -5,6 +5,36 @@
 
 void leaks();
 
+TEST(expand_wildcard, ms_wildcard_get_path_remain_test)
+{
+	char *str;
+	char *path;
+
+	path = "./u*/l*/a*";
+	str = ms_wildcard_get_last(path);
+	ASSERT_STREQ(str, "/l*/a*");
+	printf("%s\n", str);
+	free(str);
+
+	path = "qwer*qwer";
+	str = ms_wildcard_get_last(path);
+	ASSERT_STREQ(str, "");
+	printf("%s\n", str);
+	free(str);
+
+	path = "qwer*qwer/qwer";
+	str = ms_wildcard_get_last(path);
+	ASSERT_STREQ(str, "/qwer");
+	printf("%s\n", str);
+	free(str);
+
+	path = "qwer*qwer/qwer/qwer";
+	str = ms_wildcard_get_last(path);
+	ASSERT_STREQ(str, "/qwer/qwer");
+	printf("%s\n", str);
+	free(str);
+}
+
 /**
  * todo: suffix도 매치로 걸러야함
  */
@@ -438,13 +468,13 @@ TEST(expand_wildcard, ms_wildcard_get_suffix)
 
 	path = "srcs/test/qwer*/asdf";
 	str = ms_wildcard_get_suffix(path);
-	ASSERT_STREQ(str, "/asdf");
+	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);
 
 	path = "srcs/test/qwer*asdf/asdf";
 	str = ms_wildcard_get_suffix(path);
-	ASSERT_STREQ(str, "asdf/asdf");
+	ASSERT_STREQ(str, "asdf");
 	printf("%s\n", str);
 	free(str);
 
@@ -462,7 +492,7 @@ TEST(expand_wildcard, ms_wildcard_get_suffix)
 
 	path = "*/";
 	str = ms_wildcard_get_suffix(path);
-	ASSERT_STREQ(str, "/");
+	ASSERT_STREQ(str, "");
 	printf("%s\n", str);
 	free(str);
 

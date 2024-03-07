@@ -23,6 +23,13 @@ extern "C" {
 #include "ms_env.h"
 #include <dirent.h>
 
+typedef struct s_wildcard
+{
+	char	*prefix;
+	char	*suffix;
+	char	*last;
+}	t_wildcard;
+
 /* ms_expand.c */
 char	**ms_expand(char **argv, t_env **env);
 t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth);
@@ -50,15 +57,17 @@ t_list	*ms_wildcard_remove(t_list **head, t_list **remove);
 
 /* ms_wildcard_dir.c */
 t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str);
-t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix);
-t_bool	ms_wildcard_add(t_list **head, char *name, char *prefix, char *suffix);
-t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
+t_list	**ms_wildcard_d_loop(DIR *dir, char *path, t_wildcard *wc);
+t_bool	ms_wildcard_add(t_list **head, char *name, char *prefix, char *last);
+t_bool	ms_wildcard_is_type(char hidden, int type, t_wildcard *wc);
+t_bool	ms_wildcard_is_match(char *name, t_wildcard *wc);
 
 /* ms_expand_wildcard_utils.c */
 char	*ms_wildcard_get_path(char *str);
+char	*ms_wildcard_get_last(char *str);
 char	*ms_wildcard_get_prefix(char *str);
 char	*ms_wildcard_get_suffix(char *str);
-char	*ms_wildcard_combine(char *d_name, char *prefix, char *suffix);
+char	*ms_wildcard_combine(char *d_name, char *path, char *last);
 
 # ifdef __cplusplus
 }
