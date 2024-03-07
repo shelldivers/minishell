@@ -1,82 +1,65 @@
-#include "libft.h"
-#include "ft_printf.h"
 #include "ms_expand.h"
 #include "ms_env.h"
 #include <dirent.h>
 #include <stdlib.h>
 
-/**
- * @errno ENOMEM
- */
-t_bool	ms_wildcard_add(t_list **head, char *d_name, char *path, char *suffix)
-{
-	char	*name;
-	t_list	*node;
+static t_bool	ms_wildcard_is_valid(t_list *node);
 
-	name = ms_wildcard_combine(d_name, path, suffix);
-	if (!name)
+
+t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
+{
+	t_list	**tmp;
+
+	tmp = ms_wildcard_loop(node, env);
+	if (!tmp)
 		return (FALSE);
-	node = ft_lstnew(name);
-	if (!node)
+	if (!ms_wildcard_is_valid(*tmp))
 	{
-		free(name);
-		return (FALSE);
+		ft_lstclear(tmp, free);
+		free(tmp);
+		*node = (*node)->next;
+		return (TRUE);
 	}
-	ft_lstadd_back(head, node);
+	*node = ms_wildcard_replace(head, node, tmp);
+	free(tmp);
 	return (TRUE);
 }
 
 /**
+ * @errno EACCES
+ * @errno EBADF
+ * @errno EMFILE
+ * @errno ENFILE
+ * @errno ENOENT
  * @errno ENOMEM
+ * @errno ENOTDIR
  */
-t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix)
+t_list	**ms_wildcard_loop(t_list **node, t_env **env)
 {
-	struct dirent	*entry;
-	t_list			**lst;
+	char			*path;
+	t_list			**extend;
+	DIR				*dir;
 
-	lst = (t_list **)malloc(sizeof(t_list *));
-	if (!lst)
+	path = ms_wildcard_get_path((*node)->content);
+	if (!path)
 		return (NULL);
-	*lst = NULL;
-	while (1)
+	dir = opendir(path);
+	if (!dir)
 	{
-		entry = readdir(dir);
-		if (!entry)
-			break ;
-		if (!ms_wildcard_is_match(entry->d_name, entry->d_type, prefix, suffix))
-			continue ;
-		if (!ms_wildcard_add(lst, entry->d_name, path, suffix))
-		{
-			ft_lstclear(lst, free);
-			free(lst);
-			return (NULL);
-		}
-	}
-	return (lst);
-}
-
-/**
- * @errno ENOMEM
- */
-t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str)
-{
-	char			*prefix;
-	char			*suffix;
-	t_list			**lst;
-
-	prefix = ms_wildcard_get_prefix(str);
-	if (!prefix)
-		return (NULL);
-	suffix = ms_wildcard_get_suffix(str);
-	if (!suffix)
-	{
-		free(prefix);
+		free(path);
 		return (NULL);
 	}
-	lst = ms_wildcard_d_loop(dir, path, prefix, suffix);
-	free(prefix);
-	free(suffix);
-	return (lst);
+	extend = ms_wildcard_extend(dir, path, (*node)->content);
+	free(path);
+	closedir(dir);
+	if (!extend)
+		return (NULL);
+	if (!ms_expand_proceed(extend, env))
+	{
+		free(extend);
+		return (NULL);
+	}
+	return (extend);
 }
 
 t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
@@ -123,39 +106,11 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 	}
 }
 
-/**
- * @errno EACCES
- * @errno EBADF
- * @errno EMFILE
- * @errno ENFILE
- * @errno ENOENT
- * @errno ENOMEM
- * @errno ENOTDIR
- */
-t_list	**ms_expand_wildcard(t_list **node, t_env **env)
+static t_bool	ms_wildcard_is_valid(t_list *node)
 {
-	char			*path;
-	t_list			**extend;
-	DIR				*dir;
-
-	path = ms_wildcard_get_path((*node)->content);
-	if (!path)
-		return (NULL);
-	dir = opendir(path);
-	if (!dir)
-	{
-		free(path);
-		return (NULL);
-	}
-	extend = ms_wildcard_extend(dir, path, (*node)->content);
-	free(path);
-	closedir(dir);
-	if (!extend)
-		return (NULL);
-	if (!ms_expand_proceed(extend, env))
-	{
-		free(extend);
-		return (NULL);
-	}
-	return (extend);
+	if (!node)
+		return (FALSE);
+	if (ft_strchr(node->content, '*') != NULL)
+		return (FALSE);
+	return (TRUE);
 }

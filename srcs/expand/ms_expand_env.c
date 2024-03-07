@@ -3,30 +3,7 @@
 #include "ms_expand.h"
 #include <stdlib.h>
 
-/**
- * @errno ENOMEM
- */
-t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_strndup(*str, *index);
-	if (tmp == NULL)
-		return (FALSE);
-	tmp2 = ft_strjoin(tmp, value);
-	free(tmp);
-	if (tmp2 == NULL)
-		return (FALSE);
-	*index = (int)ft_strlen(tmp2);
-	tmp = ft_strjoin(tmp2, *str + *index);
-	free(tmp2);
-	if (tmp == NULL)
-		return (FALSE);
-	free(*str);
-	*str = tmp;
-	return (TRUE);
-}
+t_bool	ms_expand_env_exchange(char **str, int *index, char *value);
 
 /**
  * @errno ENOMEM
@@ -53,5 +30,30 @@ t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env)
 		value = "";
 	if (!ms_expand_env_exchange(str, idx, value))
 		return (FALSE);
+	return (TRUE);
+}
+
+/**
+ * @errno ENOMEM
+ */
+t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	tmp = ft_strndup(*str, *index);
+	if (tmp == NULL)
+		return (FALSE);
+	tmp2 = ft_strjoin(tmp, value);
+	free(tmp);
+	if (tmp2 == NULL)
+		return (FALSE);
+	*index = (int)ft_strlen(tmp2);
+	tmp = ft_strjoin(tmp2, *str + *index);
+	free(tmp2);
+	if (tmp == NULL)
+		return (FALSE);
+	free(*str);
+	*str = tmp;
 	return (TRUE);
 }

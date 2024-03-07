@@ -48,15 +48,6 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env)
 	return (TRUE);
 }
 
-t_bool	ms_wildcard_is_valid(t_list *node)
-{
-	if (!node)
-		return (FALSE);
-	if (ft_strchr(node->content, '*') != NULL)
-		return (FALSE);
-	return (TRUE);
-}
-
 /**
  * @errno ENOMEM
  */
@@ -64,34 +55,15 @@ static t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 {
 	int		i;
 	void	*f;
-	t_list	**tmp;
 
 	i = 0;
 	while (*node && ((char *)(*node)->content)[i] && i != -1)
 	{
 		f = ms_expand_dispatcher(((char *)(*node)->content)[i]);
-		if (f == (void *)0)
+		if (f == NULL)
 			i++;
-		else if (f == (void *)1)
-		{
-			tmp = ms_expand_wildcard(node, env);
-			if (!tmp)
-				return (FALSE);
-			if (!ms_wildcard_is_valid(*tmp))
-			{
-				ft_lstclear(tmp, free);
-				free(tmp);
-				*node = (*node)->next;
-				return (TRUE);
-			}
-			else
-			{
-				*node = ms_wildcard_replace(head, node, tmp);
-				free(tmp);
-				i = 0;
-				return (TRUE);
-			}
-		}
+		else if (f == WILDCARD)
+			return (ms_expand_wildcard(head, node, env));
 		else
 		{
 			if (!((t_bool(*)(t_list **, t_list **, int *, t_env **))f)
@@ -114,7 +86,7 @@ static void	*ms_expand_dispatcher(char c)
 	else if (c == '$')
 		return (ms_expand_env);
 	else if (c == '*')
-		return ((void *)1);
+		return (WILDCARD);
 	else
-		return ((void *)0);
+		return (NULL);
 }

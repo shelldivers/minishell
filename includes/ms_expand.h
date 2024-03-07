@@ -1,6 +1,8 @@
 #ifndef MS_EXPAND_H
 #define MS_EXPAND_H
 
+# define WILDCARD (void *)1
+
 # ifdef __cplusplus
 extern "C" {
 # endif
@@ -29,18 +31,21 @@ t_bool	ms_expand_escape(t_list **lst, t_list **node, int *idx, t_env **env);
 t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env);
 
 /* ms_expand_wildcard.c */
-t_list	**ms_expand_wildcard(t_list **node, t_env **env);
+t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env);
+t_list	**ms_wildcard_loop(t_list **node, t_env **env);
 t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend);
+
+/* ms_wildcard_dir.c */
 t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str);
 t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix);
 t_bool	ms_wildcard_add(t_list **head, char *d_name, char *prefix, char *suffix);
+t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
 
 /* ms_expand_wildcard_utils.c */
 char	*ms_wildcard_get_path(char *str);
 char	*ms_wildcard_get_prefix(char *str);
 char	*ms_wildcard_get_suffix(char *str);
 char	*ms_wildcard_combine(char *d_name, char *prefix, char *suffix);
-t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
 
 # ifdef __cplusplus
 }
