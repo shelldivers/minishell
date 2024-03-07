@@ -107,7 +107,7 @@ t_list	*ms_wildcard_remove(t_list **head, t_list **remove)
 
 	prev = *head;
 	if (prev == *remove)
-		*head = next;
+		*head = (*remove)->next;
 	else
 	{
 		while (prev->next != *remove)
