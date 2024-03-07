@@ -50,7 +50,7 @@ TEST(expand_wildcard, ms_expand_wildcard_test_8)
 	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
 	t_env **env = ms_env_deserialize(envp);
 
-	char *arg = ft_strdup("../../*/*/");
+	char *arg = ft_strdup("../../*/*");
 	char *argv[] = {"ls", arg, NULL};
 
 	char **new_argv = ms_expand(argv, env);
