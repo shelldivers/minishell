@@ -3,7 +3,7 @@
 #include "ms_expand.h"
 #include <stdlib.h>
 
-t_bool	ms_expand_env_exchange(char **str, int *index, char *value);
+static t_bool	ms_expand_env_exchange(char **str, int *index, char *value);
 
 /**
  * @errno ENOMEM
@@ -36,7 +36,7 @@ t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env)
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
+static t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
 {
 	char	*tmp;
 	char	*tmp2;
