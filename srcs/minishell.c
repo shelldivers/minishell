@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/06 20:14:22 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/07 18:17:39 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,6 @@ void	show_tree(t_parse *parse)
 		show_tree(parse->left);
 	if (parse->right)
 		show_tree(parse->right);
-	printf("token: ");
-	while (i < parse->token_size)
-	{
-		printf("%s  ", parse->token[i]->value);
-		i++;
-	}
-	printf("\n");
 	printf("token size: %zu\n", parse->token_size);
 	if (parse->grammar == GAND_OR)
 		printf("grammar: GAND_OR\n");
@@ -56,6 +49,23 @@ void	show_tree(t_parse *parse)
 		printf("grammar: GIO_FILE\n");
 	else if (parse->grammar == GIO_HERE)
 		printf("grammar: GIO_HERE\n");
+	else if (parse->grammar == GWORD)
+		printf("grammar: GWORD\n");
+	if (parse->op == OPAND_IF)
+		printf("op: OPAND_IF\n");
+	else if (parse->op == OPOR_IF)
+		printf("op: OPOR_IF\n");
+	else if (parse->op == OPPIPE)
+		printf("op: OPPIPE\n");
+	else if (parse->op == OPNONE)
+		printf("op: OPNONE\n");
+	printf("token: ");
+	while (i < parse->token_size)
+	{
+		printf("%s  ", parse->token[i]->value);
+		i++;
+	}
+	printf("\n");
 	printf ("=================================\n");
 }
 
@@ -63,10 +73,9 @@ void	parser(t_parse **parse, t_token **token, size_t size)
 {
 	size_t	i;
 
-	*parse = ms_new_parse(token, OPNONE);
+	*parse = ms_new_parse(token, OPNONE, size);
 	init_parse(*parse, token, size);
 	i = isand_or(*parse, token);
-	(*parse)->token_size = i;
 	backtracking_free(parse);
 	printf("i: %zu\n", i);
 	if (i != size)
@@ -75,18 +84,23 @@ void	parser(t_parse **parse, t_token **token, size_t size)
 	}
 }
 
-t_parse	*ms_new_parse(t_token **token, enum e_op op)
+t_parse	*ms_new_parse(t_token **token, enum e_op op, size_t size)
 {
 	t_parse	*new_parse;
 
 	new_parse = (t_parse *)malloc(sizeof(t_parse));
 	new_parse->token = token;
-	new_parse->token_size = 0;
+	new_parse->token_size = size;
 	new_parse->grammar = GNONE;
 	new_parse->op = op;
 	new_parse->left = NULL;
 	new_parse->right = NULL;
 	return (new_parse);
+}
+
+void	leaks()
+{
+	system("leaks minishell");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -95,6 +109,7 @@ int	main(int argc, char **argv, char **envp)
 	t_token		**token;
 	t_parse		*parse;
 
+	atexit(leaks);
 	init_syntax(&syntax);
 	while (1)
 	{

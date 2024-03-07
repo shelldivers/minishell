@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/06 20:12:17 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:07:29 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	isredirect_list(t_parse *parse, t_token **token)
 	size_t	i;
 
 	i = 0;
-	parse->left = ms_new_parse(token, OPNONE);
+	parse->left = ms_new_parse(token, OPNONE, 0);
 	i += isio_redirect(parse->left, token);
 	parse->left->token_size = i;
 	backtracking_free(&(parse->left));
@@ -37,13 +37,13 @@ size_t	isio_redirect(t_parse *parse, t_token **token)
 	size_t	i;
 
 	i = 0;
-	parse->left = ms_new_parse(token, OPNONE);
+	parse->left = ms_new_parse(token, OPNONE, 0);
 	i += isio_file(parse->left, token);
 	parse->left->token_size = i;
 	backtracking_free(&(parse->left));
 	if (!i)
 	{
-		parse->left = ms_new_parse(token, OPNONE);
+		parse->left = ms_new_parse(token, OPNONE, 0);
 		i += isio_here(parse->left, token);
 		parse->left->token_size = i;
 		backtracking_free(&(parse->left));

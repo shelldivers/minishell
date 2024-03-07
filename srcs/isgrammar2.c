@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/06 20:46:51 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:07:22 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,26 @@ size_t	issimple_command(t_parse *parse, t_token **token)
 	size_t	i;
 
 	i = 0;
-	parse->left = ms_new_parse(token, OPNONE);
+	parse->left = ms_new_parse(token, OPNONE, 0);
 	i += isredirect_list(parse->left, token);
 	parse->left->token_size = i;
 	backtracking_free(&(parse->left));
 	if (i && token[i] && token[i]->type == TWORD)
 	{
-		parse->left = ms_new_parse(token + i, OPNONE);
+		parse->left = ms_new_parse(token + i, OPNONE, 0);
 		i += isword(parse->left, token + i);
 		parse->left->token_size = i;
-		parse->right = ms_new_parse(token + i, OPNONE);
+		parse->right = ms_new_parse(token + i, OPNONE, 0);
 		i += iscmd_suffix(parse->right, token + i);
 		parse->right->token_size = i - parse->left->token_size;
 		backtracking_free(&(parse->right));
 	}
 	else if (!i && token[i] && token[i]->type == TWORD)
 	{
-		parse->left = ms_new_parse(token + i, OPNONE);
+		parse->left = ms_new_parse(token + i, OPNONE, 0);
 		i += isword(parse->left, token + i);
 		parse->left->token_size = i;
-		parse->right = ms_new_parse(token + i, OPNONE);
+		parse->right = ms_new_parse(token + i, OPNONE, 0);
 		i += iscmd_suffix(parse->right, token + i);
 		parse->right->token_size = i - parse->left->token_size;
 		backtracking_free(&(parse->right));
@@ -66,16 +66,16 @@ size_t	iscmd_suffix(t_parse *parse, t_token **token)
 	size_t	i;
 
 	i = 0;
-	parse->left = ms_new_parse(token, OPNONE);
+	parse->left = ms_new_parse(token, OPNONE, 0);
 	i += isredirect_list(parse->left, token);
 	parse->left->token_size = i;
 	backtracking_free(&(parse->left));
 	if (!i && token[i] && token[i]->type == TWORD)
 	{
-		parse->left = ms_new_parse(token + i, OPNONE);
+		parse->left = ms_new_parse(token + i, OPNONE, 0);
 		i += isword(parse->left, token + i);
 		parse->left->token_size = i;
-		parse->right = ms_new_parse(token + i, OPNONE);
+		parse->right = ms_new_parse(token + i, OPNONE, 0);
 		i += iscmd_suffix(parse->right, token + i);
 		parse->right->token_size = i;
 		backtracking_free(&(parse->right));

@@ -70,7 +70,7 @@ Assignment to the name within a returned ASSIGNMENT_WORD token shall occur as sp
 
 # [GRAMMAR]
 
-```bnf
+```bison
 /* -------------------------------------------------------
    The grammar symbols
    ------------------------------------------------------- */

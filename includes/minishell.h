@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/06 20:45:50 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:57:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,5 @@ size_t	ispipeline(t_parse *parse, t_token **token);
 size_t	isand_or(t_parse *parse, t_token **token);
 size_t	isword(t_parse *parse, t_token **token);
 /*================parse_tree.c================*/
-t_parse	*ms_new_parse(t_token **token, enum e_op op);
+t_parse	*ms_new_parse(t_token **token, enum e_op op, size_t size);
 #endif
