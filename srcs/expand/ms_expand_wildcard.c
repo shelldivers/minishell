@@ -3,9 +3,6 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-static t_bool	ms_wildcard_is_valid(t_list *node);
-
-
 t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
 {
 	t_list	**extend;
@@ -13,7 +10,7 @@ t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
 	extend = ms_wildcard_loop(node, env);
 	if (!extend)
 		return (FALSE);
-	if (!ms_wildcard_is_valid(*extend))
+	if (!*extend || ft_strchr((*extend)->content, '*') != NULL)
 	{
 		ft_lstclear(extend, free);
 		free(extend);
@@ -66,51 +63,23 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 {
 	t_list	*prev;
 	t_list	*next;
-	t_list	*next_tmp;
+	t_list	*tmp;
 
-	next_tmp = (*node)->next;
+	next = (*node)->next;
 	prev = *head;
 	if (prev == *node)
-	{
-		if (*extend == NULL)
-			*head = (*node)->next;
-		else
-		{
-			*head = *extend;
-			next = *extend;
-			while (next->next)
-				next = next->next;
-			next->next = next_tmp;
-		}
-		free((*node)->content);
-		free(*node);
-		return (next_tmp);
-	}
+		*head = *extend;
 	else
 	{
 		while (prev->next != *node)
 			prev = prev->next;
-		if (*extend == NULL)
-			prev->next = (*node)->next;
-		else
-		{
-			prev->next = *extend;
-			next = *extend;
-			while (next->next)
-				next = next->next;
-			next->next = next_tmp;
-		}
-		free((*node)->content);
-		free(*node);
-		return (next_tmp);
+		prev->next = *extend;
 	}
-}
-
-static t_bool	ms_wildcard_is_valid(t_list *node)
-{
-	if (!node)
-		return (FALSE);
-	if (ft_strchr(node->content, '*') != NULL)
-		return (FALSE);
-	return (TRUE);
+	tmp = *extend;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = next;
+	free((*node)->content);
+	free(*node);
+	return (next);
 }
