@@ -25,8 +25,8 @@ extern "C" {
 
 /* ms_expand.c */
 char	**ms_expand(char **argv, t_env **env);
-t_bool	ms_expand_proceed(t_list **head, t_env **env);
-t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env);
+t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth);
+t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth);
 
 /* ms_expand_lst.c */
 t_list	**ms_expand_init(char **argv);
@@ -43,14 +43,15 @@ t_bool	ms_expand_escape(t_list **lst, t_list **node, int *idx, t_env **env);
 t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env);
 
 /* ms_expand_wildcard.c */
-t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env);
-t_list	**ms_wildcard_loop(t_list **node, t_env **env);
+t_bool	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth);
+t_list	**ms_wildcard_loop(t_list **node, t_env **env, int depth);
 t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend);
+t_list	*ms_wildcard_remove(t_list **head, t_list **remove);
 
 /* ms_wildcard_dir.c */
 t_list	**ms_wildcard_extend(DIR *dir, char *path, char *str);
 t_list	**ms_wildcard_d_loop(DIR *dir, char *path, char *prefix, char *suffix);
-t_bool	ms_wildcard_add(t_list **head, char *d_name, char *prefix, char *suffix);
+t_bool	ms_wildcard_add(t_list **head, char *name, char *prefix, char *suffix);
 t_bool	ms_wildcard_is_match(char *name, int type, char *prefix, char *suffix);
 
 /* ms_expand_wildcard_utils.c */

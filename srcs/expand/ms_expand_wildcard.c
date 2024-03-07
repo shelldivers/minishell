@@ -16,21 +16,24 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
+t_bool	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
 {
 	t_list	**extend;
 
-	extend = ms_wildcard_loop(node, env);
+	extend = ms_wildcard_loop(nod, env, depth);
 	if (!extend)
 		return (FALSE);
 	if (!*extend || ft_strchr((*extend)->content, '*') != NULL)
 	{
 		ft_lstclear(extend, free);
 		free(extend);
-		*node = (*node)->next;
+		if (depth == 0)
+			*nod = (*nod)->next;
+		else
+			*nod = ms_wildcard_remove(head, nod);
 		return (TRUE);
 	}
-	*node = ms_wildcard_replace(head, node, extend);
+	*nod = ms_wildcard_replace(head, nod, extend);
 	free(extend);
 	return (TRUE);
 }
@@ -44,7 +47,7 @@ t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
  * @errno ENOMEM
  * @errno ENOTDIR
  */
-t_list	**ms_wildcard_loop(t_list **node, t_env **env)
+t_list	**ms_wildcard_loop(t_list **node, t_env **env, int depth)
 {
 	char			*path;
 	t_list			**extend;
@@ -64,7 +67,7 @@ t_list	**ms_wildcard_loop(t_list **node, t_env **env)
 	closedir(dir);
 	if (!extend)
 		return (NULL);
-	if (!ms_expand_proceed(extend, env))
+	if (!ms_expand_proceed(extend, env, depth + 1))
 	{
 		free(extend);
 		return (NULL);
@@ -94,5 +97,25 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 	tmp->next = next;
 	free((*node)->content);
 	free(*node);
+	return (next);
+}
+
+t_list	*ms_wildcard_remove(t_list **head, t_list **remove)
+{
+	t_list	*prev;
+	t_list	*next;
+
+	prev = *head;
+	if (prev == *remove)
+		*head = next;
+	else
+	{
+		while (prev->next != *remove)
+			prev = prev->next;
+	}
+	next = (*remove)->next;
+	prev->next = next;
+	free((*remove)->content);
+	free(*remove);
 	return (next);
 }

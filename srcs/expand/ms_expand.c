@@ -27,7 +27,7 @@ char	**ms_expand(char **argv, t_env **env)
 		ms_puterror_arg(*env, *argv);
 		return (NULL);
 	}
-	if (!ms_expand_proceed(head, env))
+	if (!ms_expand_proceed(head, env, 0))
 	{
 		free(head);
 		return (NULL);
@@ -43,14 +43,14 @@ char	**ms_expand(char **argv, t_env **env)
 	return (new_argv);
 }
 
-t_bool	ms_expand_proceed(t_list **head, t_env **env)
+t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth)
 {
 	t_list	*node;
 
 	node = *head;
 	while (node)
 	{
-		if (!ms_expand_handler(head, &node, env))
+		if (!ms_expand_handler(head, &node, env, depth))
 		{
 			ms_puterror_arg(*env, node->content);
 			ft_lstclear(head, free);
@@ -63,7 +63,7 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env)
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
+t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth)
 {
 	int		i;
 	void	*f;
@@ -75,7 +75,7 @@ t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env)
 		if (f == NULL)
 			i++;
 		else if (f == WILDCARD)
-			return (ms_expand_wildcard(head, node, env));
+			return (ms_expand_wildcard(head, node, env, depth));
 		else
 		{
 			if (!((t_bool(*)(t_list **, t_list **, int *, t_env **))f)

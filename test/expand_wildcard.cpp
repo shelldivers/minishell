@@ -5,12 +5,15 @@
 
 void leaks();
 
-TEST(expand_wildcard, ms_expand_wildcard_test_8)
+/**
+ * todo: suffix도 매치로 걸러야함
+ */
+TEST(expand_wildcard, ms_expand_wildcard_test_9)
 {
 	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
 	t_env **env = ms_env_deserialize(envp);
 
-	char *arg = ft_strdup("*/a*");
+	char *arg = ft_strdup("../../*/*/*.txt");
 	char *argv[] = {"ls", arg, NULL};
 
 	char **new_argv = ms_expand(argv, env);
@@ -29,7 +32,44 @@ TEST(expand_wildcard, ms_expand_wildcard_test_8)
 		printf("%s\n", new_argv[i]);
 		i++;
 	}
+	printf("i: %d\n", i - 1);
+	i = 0;
+	while (new_argv[i])
+	{
+		free(new_argv[i]);
+		i++;
+	}
+	free(new_argv);
+}
 
+/**
+ * todo: ./../test
+ */
+TEST(expand_wildcard, ms_expand_wildcard_test_8)
+{
+	char *envp[] = {"expand", "hello=world", "SHELL=minishell", NULL};
+	t_env **env = ms_env_deserialize(envp);
+
+	char *arg = ft_strdup("../../*/*/");
+	char *argv[] = {"ls", arg, NULL};
+
+	char **new_argv = ms_expand(argv, env);
+
+	free(arg);
+	ms_env_clear(env);
+	free(env);
+
+	leaks();
+
+	if (!new_argv)
+		return ;
+	int i = 0;
+	while (new_argv[i])
+	{
+		printf("%s\n", new_argv[i]);
+		i++;
+	}
+	printf("i: %d\n", i - 1);
 	i = 0;
 	while (new_argv[i])
 	{
