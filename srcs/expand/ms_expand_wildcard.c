@@ -8,20 +8,20 @@ static t_bool	ms_wildcard_is_valid(t_list *node);
 
 t_bool	ms_expand_wildcard(t_list **head, t_list **node, t_env **env)
 {
-	t_list	**tmp;
+	t_list	**extend;
 
-	tmp = ms_wildcard_loop(node, env);
-	if (!tmp)
+	extend = ms_wildcard_loop(node, env);
+	if (!extend)
 		return (FALSE);
-	if (!ms_wildcard_is_valid(*tmp))
+	if (!ms_wildcard_is_valid(*extend))
 	{
-		ft_lstclear(tmp, free);
-		free(tmp);
+		ft_lstclear(extend, free);
+		free(extend);
 		*node = (*node)->next;
 		return (TRUE);
 	}
-	*node = ms_wildcard_replace(head, node, tmp);
-	free(tmp);
+	*node = ms_wildcard_replace(head, node, extend);
+	free(extend);
 	return (TRUE);
 }
 
