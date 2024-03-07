@@ -12,7 +12,7 @@ TEST(cd, cd_test)
 	char *home = ft_strjoin("HOME=", getenv("HOME"));
 	char *envp[] = {pwd, home, NULL};
 	t_env **env = ms_env_deserialize(envp);
-	char *old_pwd = ms_getenv(*env, "PWD");
+	char *old_pwd = ft_strdup(ms_getenv(*env, "PWD"));
 
 	// when
 	int status = ms_cd(argc, argv, env);
