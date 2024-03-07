@@ -65,7 +65,6 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 	t_list	*next;
 	t_list	*tmp;
 
-	next = (*node)->next;
 	prev = *head;
 	if (prev == *node)
 		*head = *extend;
@@ -75,6 +74,7 @@ t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend)
 			prev = prev->next;
 		prev->next = *extend;
 	}
+	next = (*node)->next;
 	tmp = *extend;
 	while (tmp->next)
 		tmp = tmp->next;
