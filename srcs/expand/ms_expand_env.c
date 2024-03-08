@@ -10,17 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_env.h"
 #include "ms_expand.h"
 #include <stdlib.h>
 
-static t_bool	ms_expand_env_exchange(char **str, int *index, char *value);
+static t_bool	ms_expand_env_swap(char **str, char *value, int pre, int suf);
 
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_env(t_list **node, int *idx, t_env **env)
+t_bool	ms_expand_env(t_list **node, int *idx, t_env **env, int *exit_code)
 {
 	int		i;
 	char	*key;
@@ -30,6 +31,9 @@ t_bool	ms_expand_env(t_list **node, int *idx, t_env **env)
 	i = *idx;
 	str = (char **)&((*node)->content);
 	ft_memmove((*str) + i, (*str) + i + 1, ft_strlen((*str) + i));
+	value = NULL;
+	if ((*str)[i] == '?')
+		return (ms_expand_reserved(node, idx, exit_code));
 	while ((*str)[i] && (ft_isalnum((*str)[i]) || (*str)[i] == '_'))
 		i++;
 	key = ft_substr(*str, *idx, i - *idx);
@@ -37,34 +41,55 @@ t_bool	ms_expand_env(t_list **node, int *idx, t_env **env)
 		return (FALSE);
 	value = ms_getenv(*env, key);
 	free(key);
-	if (value == NULL)
-		value = "";
-	if (!ms_expand_env_exchange(str, idx, value))
+	if (!ms_expand_env_swap(str, value, *idx, i))
 		return (FALSE);
+	*idx = i;
 	return (TRUE);
 }
 
 /**
  * @errno ENOMEM
  */
-static t_bool	ms_expand_env_exchange(char **str, int *index, char *value)
+t_bool	ms_expand_reserved(t_list **node, int *idx, const int *exit_code)
 {
-	char	*tmp;
-	char	*tmp2;
+	char	**str;
+	char	*nbr;
+	t_bool	rtvl;
 
-	tmp = ft_strndup(*str, *index);
+	str = (char **)&((*node)->content);
+	nbr = ft_sprintf("%d", *exit_code);
+	if (nbr == NULL)
+		return (FALSE);
+	rtvl = ms_expand_env_swap(str, nbr, *idx, *idx + 1);
+	if (rtvl)
+		*idx += (int)ft_strlen(nbr);
+	free(nbr);
+	return (rtvl);
+}
+
+/**
+ * @errno ENOMEM
+ */
+static t_bool	ms_expand_env_swap(char **str, char *value, int pre, int suf)
+{
+	char	*prefix;
+	char	*tmp;
+	char	*result;
+
+	if (value == NULL)
+		value = "";
+	prefix = ft_strndup(*str, pre);
+	if (prefix == NULL)
+		return (FALSE);
+	tmp = ft_strjoin(prefix, value);
+	free(prefix);
 	if (tmp == NULL)
 		return (FALSE);
-	tmp2 = ft_strjoin(tmp, value);
+	result = ft_strjoin(tmp, *str + suf);
 	free(tmp);
-	if (tmp2 == NULL)
-		return (FALSE);
-	*index = (int)ft_strlen(tmp2);
-	tmp = ft_strjoin(tmp2, *str + *index);
-	free(tmp2);
-	if (tmp == NULL)
+	if (result == NULL)
 		return (FALSE);
 	free(*str);
-	*str = tmp;
+	*str = result;
 	return (TRUE);
 }

@@ -14,7 +14,7 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-char	**ms_expand(char **argv, t_env **env)
+char	**ms_expand(char **argv, t_env **env, int *exit_code)
 {
 	t_list	**head;
 	char	**new_argv;
@@ -25,7 +25,7 @@ char	**ms_expand(char **argv, t_env **env)
 		ms_puterror_arg(*env, *argv);
 		return (NULL);
 	}
-	ms_expand_proceed(head, env, 0);
+	ms_expand_proceed(head, env, (t_exp){0, exit_code});
 	new_argv = ms_expand_transform_free(head);
 	if (!new_argv)
 	{
@@ -37,14 +37,14 @@ char	**ms_expand(char **argv, t_env **env)
 	return (new_argv);
 }
 
-t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth)
+t_bool	ms_expand_proceed(t_list **head, t_env **env, t_exp exp)
 {
 	t_list	*node;
 
 	node = *head;
 	while (node)
 	{
-		if (!ms_expand_handler(head, &node, env, depth))
+		if (!ms_expand_handler(head, &node, env, exp))
 		{
 			ms_puterror_arg(*env, node->content);
 			node = ms_wildcard_remove(head, &node);
@@ -56,35 +56,34 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth)
 /**
  * @errno ENOMEM
  */
-t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth)
+t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, t_exp exp)
 {
 	int		i;
-	void	*f;
 	int		result;
 
 	i = 0;
 	while (*node && ((char *)(*node)->content)[i] && i != -1)
 	{
-		if (((char *)(*node)->content)[i] == '*')
+		if (((char *)(*node)->content)[i] != '*')
 		{
-			result = ms_expand_wildcard(head, node, env, depth);
+			if (!ms_expand_route(node, &i, env, exp))
+				return (FALSE);
+		}
+		else
+		{
+			result = ms_expand_wildcard(head, node, env, exp);
 			if (result == ERROR)
 				return (FALSE);
 			else if (result == MATCH)
 				return (TRUE);
 			i++;
 		}
-		else
-		{
-			if (!ms_expand_route(head, node, &i, env))
-				return (FALSE);
-		}
 	}
 	*node = (*node)->next;
 	return (TRUE);
 }
 
-t_bool	ms_expand_route(t_list **lst, t_list **node, int *idx, t_env **env)
+t_bool	ms_expand_route(t_list **node, int *idx, t_env **env, t_exp exp)
 {
 	char	c;
 
@@ -92,11 +91,11 @@ t_bool	ms_expand_route(t_list **lst, t_list **node, int *idx, t_env **env)
 	if (c == '\'')
 		return (ms_expand_quote(node, idx));
 	else if (c == '\"')
-		return (ms_expand_dquote(node, idx, env));
+		return (ms_expand_dquote(node, idx, env, exp));
 	else if (c == '\\')
 		return (ms_expand_escape(node, idx));
 	else if (c == '$')
-		return (ms_expand_env(node, idx, env));
+		return (ms_expand_env(node, idx, env, exp.exit_code));
 	else
 	{
 		*idx += 1;

@@ -17,7 +17,8 @@ TEST(exapnd_qv_test, ms_expand_qv_dquote_test)
 	char *arg4 = ft_strdup("\"\\\\test\"");
 	char *argv[] = {arg1, arg2, arg3, arg4, NULL};
 
-	char **new_argv = ms_expand(argv, env);
+	int exit_code = 0;
+	char **new_argv = ms_expand(argv, env, &exit_code);
 
 	for (int i = 0; new_argv[i]; i++)
 	{
@@ -46,7 +47,8 @@ TEST(exapnd_qv_test, ms_expand_qv_test)
 
 	char *argv[] = {arg1, arg2, arg3, arg4, NULL};
 
-	char **new_argv = ms_expand(argv, env);
+	int exit_code = 0;
+	char **new_argv = ms_expand(argv, env, &exit_code);
 
 	for (int i = 0; new_argv[i]; i++)
 	{

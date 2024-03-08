@@ -12,10 +12,11 @@ TEST(exapnd_escape_test, ms_expand_escape_test)
 	char *argv[] = {arg, NULL};
 	t_list **lst = ms_expand_init(argv);
 	int i = 0;
+	int exit_code = 0;
 	while (arg[i])
 	{
 		if (arg[i] == '\"')
-			ms_expand_dquote(lst, &i, env);
+			ms_expand_dquote(lst, &i, env, (t_exp){0, &exit_code});
 		else
 			i++;
 	}

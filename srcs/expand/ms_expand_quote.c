@@ -30,7 +30,7 @@ t_bool	ms_expand_quote(t_list **node, int *idx)
 	return (TRUE);
 }
 
-t_bool	ms_expand_dquote(t_list **node, int *idx, t_env **env)
+t_bool	ms_expand_dquote(t_list **node, int *idx, t_env **env, t_exp exp)
 {
 	char	*str;
 	int		i;
@@ -43,7 +43,7 @@ t_bool	ms_expand_dquote(t_list **node, int *idx, t_env **env)
 		if (str[i] == '\\' && (str[i + 1] == '\"' || str[i + 1] == '\\'))
 			ms_expand_escape(node, &i);
 		else if (str[i] == '$')
-			ms_expand_env(node, &i, env);
+			ms_expand_env(node, &i, env, exp.exit_code);
 		else
 			i++;
 	}

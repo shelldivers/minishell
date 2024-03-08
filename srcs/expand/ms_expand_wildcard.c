@@ -16,18 +16,18 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-int	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
+int	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, t_exp exp)
 {
 	t_list	**extend;
 
-	extend = ms_wildcard_loop(nod, env, depth);
+	extend = ms_wildcard_loop(nod, env, exp);
 	if (!extend)
 		return (ERROR);
 	if (!*extend || ft_strchr((*extend)->content, '*') != NULL)
 	{
 		ft_lstclear(extend, free);
 		free(extend);
-		if (depth == 0)
+		if (exp.depth == 0)
 			return (NO_MATCH);
 		*nod = ms_wildcard_remove(head, nod);
 		return (MATCH);
@@ -46,7 +46,7 @@ int	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
  * @errno ENOMEM
  * @errno ENOTDIR
  */
-t_list	**ms_wildcard_loop(t_list **node, t_env **env, int depth)
+t_list	**ms_wildcard_loop(t_list **node, t_env **env, t_exp exp)
 {
 	char			*path;
 	t_list			**extend;
@@ -66,7 +66,7 @@ t_list	**ms_wildcard_loop(t_list **node, t_env **env, int depth)
 	closedir(dir);
 	if (!extend)
 		return (NULL);
-	if (!ms_expand_proceed(extend, env, depth + 1))
+	if (!ms_expand_proceed(extend, env, (t_exp){exp.depth + 1, exp.exit_code}))
 	{
 		free(extend);
 		return (NULL);
