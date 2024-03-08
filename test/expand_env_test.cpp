@@ -13,7 +13,7 @@ TEST(exapnd_env_test, exit_code)
 	t_list **lst = ms_expand_init(argv);
 	int i = 0;
 	char **str = (char **)&(*lst)->content;
-	int exit_code = 0;
+	int exit_code = 12;
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '$')
@@ -27,6 +27,7 @@ TEST(exapnd_env_test, exit_code)
 	ft_lstclear(lst, free);
 	free(lst);
 	ms_env_clear(env);
+	printf("env cleared\n");
 	free(env);
 }
 
@@ -54,6 +55,7 @@ TEST(exapnd_env_test, no_env)
 	free(lst);
 	ms_env_clear(env);
 	free(env);
+	leaks();
 }
 
 TEST(exapnd_env_test, ms_expand_env_test)
@@ -80,4 +82,5 @@ TEST(exapnd_env_test, ms_expand_env_test)
 	free(lst);
 	ms_env_clear(env);
 	free(env);
+	leaks();
 }
