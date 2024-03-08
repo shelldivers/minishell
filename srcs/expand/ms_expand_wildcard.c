@@ -16,26 +16,26 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-t_bool	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
+int	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
 {
 	t_list	**extend;
 
 	extend = ms_wildcard_loop(nod, env, depth);
 	if (!extend)
-		return (FALSE);
+		return (ERROR);
 	if (!*extend || ft_strchr((*extend)->content, '*') != NULL)
 	{
 		ft_lstclear(extend, free);
 		free(extend);
 		if (depth == 0)
-			*nod = (*nod)->next;
+			return (NO_MATCH);
 		else
 			*nod = ms_wildcard_remove(head, nod);
-		return (TRUE);
+		return (MATCH);
 	}
 	*nod = ms_wildcard_replace(head, nod, extend);
 	free(extend);
-	return (TRUE);
+	return (MATCH);
 }
 
 /**

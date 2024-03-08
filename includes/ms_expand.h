@@ -19,6 +19,10 @@
 extern "C" {
 # endif
 
+# define NO_MATCH 1
+# define MATCH 0
+# define ERROR (-1)
+
 #include "ft_type.h"
 #include "ms_env.h"
 #include <dirent.h>
@@ -50,7 +54,7 @@ t_bool	ms_expand_escape(t_list **lst, t_list **node, int *idx, t_env **env);
 t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env);
 
 /* ms_expand_wildcard.c */
-t_bool	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth);
+int		ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth);
 t_list	**ms_wildcard_loop(t_list **node, t_env **env, int depth);
 t_list	*ms_wildcard_replace(t_list **head, t_list **node, t_list **extend);
 t_list	*ms_wildcard_remove(t_list **head, t_list **remove);

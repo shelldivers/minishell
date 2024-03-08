@@ -67,21 +67,27 @@ t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth)
 {
 	int		i;
 	void	*f;
+	int		result;
 
 	i = 0;
 	while (*node && ((char *)(*node)->content)[i] && i != -1)
 	{
 		f = ms_expand_dispatcher(((char *)(*node)->content)[i]);
-		if (f == NULL)
-			i++;
-		else if (f == WILDCARD)
-			return (ms_expand_wildcard(head, node, env, depth));
-		else
+		if (f != NULL && f != WILDCARD)
 		{
 			if (!((t_bool(*)(t_list **, t_list **, int *, t_env **))f)
 					(head, node, &i, env))
 				return (FALSE);
 		}
+		else if (f == WILDCARD)
+		{
+			result = ms_expand_wildcard(head, node, env, depth);
+			if (result == ERROR)
+				return (FALSE);
+			else if (result == MATCH)
+				return (TRUE);
+		}
+		i++;
 	}
 	*node = (*node)->next;
 	return (TRUE);
