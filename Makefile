@@ -13,23 +13,25 @@ RM = rm -rf
 
 B_FILES = \
 minishell.c \
-separate_line.c \
+lex.c \
 init.c \
 clear.c \
-tokenize.c \
-isgrammar.c \
-isgrammar2.c \
-isgrammar3.c 
+tokenize.c 
+# isgrammar.c \
+# isgrammar2.c \
+# isgrammar3.c \
+# parse.c 
 
 M_FILES = \
 minishell.c \
-separate_line.c \
+lex.c \
 init.c \
 clear.c \
-tokenize.c \
-isgrammar.c \
-isgrammar2.c \
-isgrammar3.c 
+tokenize.c 
+# isgrammar.c \
+# isgrammar2.c \
+# isgrammar3.c \
+# parse.c 
 
 H_FILES = \
 minishell.h

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/07 16:57:02 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/08 18:57:25 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 
 # include <stdlib.h>
 
+enum e_lr
+{
+	LEFT,
+	RIGHT
+};
+
 enum e_grammar
 {
 	GAND_OR,
@@ -24,8 +30,9 @@ enum e_grammar
 	GCOMMAND,
 	GSUBSHELL,
 	GSIMPLE_COMMAND,
+	GCMD_WORD,
 	GCMD_SUFFIX,
-	GREDIRECT_LIST,
+	GCMD_PREFIX,
 	GIO_REDIRECT,
 	GIO_FILE,
 	GIO_HERE,
@@ -41,6 +48,7 @@ enum e_op
 	OPSUBSHELL,
 	OPIO_HERE,
 	OPIO_FILE,
+	OPCMD_WORD,
 	OPNONE
 };
 
@@ -80,7 +88,7 @@ typedef struct s_parse
 	size_t			token_size;
 }				t_parse;
 
-/*================seperate_line.c================*/
+/*================lex.c================*/
 void	lexer(t_syntax *syntax);
 /*================init.c================*/
 void	init_syntax(t_syntax *syntax);
@@ -93,18 +101,21 @@ void	clear_all(t_syntax *syntax, t_token **token, t_parse *parse);
 void	backtracking_free(t_parse **parse);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
-/*================is_grammar.c================*/
-size_t	isio_here(t_parse *parse, t_token **token);
-size_t	isio_file(t_parse *parse, t_token **token);
-size_t	isio_redirect(t_parse *parse, t_token **token);
-size_t	isredirect_list(t_parse *parse, t_token **token);
-size_t	iscmd_suffix(t_parse *parse, t_token **token);
-size_t	issimple_command(t_parse *parse, t_token **token);
-size_t	issubshell(t_parse *parse, t_token **token);
-size_t	iscommand(t_parse *parse, t_token **token);
-size_t	ispipeline(t_parse *parse, t_token **token);
-size_t	isand_or(t_parse *parse, t_token **token);
-size_t	isword(t_parse *parse, t_token **token);
-/*================parse_tree.c================*/
-t_parse	*ms_new_parse(t_token **token, enum e_op op, size_t size);
+// /*================is_grammar.c================*/
+// size_t	isio_here(t_parse *parse, t_token **token);
+// size_t	isio_file(t_parse *parse, t_token **token);
+// size_t	isio_redirect(t_parse *parse, t_token **token);
+// size_t	iscmd_prefix(t_parse *parse, t_token **token);
+// size_t	iscmd_suffix(t_parse *parse, t_token **token);
+// size_t	issimple_command(t_parse *parse, t_token **token);
+// size_t	issubshell(t_parse *parse, t_token **token);
+// size_t	iscommand(t_parse *parse, t_token **token);
+// size_t	ispipeline(t_parse *parse, t_token **token);
+// size_t	isand_or(t_parse *parse, t_token **token);
+// size_t	isword(t_parse *parse, t_token **token);
+// /*================parse.c================*/
+// t_parse	*ms_new_parse(t_token **token, enum e_op op, size_t size);
+// size_t	add_parse(t_parse *parse, t_token **token, size_t token_size, \
+// size_t(f)(t_parse *, t_token **), enum e_lr lr);
+
 #endif
