@@ -29,8 +29,7 @@ int	ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth)
 		free(extend);
 		if (depth == 0)
 			return (NO_MATCH);
-		else
-			*nod = ms_wildcard_remove(head, nod);
+		*nod = ms_wildcard_remove(head, nod);
 		return (MATCH);
 	}
 	*nod = ms_wildcard_replace(head, nod, extend);

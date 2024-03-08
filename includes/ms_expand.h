@@ -38,20 +38,21 @@ typedef struct s_wildcard
 char	**ms_expand(char **argv, t_env **env);
 t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth);
 t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth);
+t_bool	ms_expand_route(t_list **lst, t_list **node, int *idx, t_env **env);
 
 /* ms_expand_lst.c */
 t_list	**ms_expand_init(char **argv);
 char	**ms_expand_transform_free(t_list **head);
 
 /* ms_expand_quote.c */
-t_bool	ms_expand_quote(t_list **lst, t_list **node, int *idx, t_env **env);
-t_bool	ms_expand_dquote(t_list **lst, t_list **node, int *idx, t_env **env);
+t_bool	ms_expand_quote(t_list **node, int *idx);
+t_bool	ms_expand_dquote(t_list **node, int *idx, t_env **env);
 
 /* ms_expand_escape.c */
-t_bool	ms_expand_escape(t_list **lst, t_list **node, int *idx, t_env **env);
+t_bool	ms_expand_escape(t_list **node, int *idx);
 
 /* ms_expand_env.c */
-t_bool	ms_expand_env(t_list **lst, t_list **node, int *idx, t_env **env);
+t_bool	ms_expand_env(t_list **node, int *idx, t_env **env);
 
 /* ms_expand_wildcard.c */
 int		ms_expand_wildcard(t_list **head, t_list **nod, t_env **env, int depth);

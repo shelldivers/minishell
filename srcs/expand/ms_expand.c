@@ -14,8 +14,6 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-static void		*ms_expand_dispatcher(char c);
-
 char	**ms_expand(char **argv, t_env **env)
 {
 	t_list	**head;
@@ -27,11 +25,7 @@ char	**ms_expand(char **argv, t_env **env)
 		ms_puterror_arg(*env, *argv);
 		return (NULL);
 	}
-	if (!ms_expand_proceed(head, env, 0))
-	{
-		free(head);
-		return (NULL);
-	}
+	ms_expand_proceed(head, env, 0);
 	new_argv = ms_expand_transform_free(head);
 	if (!new_argv)
 	{
@@ -53,8 +47,7 @@ t_bool	ms_expand_proceed(t_list **head, t_env **env, int depth)
 		if (!ms_expand_handler(head, &node, env, depth))
 		{
 			ms_puterror_arg(*env, node->content);
-			ft_lstclear(head, free);
-			return (FALSE);
+			node = ms_wildcard_remove(head, &node);
 		}
 	}
 	return (TRUE);
@@ -72,39 +65,41 @@ t_bool	ms_expand_handler(t_list **head, t_list **node, t_env **env, int depth)
 	i = 0;
 	while (*node && ((char *)(*node)->content)[i] && i != -1)
 	{
-		f = ms_expand_dispatcher(((char *)(*node)->content)[i]);
-		if (f != NULL && f != WILDCARD)
-		{
-			if (!((t_bool(*)(t_list **, t_list **, int *, t_env **))f)
-					(head, node, &i, env))
-				return (FALSE);
-		}
-		else if (f == WILDCARD)
+		if (((char *)(*node)->content)[i] == '*')
 		{
 			result = ms_expand_wildcard(head, node, env, depth);
 			if (result == ERROR)
 				return (FALSE);
 			else if (result == MATCH)
 				return (TRUE);
+			i++;
 		}
-		i++;
+		else
+		{
+			if (!ms_expand_route(head, node, &i, env))
+				return (FALSE);
+		}
 	}
 	*node = (*node)->next;
 	return (TRUE);
 }
 
-static void	*ms_expand_dispatcher(char c)
+t_bool	ms_expand_route(t_list **lst, t_list **node, int *idx, t_env **env)
 {
+	char	c;
+
+	c = ((char *)(*node)->content)[*idx];
 	if (c == '\'')
-		return (ms_expand_quote);
+		return (ms_expand_quote(node, idx));
 	else if (c == '\"')
-		return (ms_expand_dquote);
+		return (ms_expand_dquote(node, idx, env));
 	else if (c == '\\')
-		return (ms_expand_escape);
+		return (ms_expand_escape(node, idx));
 	else if (c == '$')
-		return (ms_expand_env);
-	else if (c == '*')
-		return (WILDCARD);
+		return (ms_expand_env(node, idx, env));
 	else
-		return (NULL);
+	{
+		*idx += 1;
+		return (TRUE);
+	}
 }

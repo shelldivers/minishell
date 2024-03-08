@@ -14,13 +14,11 @@
 #include "ms_env.h"
 #include "ms_expand.h"
 
-t_bool	ms_expand_quote(t_list **lst, t_list **node, int *idx, t_env **env)
+t_bool	ms_expand_quote(t_list **node, int *idx)
 {
 	char	*str;
 	int		i;
 
-	(void)lst;
-	(void)env;
 	i = *idx;
 	str = (char *)(*node)->content;
 	ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
@@ -32,21 +30,20 @@ t_bool	ms_expand_quote(t_list **lst, t_list **node, int *idx, t_env **env)
 	return (TRUE);
 }
 
-t_bool	ms_expand_dquote(t_list **lst, t_list **node, int *idx, t_env **env)
+t_bool	ms_expand_dquote(t_list **node, int *idx, t_env **env)
 {
 	char	*str;
 	int		i;
 
-	(void)lst;
 	i = *idx;
 	str = (char *)(*node)->content;
 	ft_memmove(str + i, str + i + 1, ft_strlen(str + i));
 	while (str[i] && str[i] != '\"')
 	{
 		if (str[i] == '\\' && (str[i + 1] == '\"' || str[i + 1] == '\\'))
-			ms_expand_escape(lst, node, &i, env);
+			ms_expand_escape(node, &i);
 		else if (str[i] == '$')
-			ms_expand_env(lst, node, &i, env);
+			ms_expand_env(node, &i, env);
 		else
 			i++;
 	}
