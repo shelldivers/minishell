@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/08 18:57:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/09 15:30:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ enum e_type
 	TDGREAT,
 	TDREAD,
 	TDWRITE,
-	TSUBSHELL
+	TLBRACE,
+	TRBRACE
 };
 
 typedef struct s_syntax

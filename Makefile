@@ -52,7 +52,7 @@ CASE =
 all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
 # 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 # lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
 # sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)

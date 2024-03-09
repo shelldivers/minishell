@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 15:47:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:28:40 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,34 +118,7 @@ int	main(int argc, char **argv, char **envp)
 			exit (1);
 		add_history(syntax.line);
 		lexer(&syntax);
-		printf ("=================================\n");
-		printf ("words_cnt: %zu\n", syntax.words_cnt);
 		token = tokenize(&syntax);
-		for (size_t i = 0; token[i]; i++)
-		{
-			printf ("\n=================================\n\n");
-			printf("token[%zu]: $%s$\n", i, token[i]->value);
-			if (token[i]->type == TAND_IF)
-				printf("type: TAND_IF\n");
-			else if (token[i]->type == TOR_IF)
-				printf("type: TOR_IF\n");
-			else if (token[i]->type == TDLESS)
-				printf("type: TDLESS\n");
-			else if (token[i]->type == TDGREAT)
-				printf("type: TDGREAT\n");
-			else if (token[i]->type == TDREAD)
-				printf("type: TDREAD\n");
-			else if (token[i]->type == TDWRITE)
-				printf("type: TDWRITE\n");
-			else if (token[i]->type == TLBRACE)
-				printf("type: TLBRACE\n");
-			else if (token[i]->type == TRBRACE)
-				printf("type: TRBRACE\n");
-			else if (token[i]->type == TWORD)
-				printf("type: TWORD\n");
-			else if (token[i]->type == TPIPE)
-				printf("type: TPIPE\n");
-		}
 		// parser(&parse, token, syntax.words_cnt);
 		// show_tree(parse);
 		clear_all(&syntax, token, parse);
