@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 15:31:50 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:23:36 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,36 +105,9 @@ static size_t	ft_strcmp(char *dst, const char *src)
 //token  DLESS  DGREAT   DREAD  DWRITE
 /*      '<<'   '>>'     '<'     '>'    */
 
-static t_token	*new_token(char *value)
-{
-	t_token	*token;
-
-	token = (t_token *)malloc(sizeof(t_token));
-	if (!token)
-		exit(1);
-	token->value = ft_strdup(value);
-	if (ft_strcmp(value, "&&") == 0)
-		token->type = TAND_IF;
-	else if (ft_strcmp(value, "||") == 0)
-		token->type = TOR_IF;
-	else if (ft_strcmp(value, "|") == 0)
-		token->type = TPIPE;
-	else if (ft_strcmp(value, "(") == 0)
-		token->type = TLBRACE;
-	else if (ft_strcmp(value, ")") == 0)
-		token->type = TRBRACE;
-	else if (ft_strcmp(value, "<<") == 0)
-		token->type = TDLESS;
-	else if (ft_strcmp(value, ">>") == 0)
-		token->type = TDGREAT;
-	else if (ft_strcmp(value, "<") == 0)
-		token->type = TDREAD;
-	else if (ft_strcmp(value, ">") == 0)
-		token->type = TDWRITE;
-	else
-		token->type = TWORD;
-	return (token);
-}
+t_token			**tokenize(t_syntax *syntax);
+static t_token	*new_token(char *value);
+static void		set_tokentype(t_token **token);
 
 t_token	**tokenize(t_syntax *syntax)
 {
@@ -152,6 +125,42 @@ t_token	**tokenize(t_syntax *syntax)
 	}
 	token[i] = NULL;
 	return (token);
+}
+
+static t_token	*new_token(char *value)
+{
+	t_token	*token;
+
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
+		exit(1);
+	token->value = ft_strdup(value);
+	set_tokentype(&token);
+	return (token);
+}
+
+static void	set_tokentype(t_token **token)
+{
+	if (!ft_strcmp((*token)->value, "&&"))
+		(*token)->type = TAND_IF;
+	else if (!ft_strcmp((*token)->value, "||"))
+		(*token)->type = TOR_IF;
+	else if (!ft_strcmp((*token)->value, "|"))
+		(*token)->type = TPIPE;
+	else if (!ft_strcmp((*token)->value, "("))
+		(*token)->type = TLBRACE;
+	else if (!ft_strcmp((*token)->value, ")"))
+		(*token)->type = TRBRACE;
+	else if (!ft_strcmp((*token)->value, "<<"))
+		(*token)->type = TDLESS;
+	else if (!ft_strcmp((*token)->value, ">>"))
+		(*token)->type = TDGREAT;
+	else if (!ft_strcmp((*token)->value, "<"))
+		(*token)->type = TDREAD;
+	else if (!ft_strcmp((*token)->value, ">"))
+		(*token)->type = TDWRITE;
+	else
+		(*token)->type = TWORD;
 }
 
 /*================tokenize.c_END================*/

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 15:49:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:27:16 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ static void	count_word(char *line, size_t *words_cnt, const char **sep)
 	size_t	flag;
 
 	i = 0;
+	flag = 0;
 	while (line[i])
 	{
 		while (line[i] == ' ')
