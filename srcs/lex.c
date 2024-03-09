@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/08 19:23:57 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/09 15:49:25 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,10 @@ void	lexer(t_syntax *syntax)
 	start = 0;
 	while (i < syntax->words_cnt)
 	{
+		while (syntax->line[start] == ' ')
+			start++;
+		if (syntax->line[start] == '\0')
+			break ;
 		if (sepcmp(syntax->line + start, sep))
 			syntax->words[i] = extract_token(syntax->line, &start, sep);
 		else
@@ -164,6 +168,8 @@ static void	count_word(char *line, size_t *words_cnt, const char **sep)
 	i = 0;
 	while (line[i])
 	{
+		while (line[i] == ' ')
+			i++;
 		if (sepcmp(line + i, sep))
 		{
 			if (flag)
@@ -172,7 +178,7 @@ static void	count_word(char *line, size_t *words_cnt, const char **sep)
 			i += sepcmp(line + i, sep);
 			flag = 0;
 		}
-		else
+		else if (line[i])
 		{
 			flag = 1;
 			i++;
@@ -191,6 +197,8 @@ static char	*extract_word(char *line, size_t *start, const char **sep)
 	word = NULL;
 	while (sepcmp(line + i, sep) == 0 && line[i])
 		i++;
+	while (line[i - 1] == ' ')
+		i--;
 	word = ft_substr(line, *start, i - *start);
 	*start = i;
 	return (word);
