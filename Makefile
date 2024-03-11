@@ -16,22 +16,22 @@ minishell.c \
 lex.c \
 init.c \
 clear.c \
-tokenize.c 
-# isgrammar.c \
-# isgrammar2.c \
-# isgrammar3.c \
-# parse.c 
+tokenize.c \
+isgrammar.c \
+isgrammar2.c \
+isgrammar3.c \
+parse.c 
 
 M_FILES = \
 minishell.c \
 lex.c \
 init.c \
 clear.c \
-tokenize.c 
-# isgrammar.c \
-# isgrammar2.c \
-# isgrammar3.c \
-# parse.c 
+tokenize.c \
+isgrammar.c \
+isgrammar2.c \
+isgrammar3.c \
+parse.c 
 
 H_FILES = \
 minishell.h
@@ -52,7 +52,7 @@ CASE =
 all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
+	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
 # 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 # lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
 # sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)

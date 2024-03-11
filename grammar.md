@@ -75,6 +75,7 @@ Assignment to the name within a returned ASSIGNMENT_WORD token shall occur as sp
    The grammar symbols
    ------------------------------------------------------- */
 %token  WORD			// 명령어 집합
+%token	IO_NUMBER
 
 /* The following are the operators (see XBD Operator)
    containing more than one character. */
@@ -105,14 +106,12 @@ command          : simple_command
                  ;
 subshell         : LBRACE and_or RBRACE
                  ;
-simple_command   : cmd_prefix cmd_word cmd_suffix
-                 | cmd_prefix cmd_word
+simple_command   : cmd_prefix WORD cmd_suffix
+                 | cmd_prefix WORD
                  | cmd_prefix
-                 | cmd_word cmd_suffix
-                 | cmd_word
+                 | WORD cmd_suffix
+                 | WORD
                  ;
-cmd_word		 : WORD
-				 ;
 cmd_prefix       :            io_redirect
                  | cmd_prefix io_redirect
                  ;
@@ -121,8 +120,10 @@ cmd_suffix       :            io_redirect
                  |            WORD
                  | cmd_suffix WORD
                  ;
-io_redirect      : io_file
-                 | io_here
+io_redirect      :           io_file
+                 | IO_NUMBER io_file
+                 |           io_here
+                 | IO_NUMBER io_here
                  ;
 io_file          : DREAD     WORD
                  | DWRITE    WORD

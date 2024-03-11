@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:50:39 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/08 18:56:55 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:15:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,47 +57,52 @@ void	clear_token(t_token **token)
 	}
 }
 
-void	clear_parse(t_parse *parse)
+void	clear_ast(t_ast *ast)
 {
-	if (parse)
+	if (ast)
 	{
-		clear_parse(parse->left);
-		clear_parse(parse->right);
-		while (parse->token_size--)
+		clear_ast(ast->left);
+		clear_ast(ast->right);
+		while (ast->token_size--)
 		{
-			if (parse->token[parse->token_size]->value)
-				free(parse->token[parse->token_size]->value);
-			free(parse->token[parse->token_size]);
+			if (ast->token[ast->token_size]->value)
+			{
+				free(ast->token[ast->token_size]->value);
+				ast->token[ast->token_size]->value = NULL;
+			}
+			free(ast->token[ast->token_size]);
+			ast->token[ast->token_size] = NULL;
 		}
-		free(parse);
+		free(ast);
+		ast = NULL;
 	}
 }
 
-void	clear_all(t_syntax *syntax, t_token **token, t_parse *parse)
+void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 {
 	clear_syntax(syntax);
 	clear_token(token);
-	// clear_parse(parse);
+	clear_ast(ast);
 }
 
-void	backtracking_free(t_parse **parse)
+void	backtracking_free(t_ast **ast)
 {
-	if (*parse)
+	if (*ast)
 	{
-		if (!((*parse)->token_size))
+		if (!((*ast)->token_size))
 		{
-			if ((*parse)->left)
+			if ((*ast)->left)
 			{
-				free((*parse)->left);
-				(*parse)->left = NULL;
+				free((*ast)->left);
+				(*ast)->left = NULL;
 			}
-			if ((*parse)->right)
+			if ((*ast)->right)
 			{
-				free((*parse)->right);
-				(*parse)->right = NULL;
+				free((*ast)->right);
+				(*ast)->right = NULL;
 			}
-			free((*parse));
-			(*parse) = NULL;
+			free((*ast));
+			(*ast) = NULL;
 		}
 	}
 }

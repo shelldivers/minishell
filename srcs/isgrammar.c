@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/08 16:12:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:13:46 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,127 +15,113 @@
 #include "minishell.h"
 
 //unterminal
-size_t	isand_or(t_parse *parse, t_token **token)
+size_t	isand_or(t_ast *ast, t_token **token)
 {
 	size_t	i;
 	size_t	cursor;
 
-	if (parse->token_size == 0)
+	/*==============================================*/
+	if (ast->token_size == 0)
 		return (0);
-	printf ("isand_or\n");
-	for (size_t j = 0; j < parse->token_size; j++)
-	{
+	printf("isand_or\n");
+	for (size_t j = 0; j < ast->token_size; j++)
 		printf("%s ", token[j]->value);
-	}
-	printf ("\n");
-	parse->grammar = GAND_OR;
-	i = 1;
+	printf("\n");
+	ast->grammar = GAND_OR;
+	/*==============================================*/
+	i = ast->token_size - 1;
 	cursor = 0;
-	while (parse->token_size - i)
+	while (i)
 	{
-		if (token[parse->token_size - i]->type == TAND_IF)
+		if (token[i] && token[i]->type == TAND_IF)
 		{
-			parse->op = OPAND_IF;
-			cursor += add_parse(parse, token, parse->token_size - i, \
-			isand_or, LEFT);
-			break ;
-		}
-		else if (token[parse->token_size - i]->type == TOR_IF)
-		{
-			parse->op = OPOR_IF;
-			cursor += add_parse(parse, token, parse->token_size - i, \
-			isand_or, LEFT);
-			break ;
-		}
-		i++;
-	}
-	cursor += add_parse(parse, token + cursor, i, \
-	ispipeline, RIGHT);
-	return (cursor);     
-}
-
-//unterminal
-size_t	ispipeline(t_parse *parse, t_token **token)
-{
-	size_t	i;
-	size_t	cursor;
-
-	if (parse->token_size == 0)
-		return (0);
-	printf ("ispipeline\n");
-	for (size_t j = 0; j < parse->token_size; j++)
-	{
-		printf("%s ", token[j]->value);
-	}
-	printf ("\n");
-	parse->grammar = GPIPELINE;
-	i = 1;
-	cursor = 0;
-	while (parse->token_size - i)
-	{
-		if (token[parse->token_size - i]->type == TPIPE)
-		{
-			parse->op = OPPIPE;
-			cursor += add_parse(parse, token, parse->token_size - i, \
+			cursor += add_ast(ast, token + i + 1, ast->token_size - i - 1, \
+			ispipeline, RIGHT);
+			cursor += add_ast(ast, token, i - 1, \
 			ispipeline, LEFT);
-			break ;
+			ast->op = OPAND_IF;
+			return (1);
 		}
-		i++;
+		else if (token[i] && token[i]->type == TOR_IF)
+		{
+			cursor += add_ast(ast, token + i + 1, ast->token_size - i - 1, \
+			ispipeline, RIGHT);
+			cursor += add_ast(ast, token, i - 1, \
+			ispipeline, LEFT);
+			ast->op = OPOR_IF;
+			return (1);
+		}
+		i--;
 	}
-	if (!cursor)
-		cursor += add_parse(parse, token, parse->token_size, \
-		iscommand, LEFT);
-	else
-		cursor += add_parse(parse, token + cursor, i, \
-		iscommand, RIGHT);
 	return (cursor);
 }
 
-size_t	iscommand(t_parse *parse, t_token **token)
+//unterminal
+size_t	ispipeline(t_ast *ast, t_token **token)
 {
 	size_t	i;
 	size_t	cursor;
 
-	if (parse->token_size == 0)
+	/*==============================================*/
+	if (ast->token_size == 0)
 		return (0);
-	printf ("iscommand\n");
-	for (size_t j = 0; j < parse->token_size; j++)
-	{
+	printf("ispipeline\n");
+	for (size_t j = 0; j < ast->token_size; j++)
 		printf("%s ", token[j]->value);
-	}
-	printf ("\n");
-	parse->grammar = GCOMMAND;
-	i = 0;
+	printf("\n");
+	ast->grammar = GPIPELINE;
+	/*==============================================*/
+	i = ast->token_size - 1;
 	cursor = 0;
-	if (token[0] && token[0]->type == TSUBSHELL)
+	return (1);
+}
+
+size_t	iscommand(t_ast *ast, t_token **token)
+{
+	size_t	i;
+	size_t	cursor;
+
+	/*==============================================*/
+	if (ast->token_size == 0)
+		return (0);
+	printf("iscommand\n");
+	for (size_t j = 0; j < ast->token_size; j++)
+		printf("%s ", token[j]->value);
+	printf("\n");
+	ast->grammar = GCOMMAND;
+	/*==============================================*/
+	i = ast->token_size - 1;
+	cursor = 0;
+	if (token[0] && token[0]->type == TLBRACE)
 	{
-		cursor += add_parse(parse, token, 1, \
+		cursor += add_ast(ast, token + 1, ast->token_size - 2, \
 		issubshell, LEFT);
-		cursor += add_parse(parse, token + cursor, parse->token_size - cursor, \
+		cursor += add_ast(ast, token + ast->token_size - 1, 1, \
 		isio_redirect, RIGHT);
 	}
 	else
-		cursor += add_parse(parse, token, 1, \
-		issimple_command, LEFT);
+	{
+		
+	}
 	return (cursor);
 }
 
 //terminal
-size_t	issubshell(t_parse *parse, t_token **token)
+size_t	issubshell(t_ast *ast, t_token **token)
 {
-	if (parse->token_size == 0)
+	size_t	i;
+	size_t	cursor;
+
+	/*==============================================*/
+	if (ast->token_size == 0)
 		return (0);
-	for (size_t j = 0; j < parse->token_size; j++)
-	{
+	printf("issubshell\n");
+	for (size_t j = 0; j < ast->token_size; j++)
 		printf("%s ", token[j]->value);
-	}
-	printf ("\n");
-	printf ("issubshell\n");
-	parse->grammar = GSUBSHELL;
-	if (token[0] && token[0]->type == TSUBSHELL)
-	{
-		parse->op = OPSUBSHELL;
-		return (1);
-	}
-	return (0);
+	printf("\n");
+	ast->grammar = GSUBSHELL;
+	/*==============================================*/
+	i = ast->token_size - 1;
+	cursor = 0;
+	return (1);
 }

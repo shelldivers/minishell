@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   ast.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 11:24:28 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/08 11:38:52 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:12:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,47 +17,115 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-size_t	add_parse(t_parse *parse, t_token **token, size_t token_size, \
-size_t(f)(t_parse *, t_token **), enum e_lr lr)
+size_t	ft_strlen(const char *s)
+{
+	size_t	cnt;
+
+	cnt = 0;
+	while (s[cnt] != '\0')
+		cnt++;
+	return (cnt);
+}
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char		*dst_;
+	const unsigned char	*src_;
+	size_t				i;
+
+	if (dst == 0 && src == 0)
+		return (0);
+	dst_ = (unsigned char *)dst;
+	src_ = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
+	{
+		dst_[i] = src_[i];
+		i++;
+	}
+	return (dst);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*str;
+	size_t	s1_len;
+
+	s1_len = ft_strlen(s1);
+	str = (char *)malloc(sizeof(char) * (s1_len + 1));
+	if (!str)
+		return (0);
+	str[s1_len] = '\0';
+	ft_memcpy(str, s1, s1_len);
+	return (str);
+}
+
+size_t	add_ast(t_ast *ast, t_token **token, size_t token_size, \
+size_t(f)(t_ast *, t_token **), enum e_lr lr)
 {
 	size_t	cursor;
 
 	cursor = 0;
-	if (lr == LEFT)
+	if (ast == NULL)
 	{
-		parse->left = ms_new_parse(token, OPNONE, token_size);
-		parse->left->token_size = token_size;
-		cursor = (f(parse->left, token));
-		backtracking_free(&(parse->left));
+		ast = ms_new_ast(token, token_size);
+		cursor += (f(ast, token));
+		backtracking_free(&ast);
+	}
+	else if (lr == LEFT)
+	{
+		ast->left = ms_new_ast(token, token_size);
+		cursor += (f(ast->left, token));
+		backtracking_free(&(ast->left));
 	}
 	else if (lr == RIGHT)
 	{
-		parse->right = ms_new_parse(token, OPNONE, token_size);
-		parse->right->token_size = token_size;
-		cursor = (f(parse->right, token));
-		backtracking_free(&(parse->right));
+		ast->right = ms_new_ast(token, token_size);
+		cursor += (f(ast->right, token));
+		backtracking_free(&(ast->right));
 	}
 	return (cursor);
 }
 
-// void	isterminal(t_parse *parse, t_token **token)
-// {
-// 	const enum e_grammar	grammar[4] = {GWORD, GSUBSHELL, GIO_FILE, GIO_HERE};
-// 	size_t	i;
+t_ast	*new_ast(t_token **token, size_t size)
+{
+	t_ast	*new_ast;
 
-// 	i = 0;
-// 	while (i < 4)
-// 	{
-// 		if (parse->grammar == grammar[i])
-// 		{
-// 			parse->left = ms_new_parse(token, OPNONE, 0);
-// 			parse->left->token_size = 1;
-// 			parse->left->grammar = parse->grammar;
-// 			parse->left->op = OPNONE;
-// 			parse->left->left = NULL;
-// 			parse->left->right = NULL;
-// 			break ;
-// 		}
-// 		i++;
-// 	}
-// }
+	new_ast = (t_ast *)malloc(sizeof(t_ast));
+	if (!new_ast)
+		return (NULL);
+	new_ast->token = tokenndup(token, size);
+	if (!new_ast->token)
+	{
+		free(new_ast);
+		return (NULL);
+	}
+	new_ast->token_size = size;
+	new_ast->grammar = GNONE;
+	new_ast->op = OPNONE;
+	new_ast->left = NULL;
+	new_ast->right = NULL;
+	return (new_ast);
+}
+
+t_token	**tokenndup(t_token **src, size_t size)
+{
+	t_token	**dst;
+
+	dst = (t_token **)malloc(sizeof(t_token *) * (size + 1));
+	if (!dst)
+		return (NULL);
+	dst[size] = NULL;
+	while (size)
+	{
+		size--;
+		dst[size]->type = src[size]->type;
+		dst[size]->value = ft_strdup(src[size]->value);
+		if (!dst[size]->value)
+		{
+			clear_token(dst);
+			return (NULL);
+		}
+	}
+	return (dst);
+}

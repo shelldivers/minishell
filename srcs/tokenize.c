@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 16:23:36 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:28:57 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,24 @@
 #include "minishell.h"
 
 /*==================LIBFT_START===========================*/
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+int	ft_isnumeric(char *str)
+{
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
 static size_t	ft_strlen(const char *s)
 {
@@ -159,6 +177,8 @@ static void	set_tokentype(t_token **token)
 		(*token)->type = TDREAD;
 	else if (!ft_strcmp((*token)->value, ">"))
 		(*token)->type = TDWRITE;
+	else if (ft_isnumeric((*token)->value))
+		(*token)->type = TIO_NUMBER;
 	else
 		(*token)->type = TWORD;
 }
