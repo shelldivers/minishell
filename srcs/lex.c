@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 16:27:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:44:40 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-static void		count_word(char *line, size_t *words_cnt, const char **sep);
-static size_t	sepcmp(const char *s1, const char **s2);
-static char		*extract_word(char *line, size_t *start, const char **sep);
-static char		*extract_token(char *line, size_t *start, const char **sep);
+static size_t	count_word(const char *line, const char **op);
+static size_t	isop(const char *s1, const char **op);
+static size_t	isword(const char *line, const char **op);
+static size_t	close_quote(const char *line, const char quote);
+static char		*extract_word(char *line, size_t *start, const char **op);
+static char		*extract_token(char *line, size_t *start, const char **op);
 
 /*==================LIBFT_START===========================*/
 
@@ -120,11 +122,11 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
  */
 void	lexer(t_syntax *syntax)
 {
-	const char	*sep[9] = {"&&", "||", "|", "(", ")", ">", "<", ">>", "<<"};
+	const char	*op[9] = {"&&", "||", "|", "(", ")", ">", "<", ">>", "<<"};
 	size_t		i;
 	size_t		start;
 
-	count_word(syntax->line, &syntax->words_cnt, sep);
+	syntax->words_cnt = count_word(syntax->line, op);
 	syntax->words = (char **)malloc(sizeof(char *) * (syntax->words_cnt + 1));
 	if (!syntax->words)
 		exit(EXIT_FAILURE);
@@ -137,83 +139,108 @@ void	lexer(t_syntax *syntax)
 			start++;
 		if (syntax->line[start] == '\0')
 			break ;
-		if (sepcmp(syntax->line + start, sep))
-			syntax->words[i] = extract_token(syntax->line, &start, sep);
+		if (isop(syntax->line + start, op))
+			syntax->words[i] = extract_token(syntax->line, &start, op);
 		else
-			syntax->words[i] = extract_word(syntax->line, &start, sep);
+			syntax->words[i] = extract_word(syntax->line, &start, op);
 		i++;
 	}
 	i = 0;
 }
 
-static size_t	sepcmp(const char *s1, const char **s2)
+static size_t	count_word(const char *line, const char **op)
 {
 	size_t	i;
+	size_t	token_size;
+	size_t	words_cnt;
+
+	i = 0;
+	words_cnt = 0;
+	while (line[i])
+	{
+		token_size = isword(line + i, op);
+		if (token_size)
+			words_cnt++;
+		else
+		{
+			token_size = isop(line + i, op);
+			if (token_size)
+				words_cnt++;
+			else
+				i++;
+		}
+		i += token_size;
+	}
+	return (words_cnt);
+}
+
+static size_t	isop(const char *s1, const char **op)
+{
+	size_t	i;
+	size_t	op_size;
 
 	i = 0;
 	while (i < 9)
 	{
-		if (ft_strncmp(s1, s2[i], ft_strlen(s2[i])) == 0)
-			return (ft_strlen(s2[i]));
+		op_size = ft_strlen(op[i]);
+		if (ft_strncmp(s1, op[i], op_size) == 0)
+			return (op_size);
 		i++;
 	}
 	return (0);
 }
 
-static void	count_word(char *line, size_t *words_cnt, const char **sep)
+static size_t	isword(const char *line, const char **op)
 {
 	size_t	i;
-	size_t	flag;
 
 	i = 0;
-	flag = 0;
-	while (line[i])
+	while (line[i] != ' ' && line[i] != '\0' && isop(line + i, op) == 0)
 	{
-		while (line[i] == ' ')
+		if (line[i] == '\'' || line[i] == '"')
+			i += close_quote(line + i, line[i]);
+		else
 			i++;
-		if (sepcmp(line + i, sep))
-		{
-			if (flag)
-				(*words_cnt)++;
-			(*words_cnt)++;
-			i += sepcmp(line + i, sep);
-			flag = 0;
-		}
-		else if (line[i])
-		{
-			flag = 1;
-			i++;
-		}
 	}
-	if (flag)
-		(*words_cnt)++;
+	return (i);
 }
 
-static char	*extract_word(char *line, size_t *start, const char **sep)
+static size_t	close_quote(const char *line, const char quote)
+{
+	size_t	i;
+
+	i = 1;
+	while (line[i])
+	{
+		if (line[i] == quote)
+			return (i + 1);
+		i++;
+	}
+	return (1);
+}
+
+static char	*extract_word(char *line, size_t *start, const char **op)
 {
 	size_t	i;
 	char	*word;
 
 	i = *start;
 	word = NULL;
-	while (sepcmp(line + i, sep) == 0 && line[i])
-		i++;
-	while (line[i - 1] == ' ')
-		i--;
+	i += isword(line + i, op);
 	word = ft_substr(line, *start, i - *start);
 	*start = i;
 	return (word);
 }
 
-static char	*extract_token(char *line, size_t *start, const char **sep)
+static char	*extract_token(char *line, size_t *start, const char **op)
 {
 	char	*token;
 	size_t	i;
-	size_t	sep_size;
+	size_t	op_size;
 
 	i = *start;
-	sep_size = sepcmp(line + i, sep);
-	token = ft_substr(line, *start, sep_size);
-	*start += sep_size;
+	op_size = isop(line + i, op);
+	token = ft_substr(line, *start, op_size);
+	*start += op_size;
 	return (token);
 }

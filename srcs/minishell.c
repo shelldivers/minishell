@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/09 16:28:40 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:35:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@
 // 	return (new_parse);
 // }
 
-void	leaks()
-{
-	system("leaks minishell");
-}
+// void	leaks()
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -109,7 +109,7 @@ int	main(int argc, char **argv, char **envp)
 	t_token		**token;
 	t_parse		*parse;
 
-	atexit(leaks);
+	// atexit(leaks);
 	init_syntax(&syntax);
 	while (1)
 	{
@@ -119,6 +119,30 @@ int	main(int argc, char **argv, char **envp)
 		add_history(syntax.line);
 		lexer(&syntax);
 		token = tokenize(&syntax);
+		for (size_t i = 0; i < syntax.words_cnt; i++)
+		{
+			printf("token[%zu] : $%s$\n", i, token[i]->value);
+			if (token[i]->type == TWORD)
+				printf("TWORD\n");
+			else if (token[i]->type == TPIPE)
+				printf("TPIPE\n");
+			else if (token[i]->type == TAND_IF)
+				printf("TAND_IF\n");
+			else if (token[i]->type == TOR_IF)
+				printf("TOR_IF\n");
+			else if (token[i]->type == TDLESS)
+				printf("TDLESS\n");
+			else if (token[i]->type == TDGREAT)
+				printf("TDGREAT\n");
+			else if (token[i]->type == TDWRITE)
+				printf("TDWRITE\n");
+			else if (token[i]->type == TDREAD)
+				printf("TDREAD\n");
+			else if (token[i]->type == TLBRACE)
+				printf("TLBRACE\n");
+			else if (token[i]->type == TRBRACE)
+				printf("TRBRACE\n");
+		}
 		// parser(&parse, token, syntax.words_cnt);
 		// show_tree(parse);
 		clear_all(&syntax, token, parse);
