@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/11 19:36:04 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/15 20:13:55 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ enum e_type
 	TDGREAT,
 	TDREAD,
 	TDWRITE,
-	TLBRACE,
-	TRBRACE
+	TLPAREN,
+	TRPAREN
 };
 
 typedef struct s_syntax
@@ -110,6 +110,10 @@ size_t	isand_or(t_ast *ast, t_token **token);
 size_t	ispipeline(t_ast *ast, t_token **token);
 size_t	iscommand(t_ast *ast, t_token **token);
 size_t	issubshell(t_ast *ast, t_token **token);
+size_t	issimple_command(t_ast *ast, t_token **token);
+size_t	iscmd_suffix(t_ast *ast, t_token **token);
+size_t	iscmd_prefix(t_ast *ast, t_token **token);
+size_t	isio_redirect(t_ast *ast, t_token **token);
 size_t	isio_redirect(t_ast *ast, t_token **token);
 size_t	isio_file(t_ast *ast, t_token **token);
 size_t	isio_here(t_ast *ast, t_token **token);

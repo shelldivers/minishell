@@ -17,9 +17,10 @@ lex.c \
 init.c \
 clear.c \
 tokenize.c \
-isgrammar.c \
-isgrammar2.c \
-isgrammar3.c \
+unterminal.c \
+unterminal2.c \
+terminal.c \
+terminal2.c \
 parse.c 
 
 M_FILES = \
@@ -28,9 +29,10 @@ lex.c \
 init.c \
 clear.c \
 tokenize.c \
-isgrammar.c \
-isgrammar2.c \
-isgrammar3.c \
+unterminal.c \
+unterminal2.c \
+terminal.c \
+terminal2.c \
 parse.c 
 
 H_FILES = \

@@ -60,8 +60,8 @@ char	*ft_strdup(const char *s1)
 	return (str);
 }
 
-size_t	add_ast(t_ast *ast, t_token **token, size_t token_size, \
-size_t(f)(t_ast *, t_token **), enum e_lr lr)
+size_t	add_ast(t_ast *ast, t_token **token, \
+size_t token_size, size_t(f)(t_ast *, t_token **), enum e_lr lr)
 {
 	size_t	cursor;
 
