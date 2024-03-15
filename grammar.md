@@ -106,11 +106,15 @@ command          : simple_command
                  ;
 subshell         : LBRACE and_or RBRACE
                  ;
-simple_command   : cmd_prefix WORD cmd_suffix
-                 | cmd_prefix WORD
+simple_command   : cmd_prefix cmd_name cmd_suffix
+                 | cmd_prefix cmd_name
                  | cmd_prefix
-                 | WORD cmd_suffix
-                 | WORD
+                 | cmd_word cmd_suffix
+                 | cmd_word
+                 ;
+cmd_name         : WORD                   /* Apply rule 7a */
+                 ;
+cmd_word         : WORD                   /* Apply rule 7b */
                  ;
 cmd_prefix       :            io_redirect
                  | cmd_prefix io_redirect
@@ -125,10 +129,14 @@ io_redirect      :           io_file
                  |           io_here
                  | IO_NUMBER io_here
                  ;
-io_file          : DREAD     WORD
-                 | DWRITE    WORD
-                 | DGREAT    WORD
+io_file          : DREAD     filename
+                 | DWRITE    filename
+                 | DGREAT    filename
                  ;
-io_here          : DLESS     WORD
+filename         : WORD                      /* Apply rule 2 */
+                 ;
+io_here          : DLESS     here_end
+                 ;
+here_end         : WORD                      /* Apply rule 3 */
                  ;
 ```
