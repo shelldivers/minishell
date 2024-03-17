@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 17:12:26 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 17:33:21 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static size_t	ft_strcmp(char *dst, const char *src)
 t_token			**tokenize(t_syntax *syntax);
 static t_token	*new_token(char *value);
 static void		set_tokentype(t_token **token);
-static void		find_ionumber(t_token **token);
+static void		set_ionumber(t_token **token);
 
 t_token	**tokenize(t_syntax *syntax)
 {
@@ -143,11 +143,11 @@ t_token	**tokenize(t_syntax *syntax)
 		i++;
 	}
 	token[i] = NULL;
-	find_ionumber(token);
+	set_ionumber(token);
 	return (token);
 }
 
-static void	find_ionumber(t_token **token)
+static void	set_ionumber(t_token **token)
 {
 	int	i;
 

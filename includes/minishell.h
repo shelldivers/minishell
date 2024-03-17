@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/15 20:13:55 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 13:17:35 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast);
 void	backtracking_free(t_ast **ast);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
-/*================is_grammar.c================*/
+/*================unterminal.c================*/
 size_t	isand_or(t_ast *ast, t_token **token);
 size_t	ispipeline(t_ast *ast, t_token **token);
 size_t	iscommand(t_ast *ast, t_token **token);
@@ -114,11 +114,15 @@ size_t	issimple_command(t_ast *ast, t_token **token);
 size_t	iscmd_suffix(t_ast *ast, t_token **token);
 size_t	iscmd_prefix(t_ast *ast, t_token **token);
 size_t	isio_redirect(t_ast *ast, t_token **token);
-size_t	isio_redirect(t_ast *ast, t_token **token);
+/*================terminal.c================*/
 size_t	isio_file(t_ast *ast, t_token **token);
 size_t	isio_here(t_ast *ast, t_token **token);
 size_t	isword(t_ast *ast, t_token **token);
 size_t	isio_number(t_ast *ast, t_token **token);
+size_t	iscmd_word(t_ast *ast, t_token **token);
+size_t	iscmd_name(t_ast *ast, t_token **token);
+size_t	ishere_end(t_ast *ast, t_token **token);
+size_t	isfilename(t_ast *ast, t_token **token);
 /*================ast.c================*/
 t_ast	*new_ast(t_token **token, size_t size);
 size_t	add_ast(t_ast *ast, t_token **token, size_t token_size, \

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 15:49:02 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 17:17:58 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
  */
 void	lexer(t_syntax *syntax)
 {
-	const char	*op[9] = {"&&", "||", "|", "(", ")", ">", "<", ">>", "<<"};
+	const char	*op[9] = {"&&", "||", "|", "(", ")", ">>", "<<", ">", "<"};
 	size_t		i;
 	size_t		start;
 
