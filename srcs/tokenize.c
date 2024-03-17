@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 15:45:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 17:12:26 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ static size_t	ft_strcmp(char *dst, const char *src)
 t_token			**tokenize(t_syntax *syntax);
 static t_token	*new_token(char *value);
 static void		set_tokentype(t_token **token);
+static void		find_ionumber(t_token **token);
 
 t_token	**tokenize(t_syntax *syntax)
 {
@@ -142,7 +143,24 @@ t_token	**tokenize(t_syntax *syntax)
 		i++;
 	}
 	token[i] = NULL;
+	find_ionumber(token);
 	return (token);
+}
+
+static void	find_ionumber(t_token **token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i])
+	{
+		if (ft_isdigit(token[i]->value[0]) && ft_strlen(token[i]->value) == 1 \
+		&& token[i + 1] && (token[i + 1]->type == TDLESS \
+		|| token[i + 1]->type == TDGREAT || token[i + 1]->type == TDREAD \
+		|| token[i + 1]->type == TDWRITE))
+			token[i]->type = TIO_NUMBER;
+		i++;
+	}
 }
 
 static t_token	*new_token(char *value)
@@ -177,8 +195,6 @@ static void	set_tokentype(t_token **token)
 		(*token)->type = TDREAD;
 	else if (!ft_strcmp((*token)->value, ">"))
 		(*token)->type = TDWRITE;
-	else if (ft_isdigit((*token)->value[0]) && ft_strlen((*token)->value) == 1)
-		(*token)->type = TIO_NUMBER;
 	else
 		(*token)->type = TWORD;
 }
