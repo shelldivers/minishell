@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/11 15:44:40 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 15:49:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include "minishell.h"
 
 static size_t	count_word(const char *line, const char **op);
-static size_t	isop(const char *s1, const char **op);
-static size_t	isword(const char *line, const char **op);
+static size_t	get_op(const char *s1, const char **op);
+static size_t	get_word(const char *line, const char **op);
 static size_t	close_quote(const char *line, const char quote);
 static char		*extract_word(char *line, size_t *start, const char **op);
 static char		*extract_token(char *line, size_t *start, const char **op);
@@ -139,7 +139,7 @@ void	lexer(t_syntax *syntax)
 			start++;
 		if (syntax->line[start] == '\0')
 			break ;
-		if (isop(syntax->line + start, op))
+		if (get_op(syntax->line + start, op))
 			syntax->words[i] = extract_token(syntax->line, &start, op);
 		else
 			syntax->words[i] = extract_word(syntax->line, &start, op);
@@ -158,12 +158,12 @@ static size_t	count_word(const char *line, const char **op)
 	words_cnt = 0;
 	while (line[i])
 	{
-		token_size = isword(line + i, op);
+		token_size = get_word(line + i, op);
 		if (token_size)
 			words_cnt++;
 		else
 		{
-			token_size = isop(line + i, op);
+			token_size = get_op(line + i, op);
 			if (token_size)
 				words_cnt++;
 			else
@@ -174,7 +174,7 @@ static size_t	count_word(const char *line, const char **op)
 	return (words_cnt);
 }
 
-static size_t	isop(const char *s1, const char **op)
+static size_t	get_op(const char *s1, const char **op)
 {
 	size_t	i;
 	size_t	op_size;
@@ -190,12 +190,12 @@ static size_t	isop(const char *s1, const char **op)
 	return (0);
 }
 
-static size_t	isword(const char *line, const char **op)
+static size_t	get_word(const char *line, const char **op)
 {
 	size_t	i;
 
 	i = 0;
-	while (line[i] != ' ' && line[i] != '\0' && isop(line + i, op) == 0)
+	while (line[i] != ' ' && line[i] != '\0' && get_op(line + i, op) == 0)
 	{
 		if (line[i] == '\'' || line[i] == '"')
 			i += close_quote(line + i, line[i]);
@@ -226,7 +226,9 @@ static char	*extract_word(char *line, size_t *start, const char **op)
 
 	i = *start;
 	word = NULL;
-	i += isword(line + i, op);
+	i += get_word(line + i, op);
+	if (line[i] == ' ')
+		i++;
 	word = ft_substr(line, *start, i - *start);
 	*start = i;
 	return (word);
@@ -239,7 +241,7 @@ static char	*extract_token(char *line, size_t *start, const char **op)
 	size_t	op_size;
 
 	i = *start;
-	op_size = isop(line + i, op);
+	op_size = get_op(line + i, op);
 	token = ft_substr(line, *start, op_size);
 	*start += op_size;
 	return (token);

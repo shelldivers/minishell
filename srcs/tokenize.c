@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/11 19:28:57 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 15:45:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,9 @@ static void	set_tokentype(t_token **token)
 	else if (!ft_strcmp((*token)->value, "|"))
 		(*token)->type = TPIPE;
 	else if (!ft_strcmp((*token)->value, "("))
-		(*token)->type = TLBRACE;
+		(*token)->type = TLPAREN;
 	else if (!ft_strcmp((*token)->value, ")"))
-		(*token)->type = TRBRACE;
+		(*token)->type = TRPAREN;
 	else if (!ft_strcmp((*token)->value, "<<"))
 		(*token)->type = TDLESS;
 	else if (!ft_strcmp((*token)->value, ">>"))
@@ -177,7 +177,7 @@ static void	set_tokentype(t_token **token)
 		(*token)->type = TDREAD;
 	else if (!ft_strcmp((*token)->value, ">"))
 		(*token)->type = TDWRITE;
-	else if (ft_isnumeric((*token)->value))
+	else if (ft_isdigit((*token)->value[0]) && ft_strlen((*token)->value) == 1)
 		(*token)->type = TIO_NUMBER;
 	else
 		(*token)->type = TWORD;
