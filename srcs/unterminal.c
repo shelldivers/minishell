@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/15 20:14:09 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 13:25:52 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ size_t	isand_or(t_ast *ast, t_token **token)
 				ast->op = OPAND_IF;
 			else
 				ast->op = OPOR_IF;
-			cursor += addparse(ast, token, i - 1, isand_or, LEFT);
-			cursor += addparse(ast, token + i + 1, \
+			cursor += add_ast(ast, token, i - 1, isand_or, LEFT);
+			cursor += add_ast(ast, token + i + 1, \
 			ast->token_size - i, ispipeline, RIGHT);
 			return (cursor + 1);
 		}
-		cursor += addparse(ast, token, ast->token_size, ispipeline, LEFT);
+		cursor += add_ast(ast, token, ast->token_size, ispipeline, LEFT);
 	}
 	return (cursor);
 }
@@ -55,12 +55,12 @@ size_t	ispipeline(t_ast *ast, t_token **token)
 		if (token[i]->type == TPIPE)
 		{
 			ast->op = OPPIPE;
-			cursor += addparse(ast, token, i - 1, ispipeline, LEFT);
-			cursor += addparse(ast, token + i + 1, \
+			cursor += add_ast(ast, token, i - 1, ispipeline, LEFT);
+			cursor += add_ast(ast, token + i + 1, \
 			ast->token_size - i, iscommand, RIGHT);
 			return (cursor + 1);
 		}
-		cursor += addparse(ast, token, ast->token_size, iscommand, LEFT);
+		cursor += add_ast(ast, token, ast->token_size, iscommand, LEFT);
 	}
 	return (cursor);
 }
@@ -72,12 +72,12 @@ size_t	iscommand(t_ast *ast, t_token **token)
 	cursor = 0;
 	if (token[0]->type == TLPAREN)
 	{
-		cursor += addparse(ast, token, ast->token_size, issubshell, LEFT);
-		cursor += addparse(ast, token + cursor, ast->token_size - cursor, \
+		cursor += add_ast(ast, token, ast->token_size, issubshell, LEFT);
+		cursor += add_ast(ast, token + cursor, ast->token_size - cursor, \
 		isio_redirect, RIGHT);
 	}
 	else
-		cursor += addparse(ast, token, ast->token_size, issimple_command, LEFT);
+		cursor += add_ast(ast, token, ast->token_size, issimple_command, LEFT);
 	return (cursor);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/11 19:12:19 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/17 19:45:24 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ void	show_tree(t_ast *ast)
 
 void	parser(t_ast **ast, t_token **token, size_t size)
 {
+	t_ast	*ast;
 	size_t	cursor;
 
+	*ast = new_ast(token, size);
 	cursor = add_ast(*ast, token, size, isand_or, LEFT);
 	printf("cursor: %zu\n", cursor);
 	if (cursor != size)
@@ -102,6 +104,32 @@ int	main(int argc, char **argv, char **envp)
 		add_history(syntax.line);
 		lexer(&syntax);
 		token = tokenize(&syntax);
+		for (size_t i = 0; i < syntax.words_cnt; i++)
+		{
+			printf("token[%zu]: $%s$\n", i, token[i]->value);
+			if (token[i]->type == TPIPE)
+				printf("type: TPIPE\n");
+			else if (token[i]->type == TWORD)
+				printf("type: TWORD\n");
+			else if (token[i]->type == TIO_NUMBER)
+				printf("type: TIO_NUMBER\n");
+			else if (token[i]->type == TAND_IF)
+				printf("type: TAND_IF\n");
+			else if (token[i]->type == TOR_IF)
+				printf("type: TOR_IF\n");
+			else if (token[i]->type == TDLESS)
+				printf("type: TDLESS\n");
+			else if (token[i]->type == TDGREAT)
+				printf("type: TDGREAT\n");
+			else if (token[i]->type == TDREAD)
+				printf("type: TDREAD\n");
+			else if (token[i]->type == TDWRITE)
+				printf("type: TDWRITE\n");
+			else if (token[i]->type == TLPAREN)
+				printf("type: TLPAREN\n");
+			else if (token[i]->type == TRPAREN)
+				printf("type: TRPAREN\n");
+		}
 		parser(&ast, token, syntax.words_cnt);
 		show_tree(ast);
 		clear_all(&syntax, token, ast);
