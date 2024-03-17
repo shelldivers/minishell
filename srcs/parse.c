@@ -17,7 +17,7 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+static size_t	ft_strlen(const char *s)
 {
 	size_t	cnt;
 
@@ -27,7 +27,7 @@ size_t	ft_strlen(const char *s)
 	return (cnt);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+static void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	unsigned char		*dst_;
 	const unsigned char	*src_;
@@ -46,7 +46,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char	*ft_strdup(const char *s1)
+static char	*ft_strdup(const char *s1)
 {
 	char	*str;
 	size_t	s1_len;
@@ -64,23 +64,23 @@ size_t	add_ast(t_ast *ast, t_token **token, \
 size_t token_size, size_t(f)(t_ast *, t_token **), enum e_lr lr)
 {
 	size_t	cursor;
+	t_ast	*new;
 
+	new = new_ast(token, token_size);
 	cursor = 0;
-	if (ast == NULL)
+	if (lr == LEFT)
 	{
-		ast = ms_new_ast(token, token_size);
-		cursor += (f(ast, token));
-		backtracking_free(&ast);
-	}
-	else if (lr == LEFT)
-	{
-		ast->left = ms_new_ast(token, token_size);
+		if (ast->left)
+			new->left = ast->left;
+		ast->left = new;
 		cursor += (f(ast->left, token));
 		backtracking_free(&(ast->left));
 	}
 	else if (lr == RIGHT)
 	{
-		ast->right = ms_new_ast(token, token_size);
+		if (ast->right)
+			new->right = ast->right;
+		ast->right = new;
 		cursor += (f(ast->right, token));
 		backtracking_free(&(ast->right));
 	}
@@ -116,9 +116,8 @@ t_token	**tokenndup(t_token **src, size_t size)
 	if (!dst)
 		return (NULL);
 	dst[size] = NULL;
-	while (size)
+	while (--size)
 	{
-		size--;
 		dst[size]->type = src[size]->type;
 		dst[size]->value = ft_strdup(src[size]->value);
 		if (!dst[size]->value)
