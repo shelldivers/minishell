@@ -1,3 +1,6 @@
+#todo:
+# 1. libft 의존성 주입
+
 NAME = minishell
 
 INCLUDES = ./includes/
