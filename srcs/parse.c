@@ -61,29 +61,32 @@ static char	*ft_strdup(const char *s1)
 }
 
 size_t	add_ast(t_ast *ast, t_token **token, \
-size_t token_size, size_t(f)(t_ast *, t_token **), enum e_lr lr)
+size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 {
 	size_t	cursor;
 	t_ast	*new;
 
-	new = new_ast(token, token_size);
+	if (!size)
+		size = tokenlen(token);
+	new = new_ast(token, size);
+	if (!new)
+		return (0);
 	cursor = 0;
-	if (lr == LEFT)
+	cursor += (f(new, new->token));
+	if (cursor && lr == LEFT)
 	{
 		if (ast->left)
 			new->left = ast->left;
 		ast->left = new;
-		cursor += (f(ast->left, token));
-		backtracking_free(&(ast->left));
 	}
-	else if (lr == RIGHT)
+	else if (cursor && lr == RIGHT)
 	{
 		if (ast->right)
 			new->right = ast->right;
 		ast->right = new;
-		cursor += (f(ast->right, token));
-		backtracking_free(&(ast->right));
 	}
+	else
+		clear_ast(new);
 	return (cursor);
 }
 
@@ -91,6 +94,8 @@ t_ast	*new_ast(t_token **token, size_t size)
 {
 	t_ast	*new_ast;
 
+	if (!size || !token)
+		return (NULL);
 	new_ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!new_ast)
 		return (NULL);
@@ -116,8 +121,15 @@ t_token	**tokenndup(t_token **src, size_t size)
 	if (!dst)
 		return (NULL);
 	dst[size] = NULL;
-	while (--size)
+	while (size)
 	{
+		size--;
+		dst[size] = (t_token *)malloc(sizeof(t_token));
+		if (!dst[size])
+		{
+			clear_token(dst);
+			return (NULL);
+		}
 		dst[size]->type = src[size]->type;
 		dst[size]->value = ft_strdup(src[size]->value);
 		if (!dst[size]->value)
@@ -127,4 +139,14 @@ t_token	**tokenndup(t_token **src, size_t size)
 		}
 	}
 	return (dst);
+}
+
+size_t	tokenlen(t_token **token)
+{
+	size_t	len;
+
+	len = 0;
+	while (token[len])
+		len++;
+	return (len);
 }

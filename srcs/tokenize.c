@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 17:33:21 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/19 19:51:56 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ t_token	**tokenize(t_syntax *syntax)
 	int		i;
 	t_token	**token;
 
+	if (!syntax->words_cnt)
+		return (NULL);
 	token = (t_token **)malloc(sizeof(t_token *) * (syntax->words_cnt + 1));
 	if (!token)
 		exit (1);

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:50:39 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 17:33:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:40:37 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,23 @@ void	clear_syntax(t_syntax *syntax)
 	int	i;
 
 	i = 0;
-	if (syntax->line)
-		free(syntax->line);
-	if (syntax->words)
+	if (syntax)
 	{
-		while (syntax->words[i])
+		if (syntax->line)
+			free (syntax->line);
+		syntax->line = NULL;
+		if (syntax->words)
 		{
-			free(syntax->words[i++]);
-			syntax->words[i] = NULL;
+			while (syntax->words[i])
+			{
+				free(syntax->words[i]);
+				syntax->words[i] = NULL;
+				i++;
+			}
+			free (syntax->words);
+			syntax->words = NULL;
 		}
-		free(syntax->words);
-		syntax->words = NULL;
 	}
-	syntax->words_cnt = 0;
 }
 
 void	clear_token(t_token **token)
@@ -59,19 +63,19 @@ void	clear_token(t_token **token)
 
 void	clear_ast(t_ast *ast)
 {
+	t_ast	*left;
+	t_ast	*right;
+
 	if (ast)
 	{
-		clear_ast(ast->left);
-		clear_ast(ast->right);
-		while (ast->token_size--)
+		left = ast->left;
+		right = ast->right;
+		clear_ast(left);
+		clear_ast(right);
+		if (ast->token)
 		{
-			if (ast->token[ast->token_size]->value)
-			{
-				free(ast->token[ast->token_size]->value);
-				ast->token[ast->token_size]->value = NULL;
-			}
-			free(ast->token[ast->token_size]);
-			ast->token[ast->token_size] = NULL;
+			clear_token(ast->token);
+			ast->token = NULL;
 		}
 		free(ast);
 		ast = NULL;
@@ -82,27 +86,4 @@ void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 {
 	clear_syntax(syntax);
 	clear_token(token);
-	clear_ast(ast);
-}
-
-void	backtracking_free(t_ast **ast)
-{
-	if (*ast)
-	{
-		if (!((*ast)->token_size))
-		{
-			if ((*ast)->left)
-			{
-				free((*ast)->left);
-				(*ast)->left = NULL;
-			}
-			if ((*ast)->right)
-			{
-				free((*ast)->right);
-				(*ast)->right = NULL;
-			}
-			free((*ast));
-			(*ast) = NULL;
-		}
-	}
 }
