@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/17 13:17:35 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/19 18:43:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ enum e_grammar
 	GIO_HERE,
 	GWORD,
 	GIO_NUMBER,
+	GFILENAME,
+	GHERE_END,
+	GCMD_NAME,
 	GNONE
 };
 
@@ -91,6 +94,7 @@ typedef struct s_ast
 	struct s_ast	*right;
 	struct s_token	**token;
 	size_t			token_size;
+	char			**words;
 }				t_ast;
 
 /*================lex.c================*/
@@ -102,7 +106,6 @@ void	clear_syntax(t_syntax *syntax);
 void	clear_ast(t_ast *ast);
 void	clear_token(t_token **token);
 void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast);
-void	backtracking_free(t_ast **ast);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
 /*================unterminal.c================*/
@@ -125,8 +128,9 @@ size_t	ishere_end(t_ast *ast, t_token **token);
 size_t	isfilename(t_ast *ast, t_token **token);
 /*================ast.c================*/
 t_ast	*new_ast(t_token **token, size_t size);
-size_t	add_ast(t_ast *ast, t_token **token, size_t token_size, \
-size_t(f)(t_ast *, t_token **), enum e_lr lr);
+size_t	add_ast(t_ast *ast, t_token **token, \
+size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr);
 t_token	**tokenndup(t_token **src, size_t size);
+size_t	tokenlen(t_token **token);
 
 #endif
