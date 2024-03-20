@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 16:06:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 18:21:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,20 @@ size_t	ms_is_word(t_ast *ast, t_token **token)
 //terminal
 size_t	ms_is_subshell(t_ast *ast, t_token **token)
 {
-	size_t	cursor;
+	size_t	curtok;
 
 	if (ast->token_size < 3)
 		return (0);
-	cursor = 0;
-	if (token[cursor] && token[cursor]->type == TLPAREN)
+	curtok = 0;
+	if (token[curtok] && token[curtok]->type == TLPAREN)
 	{
-		while (token[cursor] && token[cursor]->type != TRPAREN)
-			cursor++;
-		if (token[cursor] && token[cursor]->type == TRPAREN)
+		while (token[curtok] && token[curtok]->type != TRPAREN)
+			curtok++;
+		if (token[curtok] && token[curtok]->type == TRPAREN)
 		{
 			ast->op = OPSUBSHELL;
-			ast->token_size = cursor + 1;
-			return (cursor + 1);
+			ast->token_size = curtok + 1;
+			return (curtok + 1);
 		}
 	}
 	return (0);

@@ -21,7 +21,7 @@
 size_t	ms_add_ast(t_ast *ast, t_token **token, \
 size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 {
-	size_t	cursor;
+	size_t	curtok;
 	t_ast	*new;
 
 	if (!size)
@@ -29,15 +29,14 @@ size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 	new = ms_new_ast(token, size);
 	if (!new)
 		return (0);
-	cursor = 0;
-	cursor += (f(new, new->token));
-	if (cursor && lr == LEFT)
+	curtok = (f(new, new->token));
+	if (curtok && lr == LEFT)
 	{
 		if (ast->left)
 			new->left = ast->left;
 		ast->left = new;
 	}
-	else if (cursor && lr == RIGHT)
+	else if (curtok && lr == RIGHT)
 	{
 		if (ast->right)
 			new->right = ast->right;
@@ -45,7 +44,7 @@ size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 	}
 	else
 		ms_clear_ast(new);
-	return (cursor);
+	return (curtok);
 }
 
 t_ast	*ms_new_ast(t_token **token, size_t size)

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 16:12:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 18:22:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ enum e_op
 	OPDGREAT,
 	OPDLESS,
 	OPCMD_WORD,
-	OPCMD_NAME,
 	OPIO_HERE,
 	OPIO_FILE,
 	OPWORD,
@@ -79,21 +78,23 @@ typedef struct s_ast
 }				t_ast;
 
 /*================lex.c================*/
-void	ms_lexer(t_syntax *syntax);
-size_t	ms_count_word(const char *line, const char **op);
-size_t	ms_get_op(const char *s1, const char **op);
-size_t	ms_get_word(const char *line, const char **op);
+void	ms_tokenizer(t_syntax *syntax);
+size_t	ms_count_word(const char *line, const char **op, size_t op_size);
+size_t	ms_get_op(const char *s1, const char **op, size_t op_size);
+size_t	ms_get_word(const char *line, const char **op, size_t op_size);
 size_t	ms_close_quote(const char *line, const char quote);
-char	*ms_extract_token(char *line, size_t *start, const char **op);
-char	*ms_extract_word(char *line, size_t *start, const char **op);
+char	*ms_extract_token(\
+char *line, size_t *start, const char **op, size_t op_size);
+char	*ms_extract_word(\
+char *line, size_t *start, const char **op, size_t op_size);
 /*================init.c================*/
 void	ms_init_syntax(t_syntax *syntax);
 /*================clear.c================*/
 void	ms_clear_syntax(t_syntax *syntax);
 void	ms_clear_ast(t_ast *ast);
 void	ms_clear_token(t_token **token);
-/*================tokenize.c================*/
-t_token	**ms_tokenizer(t_syntax *syntax);
+/*================lexer.c================*/
+t_token	**ms_lexer(t_syntax *syntax);
 /*================unterminal.c================*/
 size_t	ms_is_and_or(t_ast *ast, t_token **token);
 size_t	ms_is_pipeline(t_ast *ast, t_token **token);
@@ -109,7 +110,6 @@ size_t	ms_is_io_file(t_ast *ast, t_token **token);
 size_t	ms_is_io_here(t_ast *ast, t_token **token);
 size_t	ms_is_word(t_ast *ast, t_token **token);
 size_t	ms_is_cmd_word(t_ast *ast, t_token **token);
-size_t	ms_is_cmd_name(t_ast *ast, t_token **token);
 size_t	ms_is_here_end(t_ast *ast, t_token **token);
 size_t	ms_is_filename(t_ast *ast, t_token **token);
 /*================ast.c================*/

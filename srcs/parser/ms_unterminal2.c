@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 16:15:21 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 18:20:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,77 +18,79 @@
 size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 {
 	size_t	i;
-	size_t	cursor;
+	size_t	curtok;
 
 	if (ast->token_size < 1)
 		return (0);
-	cursor = 0;
-	if (token[cursor] && token[cursor]->type == TWORD)
+	curtok = 0;
+	if (token[curtok] && token[curtok]->type == TWORD)
 	{
-		cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_word, 0, LEFT);
-		if (cursor)
-			cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_suffix, 0, RIGHT);
+		curtok += ms_add_ast(ast, token + curtok, ms_is_word, 0, LEFT);
+		if (curtok)
+			curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_suffix, \
+			0, RIGHT);
 	}
 	else
 	{
-		cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_prefix, 0, LEFT);
-		if (cursor && token[cursor] && token[cursor]->type == TWORD)
+		curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_prefix, 0, LEFT);
+		if (curtok && token[curtok] && token[curtok]->type == TWORD)
 		{
-			cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_word, 0, RIGHT);
-			cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_suffix, 0, RIGHT);
+			curtok += ms_add_ast(ast, token + curtok, ms_is_word, 0, RIGHT);
+			curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_suffix, \
+			0, RIGHT);
 		}
 	}
-	ast->token_size = cursor;
-	return (cursor);
+	ast->token_size = curtok;
+	return (curtok);
 }
 
 //unterminal
 size_t	ms_is_cmd_suffix(t_ast *ast, t_token **token)
 {
-	size_t	cursor;
+	size_t	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
-	cursor = 0;
-	if (token[cursor] && (token[cursor]->type == TWORD))
-		cursor += ms_add_ast(ast, token, ms_is_word, 0, RIGHT);
+	curtok = 0;
+	if (token[curtok] && (token[curtok]->type == TWORD))
+		curtok += ms_add_ast(ast, token, ms_is_word, 0, RIGHT);
 	else
-		cursor += ms_add_ast(ast, token, ms_is_io_redirect, 0, LEFT);
-	if (cursor)
-		cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_suffix, \
-		ast->token_size - cursor, LEFT);
-	ast->token_size = cursor;
-	return (cursor);
+		curtok += ms_add_ast(ast, token, ms_is_io_redirect, 0, LEFT);
+	if (curtok)
+		curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_suffix, \
+		ast->token_size - curtok, LEFT);
+	ast->token_size = curtok;
+	return (curtok);
 }
 
 //unterminal
 size_t	ms_is_cmd_prefix(t_ast *ast, t_token **token)
 {
-	size_t	cursor;
+	size_t	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
-	cursor = 0;
-	cursor += ms_add_ast(ast, token, ms_is_io_redirect, 0, LEFT);
-	if (cursor)
-		cursor += ms_add_ast(ast, token + cursor, ms_is_cmd_prefix, \
-		ast->token_size - cursor, LEFT);
-	ast->token_size = cursor;
-	return (cursor);
+	curtok = 0;
+	curtok += ms_add_ast(ast, token, ms_is_io_redirect, 0, LEFT);
+	if (curtok)
+		curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_prefix, \
+		ast->token_size - curtok, LEFT);
+	ast->token_size = curtok;
+	return (curtok);
 }
 
 //unterminal
 size_t	ms_is_io_redirect(t_ast *ast, t_token **token)
 {
-	size_t	cursor;
+	size_t	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
-	cursor = 0;
-	if (token[cursor] && (token[cursor]->type == TDLESS))
-		cursor += ms_add_ast(ast, token + cursor, ms_is_io_here, 0, LEFT);
+	curtok = 0;
+	if (token[curtok] && (token[curtok]->type == TDLESS))
+		curtok += ms_add_ast(ast, token + curtok, ms_is_io_here, 0, LEFT);
 	else
-		cursor += ms_add_ast(ast, token + cursor, ms_is_io_file, 0, LEFT);
-	ast->token_size = cursor;
-	return (cursor);
+		curtok += ms_add_ast(ast, token + curtok, ms_is_io_file, 0, LEFT);
+	ast->token_size = curtok;
+	return (curtok);
 }

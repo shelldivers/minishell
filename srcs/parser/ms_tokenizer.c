@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 16:15:05 by jiwojung         ###   ########.fr       */
+/*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
+/*   Updated: 2024/03/20 18:59:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,61 +18,64 @@
 #include "minishell.h"
 #include "../libft/includes/libft.h"
 
-static t_token	*ms_new_token(char *value);
-static void		ms_set_tokentype(t_token **token);
-
-t_token	**ms_tokenizer(t_syntax *syntax)
+/**
+ * separateWords - 주어진 문자열을 단어로 분리합니다.
+ * 
+ * @param line 단어로 분리할 문자열
+ * @return void
+ * @todo separate_words 를 사용한 후에는 syntax.words, syntax.line 메모리를 해제해야 합니다.
+ */
+void	ms_tokenizer(t_syntax *syntax)
 {
-	int		i;
-	t_token	**token;
+	const char	*op[9] = {"&&", "||", "|", "(", ")", ">>", "<<", ">", "<"};
+	size_t		i;
+	size_t		start;
 
-	if (!syntax->words_cnt)
-		return (NULL);
-	token = (t_token **)malloc(sizeof(t_token *) * (syntax->words_cnt + 1));
-	if (!token)
-		exit (1);
+	syntax->words_cnt = ms_count_word(syntax->line, op, 9);
+	syntax->words = (char **)malloc(sizeof(char *) * (syntax->words_cnt + 1));
+	if (!syntax->words)
+		// error message
+	syntax->words[syntax->words_cnt] = NULL;
 	i = 0;
+	start = 0;
 	while (i < syntax->words_cnt)
 	{
-		token[i] = ms_new_token(syntax->words[i]);
+		while (syntax->line[start] == ' ')
+			start++;
+		if (syntax->line[start] == '\0')
+			break ;
+		if (ms_get_op(syntax->line + start, op, 9))
+			syntax->words[i] = ms_extract_token(syntax->line, &start, op, 9);
+		else
+			syntax->words[i] = ms_extract_word(syntax->line, &start, op, 9);
 		i++;
 	}
-	token[i] = NULL;
-	return (token);
+	i = 0;
 }
 
-static t_token	*ms_new_token(char *value)
+size_t	ms_count_word(const char *line, const char **op, size_t op_size)
 {
-	t_token	*token;
+	size_t	i;
+	size_t	token_size;
+	size_t	words_cnt;
 
-	token = (t_token *)malloc(sizeof(t_token));
-	if (!token)
-		exit(1);
-	token->value = ft_strdup(value);
-	ms_set_tokentype(&token);
-	return (token);
-}
-
-static void	ms_set_tokentype(t_token **token)
-{
-	if (!ft_strcmp((*token)->value, "&&"))
-		(*token)->type = TAND_IF;
-	else if (!ft_strcmp((*token)->value, "||"))
-		(*token)->type = TOR_IF;
-	else if (!ft_strcmp((*token)->value, "|"))
-		(*token)->type = TPIPE;
-	else if (!ft_strcmp((*token)->value, "("))
-		(*token)->type = TLPAREN;
-	else if (!ft_strcmp((*token)->value, ")"))
-		(*token)->type = TRPAREN;
-	else if (!ft_strcmp((*token)->value, "<<"))
-		(*token)->type = TDLESS;
-	else if (!ft_strcmp((*token)->value, ">>"))
-		(*token)->type = TDGREAT;
-	else if (!ft_strcmp((*token)->value, "<"))
-		(*token)->type = TDREAD;
-	else if (!ft_strcmp((*token)->value, ">"))
-		(*token)->type = TDWRITE;
-	else
-		(*token)->type = TWORD;
+	i = 0;
+	words_cnt = 0;
+	while (line[i])
+	{
+		token_size = ms_get_word(line + i, op, op_size);
+		if (token_size)
+			words_cnt++;
+		else
+		{
+			token_size = ms_get_op(line + i, op, op_size);
+			if (token_size)
+				words_cnt++;
+			else
+				i++;
+		}
+		i += token_size;
+	}
+	printf ("words_cnt: %zu\n", words_cnt);
+	return (words_cnt);
 }
