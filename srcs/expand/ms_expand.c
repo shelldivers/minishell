@@ -27,18 +27,6 @@ t_bool	ms_quote_removal(char **arg)
 }
 
 /**
- * @details filename expansion\n
- * - `*`를 제외한 다른 특수 패턴을 처리하지 않습니다.
- * @see https://runebook.dev/ko/docs/bash/pattern-matching
- */
-char	**ms_filename_expansion(char **arg, t_env *env)
-{
-
-}
-
-
-
-/**
  * @details 쉘 확장은 다음 순서로 진행됩니다.\n
  * parameter expansion -> filename expansion -> quote removal
  * @see https://runebook.dev/ko/docs/bash/shell-expansions
@@ -50,7 +38,7 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 
 	if (!ms_expand_param(argv, env, status))
 		return (NULL);
-	expanded = ms_filename_expansion(argv, env);
+	expanded = ms_expand_filename(argv, env);
 	if (!expanded)
 		return (NULL);
 	if (!ms_quote_removal(expanded))
