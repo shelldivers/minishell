@@ -13,24 +13,8 @@
 #include "libft.h"
 #include "ms_expand.h"
 #include "ms_env.h"
+#include "ms_error.h"
 #include <stdlib.h>
-
-void	ms_expand_tilde(char **argv, t_env *env)
-{
-
-}
-
-char	*ms_get_tilde(char *str)
-{
-	char	*pos;
-
-	pos = ft_strchr(str, '~');
-	if (!pos)
-		return (NULL);
-	if (*(pos + 1) != '\0' && *(pos + 1) != '/')
-		return (NULL);
-	return (pos);
-}
 
 /**
  * @details tilde expansion\n
@@ -39,20 +23,45 @@ char	*ms_get_tilde(char *str)
  * - tilde-prefix는 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/tilde-expansion
  */
-void	ms_tilde_expansion(char **argv, t_env *env)
+t_bool	ms_tilde_expansion(char **argv, t_env *env)
 {
 	char	*home;
-	int		i;
-	char	*pos;
 
 	home = ms_getenv(env, HOME);
 	if (!home)
 		home = "";
 	while (argv)
 	{
-		pos = ms_get_tilde(*argv);
-		if (!pos)
-			continue ;
+		if (ms_get_tilde(*argv))
+		{
+			if (!ms_expand_tilde(argv, home, env))
+				return (FALSE);
+		}
 		argv++;
 	}
+	return (TRUE);
+}
+
+t_bool	ms_expand_tilde(char **str, char *home, t_env *env)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(home, (*str) + 1);
+	if (!tmp)
+	{
+		ms_puterror_arg(env, "~");
+		return (FALSE);
+	}
+	free(*str);
+	*str = tmp;
+	return (TRUE);
+}
+
+t_bool	ms_get_tilde(const char *str)
+{
+	if ((*str) != '~')
+		return (FALSE);
+	if (*(str + 1) != '\0' && *(str + 1) != '/')
+		return (FALSE);
+	return (TRUE);
 }

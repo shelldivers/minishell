@@ -21,7 +21,7 @@
  * - `\\"`와 `\'`는 `"`와 `'`로 치환합니다.
  * @see https://runebook.dev/ko/docs/bash/quote-removal
  */
-void	ms_quote_removal(char **arg)
+t_bool	ms_quote_removal(char **arg)
 {
 
 }
@@ -31,7 +31,7 @@ void	ms_quote_removal(char **arg)
  * - `*`를 제외한 다른 특수 패턴을 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/pattern-matching
  */
-void	ms_filename_expansion(char **arg, t_env *env)
+char	**ms_filename_expansion(char **arg, t_env *env)
 {
 
 }
@@ -43,10 +43,11 @@ void	ms_filename_expansion(char **arg, t_env *env)
  * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/special-parameters
  */
-void	ms_parameter_expansion(char **arg, t_env *env)
+t_bool	ms_parameter_expansion(char **arg, t_env *env)
 {
 
 }
+
 /**
  * @details 쉘 확장은 다음 순서로 진행됩니다.\n
  * tilde expansion -> parameter expansion -> filename expansion -> quote removal
@@ -54,8 +55,22 @@ void	ms_parameter_expansion(char **arg, t_env *env)
  */
 char	**ms_expansion(char **argv, t_env *env)
 {
-	ms_tilde_expansion(argv, env);
-	ms_parameter_expansion(argv, env);
-	ms_filename_expansion(argv, env);
-	ms_quote_removal(argv);
+	char	**expanded;
+	int		i;
+
+	if (!ms_tilde_expansion(argv, env)
+		|| !ms_parameter_expansion(argv, env))
+		return (NULL);
+	expanded = ms_filename_expansion(argv, env);
+	if (!expanded)
+		return (NULL);
+	if (!ms_quote_removal(expanded))
+	{
+		i = 0;
+		while (expanded[i])
+			free(expanded[i++]);
+		free(expanded);
+		return (NULL);
+	}
+	return (expanded);
 }

@@ -25,8 +25,9 @@ extern "C" {
 char	**ms_expansion(char **argv, t_env *env);
 
 /* ms_expand_tilde.c */
-void	ms_tilde_expansion(char **argv, t_env *env);
-
+t_bool	ms_tilde_expansion(char **argv, t_env *env);
+t_bool	ms_get_tilde(const char *str);
+t_bool	ms_expand_tilde(char **str, char *home, t_env *env);
 
 # ifdef __cplusplus
 }
