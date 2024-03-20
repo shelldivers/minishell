@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 18:20:51 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 19:37:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include "minishell.h"
 
-//unterminal
 size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 {
 	size_t	i;
@@ -25,7 +24,7 @@ size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 	curtok = 0;
 	if (token[curtok] && token[curtok]->type == TWORD)
 	{
-		curtok += ms_add_ast(ast, token + curtok, ms_is_word, 0, LEFT);
+		curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_word, 0, LEFT);
 		if (curtok)
 			curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_suffix, \
 			0, RIGHT);
@@ -35,7 +34,7 @@ size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 		curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_prefix, 0, LEFT);
 		if (curtok && token[curtok] && token[curtok]->type == TWORD)
 		{
-			curtok += ms_add_ast(ast, token + curtok, ms_is_word, 0, RIGHT);
+			curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_word, 0, RIGHT);
 			curtok += ms_add_ast(ast, token + curtok, ms_is_cmd_suffix, \
 			0, RIGHT);
 		}
@@ -44,7 +43,6 @@ size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-//unterminal
 size_t	ms_is_cmd_suffix(t_ast *ast, t_token **token)
 {
 	size_t	curtok;
@@ -63,7 +61,6 @@ size_t	ms_is_cmd_suffix(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-//unterminal
 size_t	ms_is_cmd_prefix(t_ast *ast, t_token **token)
 {
 	size_t	curtok;
@@ -79,7 +76,6 @@ size_t	ms_is_cmd_prefix(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-//unterminal
 size_t	ms_is_io_redirect(t_ast *ast, t_token **token)
 {
 	size_t	curtok;

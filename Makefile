@@ -9,15 +9,16 @@ CC = cc
 AR = ar rcs
 RM = rm -rf
 
-PARSER += ms_minishell.c ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_terminal2.c ms_parser.c 
+PARSER += ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_terminal2.c ms_parser.c 
 
-B_FILES += $(addprefix $(S_PARSE), $(PARSER))
-
+M_FILES += minishell.c
 M_FILES += $(addprefix $(S_PARSE), $(PARSER))
 
+B_FILES += minishell.c
+B_FILES += $(addprefix $(S_PARSE), $(PARSER))
 
 H_FILES = \
-minishell.h \
+minishell.h 
 
 LIBFT = libft/libft.a
 

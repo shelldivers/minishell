@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 18:21:12 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 19:36:21 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include "minishell.h"
 
-//terminal
 size_t	ms_is_io_file(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
@@ -33,7 +32,6 @@ size_t	ms_is_io_file(t_ast *ast, t_token **token)
 	return (0);
 }
 
-//terminal
 size_t	ms_is_io_here(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
@@ -49,7 +47,6 @@ size_t	ms_is_io_here(t_ast *ast, t_token **token)
 	return (0);
 }
 
-//terminal
 size_t	ms_is_word(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
@@ -63,7 +60,6 @@ size_t	ms_is_word(t_ast *ast, t_token **token)
 	return (0);
 }
 
-//terminal
 size_t	ms_is_subshell(t_ast *ast, t_token **token)
 {
 	size_t	curtok;

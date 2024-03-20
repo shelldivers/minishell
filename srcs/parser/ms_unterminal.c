@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 18:20:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 19:36:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include "minishell.h"
 
-//unterminal
 size_t	ms_is_and_or(t_ast *ast, t_token **token)
 {
 	size_t	op_pos;
@@ -44,7 +43,6 @@ size_t	ms_is_and_or(t_ast *ast, t_token **token)
 	return (ast->token_size - curtok);
 }
 
-//unterminal
 size_t	ms_is_pipeline(t_ast *ast, t_token **token)
 {
 	size_t	op_pos;

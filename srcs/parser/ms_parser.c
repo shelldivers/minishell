@@ -18,6 +18,26 @@
 #include "minishell.h"
 #include "../libft/includes/libft.h"
 
+int	ms_parser(t_ast *ast, t_token **token, size_t size)
+{
+	size_t	cursor;
+
+	ast = ms_new_ast(token, size);
+	if (!ast)
+		return (0);
+	cursor = ms_add_ast(ast, token, ms_is_pipeline, size, LEFT);
+	printf ("cursor: %zu\n", cursor);
+	if (cursor != size)
+	{
+		ms_clear_ast(ast);
+		ms_clear_token(token);
+		return (0);
+	}
+	ms_clear_ast(ast);
+	ms_clear_token(token);
+	return (1);
+}
+
 size_t	ms_add_ast(t_ast *ast, t_token **token, \
 size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 {
