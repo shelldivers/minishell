@@ -40,7 +40,7 @@ set(SRCS includes/minishell.h
         srcs/error/ms_error_utils.c
         srcs/expand/ms_expand.c
         includes/ms_expand.h
-        srcs/expand/ms_expand_env.c
+        srcs/expand/ms_expand_tilde.c
         )
 
 add_library(${NAME} STATIC ${SRCS})
