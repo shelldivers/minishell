@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/19 16:42:00 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:52:23 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 //unterminal
 size_t	issimple_command(t_ast *ast, t_token **token)
 {
-	ast->grammar = GSIMPLE_COMMAND;
 	size_t	i;
 	size_t	cursor;
 
@@ -46,18 +45,18 @@ size_t	issimple_command(t_ast *ast, t_token **token)
 //unterminal
 size_t	iscmd_suffix(t_ast *ast, t_token **token)
 {
-	ast->grammar = GCMD_SUFFIX;
 	size_t	cursor;
 
 	if (ast->token_size == 0)
 		return (0);
 	cursor = 0;
 	if (token[cursor] && (token[cursor]->type == TWORD))
-		cursor += add_ast(ast, token, isword, 0, LEFT);
+		cursor += add_ast(ast, token, isword, 0, RIGHT);
 	else
 		cursor += add_ast(ast, token, isio_redirect, 0, LEFT);
 	if (cursor)
-		cursor += iscmd_suffix(ast, token + cursor);
+		cursor += add_ast(ast, token + cursor, iscmd_suffix, \
+		ast->token_size - cursor, LEFT);
 	ast->token_size = cursor;
 	return (cursor);
 }
@@ -65,7 +64,6 @@ size_t	iscmd_suffix(t_ast *ast, t_token **token)
 //unterminal
 size_t	iscmd_prefix(t_ast *ast, t_token **token)
 {
-	ast->grammar = GCMD_PREFIX;
 	size_t	cursor;
 
 	if (ast->token_size == 0)
@@ -73,7 +71,8 @@ size_t	iscmd_prefix(t_ast *ast, t_token **token)
 	cursor = 0;
 	cursor += add_ast(ast, token, isio_redirect, 0, LEFT);
 	if (cursor)
-		cursor += iscmd_prefix(ast, token + cursor);
+		cursor += add_ast(ast, token + cursor, iscmd_prefix, \
+		ast->token_size - cursor, LEFT);
 	ast->token_size = cursor;
 	return (cursor);
 }
@@ -81,18 +80,15 @@ size_t	iscmd_prefix(t_ast *ast, t_token **token)
 //unterminal
 size_t	isio_redirect(t_ast *ast, t_token **token)
 {
-	ast->grammar = GIO_REDIRECT;
 	size_t	cursor;
 
 	if (ast->token_size == 0)
 		return (0);
 	cursor = 0;
-	if (token[cursor] && (token[cursor]->type == TIO_NUMBER))
-		cursor += add_ast(ast, token + cursor, isio_number, 0, LEFT);
 	if (token[cursor] && (token[cursor]->type == TDLESS))
-		cursor += add_ast(ast, token + cursor, isio_here, 0, RIGHT);
+		cursor += add_ast(ast, token + cursor, isio_here, 0, LEFT);
 	else
-		cursor += add_ast(ast, token + cursor, isio_file, 0, RIGHT);
+		cursor += add_ast(ast, token + cursor, isio_file, 0, LEFT);
 	ast->token_size = cursor;
 	return (cursor);
 }

@@ -1,6 +1,3 @@
-#todo:
-# 1. libft 의존성 주입
-
 NAME = minishell
 
 INCLUDES = ./includes/
@@ -16,30 +13,34 @@ RM = rm -rf
 
 B_FILES = \
 minishell.c \
-lex.c \
+lexer.c \
+lexer2.c \
 init.c \
 clear.c \
-tokenize.c \
+tokenizer.c \
 unterminal.c \
 unterminal2.c \
 terminal.c \
 terminal2.c \
-parse.c 
+parser.c 
 
 M_FILES = \
 minishell.c \
-lex.c \
+lexer.c \
+lexer2.c \
 init.c \
 clear.c \
-tokenize.c \
+tokenizer.c \
 unterminal.c \
 unterminal2.c \
 terminal.c \
 terminal2.c \
-parse.c 
+parser.c 
 
 H_FILES = \
-minishell.h
+minishell.h \
+
+LIBFT = libft/libft.a
 
 ifdef objs
 SRCS = $(addprefix $(SOURCES), $(B_FILES))
@@ -57,7 +58,8 @@ CASE =
 all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) -lreadline
+	make -C ./libft
+	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I $(INCLUDES) $(LIBFT) -lreadline
 # 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 # lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
 # sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)
@@ -76,9 +78,11 @@ leak: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES)
 
 clean:
+	make clean -C ./libft
 	$(RM) $(SRCS:.c=.o) $(SRCS:.c=.o)
 
 fclean: clean
+	make fclean -C ./libft
 	$(RM) $(NAME)
 
 re: fclean all

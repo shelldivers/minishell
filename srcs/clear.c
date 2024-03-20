@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:50:39 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/19 15:40:37 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:28:56 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
+#include "../libft/includes/libft.h"
 
 void	clear_syntax(t_syntax *syntax)
 {
@@ -70,8 +71,6 @@ void	clear_ast(t_ast *ast)
 	{
 		left = ast->left;
 		right = ast->right;
-		clear_ast(left);
-		clear_ast(right);
 		if (ast->token)
 		{
 			clear_token(ast->token);
@@ -79,11 +78,7 @@ void	clear_ast(t_ast *ast)
 		}
 		free(ast);
 		ast = NULL;
+		clear_ast(left);
+		clear_ast(right);
 	}
-}
-
-void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
-{
-	clear_syntax(syntax);
-	clear_token(token);
 }

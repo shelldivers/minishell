@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/19 19:48:46 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:56:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,71 +17,7 @@
 #include <readline/history.h>
 #include "minishell.h"
 
-void	show_tree(t_ast *ast)
-{
-	int	i;
-
-	i = 0;
-	if (!ast)
-		return ;
-	if (ast->left)
-		show_tree(ast->left);
-	printf ("=================================\n");
-	printf("token size: %zu\n", ast->token_size);
-	if (ast->grammar == GAND_OR)
-		printf("grammar: GAND_OR\n");
-	else if (ast->grammar == GPIPELINE)
-		printf("grammar: GPIPELINE\n");
-	else if (ast->grammar == GCOMMAND)
-		printf("grammar: GCOMMAND\n");
-	else if (ast->grammar == GSUBSHELL)
-		printf("grammar: GSUBSHELL\n");
-	else if (ast->grammar == GSIMPLE_COMMAND)
-		printf("grammar: GSIMPLE_COMMAND\n");
-	else if (ast->grammar == GCMD_SUFFIX)
-		printf("grammar: GCMD_SUFFIX\n");
-	else if (ast->grammar == GCMD_PREFIX)
-		printf("grammar: GCMD_PREFIX\n");
-	else if (ast->grammar == GIO_REDIRECT)
-		printf("grammar: GIO_REDIRECT\n");
-	else if (ast->grammar == GIO_FILE)
-		printf("grammar: GIO_FILE\n");
-	else if (ast->grammar == GIO_HERE)
-		printf("grammar: GIO_HERE\n");
-	else if (ast->grammar == GWORD)
-		printf("grammar: GWORD\n");
-	else if (ast->grammar == GIO_NUMBER)
-		printf("grammar: GIO_NUMBER\n");
-	else if (ast->grammar == GFILENAME)
-		printf("grammar: GFILENAME\n");
-	else if (ast->grammar == GHERE_END)
-		printf("grammar: GHERE_END\n");
-	else if (ast->grammar == GCMD_NAME)
-		printf("grammar: GCMD_NAME\n");
-	else if (ast->grammar == GCMD_WORD)
-		printf("grammar: GCMD_WORD\n");
-	else if (ast->grammar == GNONE)
-		printf("grammar: GNONE\n");
-	if (ast->op == OPAND_IF)
-		printf("op: OPAND_IF\n");
-	else if (ast->op == OPOR_IF)
-		printf("op: OPOR_IF\n");
-	else if (ast->op == OPPIPE)
-		printf("op: OPPIPE\n");
-	else if (ast->op == OPNONE)
-		printf("op: OPNONE\n");
-	printf("token: ");
-	while (i < ast->token_size)
-	{
-		printf("%s  ", ast->token[i]->value);
-		i++;
-	}
-	printf("\n");
-	if (ast->right)
-		show_tree(ast->right);
-}
-
-void	parser(t_ast *ast, t_token **token, size_t size)
+int	parser(t_ast *ast, t_token **token, size_t size)
 {
 	size_t	cursor;
 
@@ -89,18 +25,20 @@ void	parser(t_ast *ast, t_token **token, size_t size)
 	if (!ast)
 	{
 		printf("invalid line\n");
-		return ;
+		return (0);
 	}
-	ast->grammar = GAND_OR;
-	cursor = add_ast(ast, token, isand_or, size, LEFT);
-	show_tree(ast);
+	cursor = add_ast(ast, token, ispipeline, size, LEFT);
 	printf("cursor: %zu\n", cursor);
 	if (cursor != size)
 	{
 		printf("syntax error %s\n", token[cursor]->value);
+		clear_ast(ast);
+		clear_token(token);
+		return (0);
 	}
 	clear_ast(ast);
 	clear_token(token);
+	return (1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -115,10 +53,12 @@ int	main(int argc, char **argv, char **envp)
 		syntax.line = readline("minishell$ ");
 		if (!(syntax.line))
 			exit (1);
-		add_history(syntax.line);
 		lexer(&syntax);
 		token = tokenize(&syntax);
-		parser(ast, token, syntax.words_cnt);
+		if (parser(ast, token, syntax.words_cnt))
+		{
+			add_history(syntax.line);
+		}
 		clear_syntax(&syntax);
 	}
 	return (0);

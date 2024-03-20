@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/19 18:43:11 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:53:26 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,6 @@ enum e_lr
 	RIGHT
 };
 
-enum e_grammar
-{
-	GAND_OR,
-	GPIPELINE,
-	GCOMMAND,
-	GSUBSHELL,
-	GSIMPLE_COMMAND,
-	GCMD_WORD,
-	GCMD_SUFFIX,
-	GCMD_PREFIX,
-	GIO_REDIRECT,
-	GIO_FILE,
-	GIO_HERE,
-	GWORD,
-	GIO_NUMBER,
-	GFILENAME,
-	GHERE_END,
-	GCMD_NAME,
-	GNONE
-};
-
 enum e_op
 {
 	OPPIPE,
@@ -55,6 +34,10 @@ enum e_op
 	OPDGREAT,
 	OPDLESS,
 	OPCMD_WORD,
+	OPCMD_NAME,
+	OPIO_HERE,
+	OPIO_FILE,
+	OPWORD,
 	OPNONE
 };
 
@@ -62,7 +45,6 @@ enum e_type
 {
 	TPIPE,
 	TWORD,
-	TIO_NUMBER,
 	TAND_IF,
 	TOR_IF,
 	TDLESS,
@@ -70,7 +52,8 @@ enum e_type
 	TDREAD,
 	TDWRITE,
 	TLPAREN,
-	TRPAREN
+	TRPAREN,
+	TNONE
 };
 
 typedef struct s_syntax
@@ -89,23 +72,26 @@ typedef struct s_token
 typedef struct s_ast
 {
 	enum e_op		op;
-	enum e_grammar	grammar;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_token	**token;
 	size_t			token_size;
-	char			**words;
 }				t_ast;
 
 /*================lex.c================*/
 void	lexer(t_syntax *syntax);
+size_t	count_word(const char *line, const char **op);
+size_t	get_op(const char *s1, const char **op);
+size_t	get_word(const char *line, const char **op);
+size_t	close_quote(const char *line, const char quote);
+char	*extract_token(char *line, size_t *start, const char **op);
+char	*extract_word(char *line, size_t *start, const char **op);
 /*================init.c================*/
 void	init_syntax(t_syntax *syntax);
 /*================clear.c================*/
 void	clear_syntax(t_syntax *syntax);
 void	clear_ast(t_ast *ast);
 void	clear_token(t_token **token);
-void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast);
 /*================tokenize.c================*/
 t_token	**tokenize(t_syntax *syntax);
 /*================unterminal.c================*/
@@ -121,7 +107,6 @@ size_t	isio_redirect(t_ast *ast, t_token **token);
 size_t	isio_file(t_ast *ast, t_token **token);
 size_t	isio_here(t_ast *ast, t_token **token);
 size_t	isword(t_ast *ast, t_token **token);
-size_t	isio_number(t_ast *ast, t_token **token);
 size_t	iscmd_word(t_ast *ast, t_token **token);
 size_t	iscmd_name(t_ast *ast, t_token **token);
 size_t	ishere_end(t_ast *ast, t_token **token);

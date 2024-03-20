@@ -16,49 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
-
-static size_t	ft_strlen(const char *s)
-{
-	size_t	cnt;
-
-	cnt = 0;
-	while (s[cnt] != '\0')
-		cnt++;
-	return (cnt);
-}
-
-static void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	unsigned char		*dst_;
-	const unsigned char	*src_;
-	size_t				i;
-
-	if (dst == 0 && src == 0)
-		return (0);
-	dst_ = (unsigned char *)dst;
-	src_ = (const unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		dst_[i] = src_[i];
-		i++;
-	}
-	return (dst);
-}
-
-static char	*ft_strdup(const char *s1)
-{
-	char	*str;
-	size_t	s1_len;
-
-	s1_len = ft_strlen(s1);
-	str = (char *)malloc(sizeof(char) * (s1_len + 1));
-	if (!str)
-		return (0);
-	str[s1_len] = '\0';
-	ft_memcpy(str, s1, s1_len);
-	return (str);
-}
+#include "../libft/includes/libft.h"
 
 size_t	add_ast(t_ast *ast, t_token **token, \
 size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
@@ -106,7 +64,6 @@ t_ast	*new_ast(t_token **token, size_t size)
 		return (NULL);
 	}
 	new_ast->token_size = size;
-	new_ast->grammar = GNONE;
 	new_ast->op = OPNONE;
 	new_ast->left = NULL;
 	new_ast->right = NULL;
