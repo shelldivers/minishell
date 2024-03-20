@@ -1,41 +1,20 @@
 NAME = minishell
 
-INCLUDES = ./includes/
-SOURCES = ./srcs/parser/
+INCLUDES = includes/
+SOURCES = srcs/
+S_PARSE = parser/
 
 CC = cc
-
 # CFLAGS = -Wall -Wextra -Werror
-
 AR = ar rcs
-
 RM = rm -rf
 
-B_FILES = \
-minishell.c \
-lexer.c \
-lexer2.c \
-init.c \
-clear.c \
-tokenizer.c \
-unterminal.c \
-unterminal2.c \
-terminal.c \
-terminal2.c \
-parser.c 
+PARSER += minishell.c lexer.c lexer2.c init.c clear.c tokenizer.c unterminal.c unterminal2.c terminal.c terminal2.c parser.c 
 
-M_FILES = \
-minishell.c \
-lexer.c \
-lexer2.c \
-init.c \
-clear.c \
-tokenizer.c \
-unterminal.c \
-unterminal2.c \
-terminal.c \
-terminal2.c \
-parser.c 
+B_FILES += $(addprefix $(S_PARSE), $(PARSER))
+
+M_FILES += $(addprefix $(S_PARSE), $(PARSER))
+
 
 H_FILES = \
 minishell.h \
