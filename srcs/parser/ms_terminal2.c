@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminal2.c                                        :+:      :+:    :+:   */
+/*   ms_terminal2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:09:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 14:46:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:07:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 
 //terminal
-size_t	isfilename(t_ast *ast, t_token **token)
+size_t	ms_is_filename(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);
@@ -28,7 +28,7 @@ size_t	isfilename(t_ast *ast, t_token **token)
 }
 
 //terminal
-size_t	ishere_end(t_ast *ast, t_token **token)
+size_t	ms_is_here_end(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);
@@ -40,7 +40,7 @@ size_t	ishere_end(t_ast *ast, t_token **token)
 	return (0);
 }
 
-size_t	iscmd_name(t_ast *ast, t_token **token)
+size_t	ms_is_cmd_name(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);
@@ -53,7 +53,7 @@ size_t	iscmd_name(t_ast *ast, t_token **token)
 	return (0);
 }
 
-size_t	iscmd_word(t_ast *ast, t_token **token)
+size_t	ms_is_cmd_word(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);

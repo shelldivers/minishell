@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clear.c                                            :+:      :+:    :+:   */
+/*   ms_clear.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:50:39 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 14:28:56 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:04:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "minishell.h"
 #include "../libft/includes/libft.h"
 
-void	clear_syntax(t_syntax *syntax)
+void	ms_clear_syntax(t_syntax *syntax)
 {
 	int	i;
 
@@ -42,7 +42,7 @@ void	clear_syntax(t_syntax *syntax)
 	}
 }
 
-void	clear_token(t_token **token)
+void	ms_clear_token(t_token **token)
 {
 	int	i;
 
@@ -62,7 +62,7 @@ void	clear_token(t_token **token)
 	}
 }
 
-void	clear_ast(t_ast *ast)
+void	ms_clear_ast(t_ast *ast)
 {
 	t_ast	*left;
 	t_ast	*right;
@@ -73,12 +73,12 @@ void	clear_ast(t_ast *ast)
 		right = ast->right;
 		if (ast->token)
 		{
-			clear_token(ast->token);
+			ms_clear_token(ast->token);
 			ast->token = NULL;
 		}
 		free(ast);
 		ast = NULL;
-		clear_ast(left);
-		clear_ast(right);
+		ms_clear_ast(left);
+		ms_clear_ast(right);
 	}
 }

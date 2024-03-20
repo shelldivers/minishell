@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   ms_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 14:56:39 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:15:05 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@
 #include "minishell.h"
 #include "../libft/includes/libft.h"
 
-t_token			**tokenize(t_syntax *syntax);
-static t_token	*new_token(char *value);
-static void		set_tokentype(t_token **token);
+static t_token	*ms_new_token(char *value);
+static void		ms_set_tokentype(t_token **token);
 
-t_token	**tokenize(t_syntax *syntax)
+t_token	**ms_tokenizer(t_syntax *syntax)
 {
 	int		i;
 	t_token	**token;
@@ -35,14 +34,14 @@ t_token	**tokenize(t_syntax *syntax)
 	i = 0;
 	while (i < syntax->words_cnt)
 	{
-		token[i] = new_token(syntax->words[i]);
+		token[i] = ms_new_token(syntax->words[i]);
 		i++;
 	}
 	token[i] = NULL;
 	return (token);
 }
 
-static t_token	*new_token(char *value)
+static t_token	*ms_new_token(char *value)
 {
 	t_token	*token;
 
@@ -50,11 +49,11 @@ static t_token	*new_token(char *value)
 	if (!token)
 		exit(1);
 	token->value = ft_strdup(value);
-	set_tokentype(&token);
+	ms_set_tokentype(&token);
 	return (token);
 }
 
-static void	set_tokentype(t_token **token)
+static void	ms_set_tokentype(t_token **token)
 {
 	if (!ft_strcmp((*token)->value, "&&"))
 		(*token)->type = TAND_IF;

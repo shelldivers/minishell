@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminal.c                                         :+:      :+:    :+:   */
+/*   ms_terminal.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 14:53:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:06:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 
 //terminal
-size_t	isio_file(t_ast *ast, t_token **token)
+size_t	ms_is_io_file(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
 		return (0);
@@ -27,14 +27,14 @@ size_t	isio_file(t_ast *ast, t_token **token)
 	{
 		ast->op = OPIO_FILE;
 		ast->token_size = 2;
-		add_ast(ast, token + 1, isfilename, 0, RIGHT);
+		ms_add_ast(ast, token + 1, ms_is_filename, 0, RIGHT);
 		return (2);
 	}
 	return (0);
 }
 
 //terminal
-size_t	isio_here(t_ast *ast, t_token **token)
+size_t	ms_is_io_here(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
 		return (0);
@@ -43,14 +43,14 @@ size_t	isio_here(t_ast *ast, t_token **token)
 	{
 		ast->op = OPIO_HERE;
 		ast->token_size = 2;
-		add_ast(ast, token + 1, ishere_end, 0, RIGHT);
+		ms_add_ast(ast, token + 1, ms_is_here_end, 0, RIGHT);
 		return (2);
 	}
 	return (0);
 }
 
 //terminal
-size_t	isword(t_ast *ast, t_token **token)
+size_t	ms_is_word(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);
@@ -64,7 +64,7 @@ size_t	isword(t_ast *ast, t_token **token)
 }
 
 //terminal
-size_t	issubshell(t_ast *ast, t_token **token)
+size_t	ms_is_subshell(t_ast *ast, t_token **token)
 {
 	size_t	cursor;
 

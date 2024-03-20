@@ -18,15 +18,15 @@
 #include "minishell.h"
 #include "../libft/includes/libft.h"
 
-size_t	add_ast(t_ast *ast, t_token **token, \
+size_t	ms_add_ast(t_ast *ast, t_token **token, \
 size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 {
 	size_t	cursor;
 	t_ast	*new;
 
 	if (!size)
-		size = tokenlen(token);
-	new = new_ast(token, size);
+		size = ms_tokenlen(token);
+	new = ms_new_ast(token, size);
 	if (!new)
 		return (0);
 	cursor = 0;
@@ -44,11 +44,11 @@ size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 		ast->right = new;
 	}
 	else
-		clear_ast(new);
+		ms_clear_ast(new);
 	return (cursor);
 }
 
-t_ast	*new_ast(t_token **token, size_t size)
+t_ast	*ms_new_ast(t_token **token, size_t size)
 {
 	t_ast	*new_ast;
 
@@ -57,7 +57,7 @@ t_ast	*new_ast(t_token **token, size_t size)
 	new_ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!new_ast)
 		return (NULL);
-	new_ast->token = tokenndup(token, size);
+	new_ast->token = ms_tokenndup(token, size);
 	if (!new_ast->token)
 	{
 		free(new_ast);
@@ -70,7 +70,7 @@ t_ast	*new_ast(t_token **token, size_t size)
 	return (new_ast);
 }
 
-t_token	**tokenndup(t_token **src, size_t size)
+t_token	**ms_tokenndup(t_token **src, size_t size)
 {
 	t_token	**dst;
 
@@ -84,21 +84,21 @@ t_token	**tokenndup(t_token **src, size_t size)
 		dst[size] = (t_token *)malloc(sizeof(t_token));
 		if (!dst[size])
 		{
-			clear_token(dst);
+			ms_clear_token(dst);
 			return (NULL);
 		}
 		dst[size]->type = src[size]->type;
 		dst[size]->value = ft_strdup(src[size]->value);
 		if (!dst[size]->value)
 		{
-			clear_token(dst);
+			ms_clear_token(dst);
 			return (NULL);
 		}
 	}
 	return (dst);
 }
 
-size_t	tokenlen(t_token **token)
+size_t	ms_tokenlen(t_token **token)
 {
 	size_t	len;
 
