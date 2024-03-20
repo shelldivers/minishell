@@ -40,8 +40,7 @@ set(SRCS includes/minishell.h
         srcs/error/ms_error_utils.c
         srcs/expand/ms_expand.c
         includes/ms_expand.h
-        srcs/expand/ms_expand_tilde.c
-        )
+        srcs/expand/ms_expand_param.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)

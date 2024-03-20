@@ -36,30 +36,19 @@ char	**ms_filename_expansion(char **arg, t_env *env)
 
 }
 
-/**
- * @details parameter expansion\n
- * - 환경 변수만 처리하고, 쉘 변수는 처리하지 않습니다.\n
- * - 중괄호(`{}`)는 처리하지 않습니다.\n
- * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
- * @see https://runebook.dev/ko/docs/bash/special-parameters
- */
-t_bool	ms_parameter_expansion(char **arg, t_env *env)
-{
 
-}
 
 /**
  * @details 쉘 확장은 다음 순서로 진행됩니다.\n
- * tilde expansion -> parameter expansion -> filename expansion -> quote removal
+ * parameter expansion -> filename expansion -> quote removal
  * @see https://runebook.dev/ko/docs/bash/shell-expansions
  */
-char	**ms_expansion(char **argv, t_env *env)
+char	**ms_expansion(char **argv, t_env *env, int status)
 {
 	char	**expanded;
 	int		i;
 
-	if (!ms_tilde_expansion(argv, env)
-		|| !ms_parameter_expansion(argv, env))
+	if (!ms_expand_param(argv, env, status))
 		return (NULL);
 	expanded = ms_filename_expansion(argv, env);
 	if (!expanded)

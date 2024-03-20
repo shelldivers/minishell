@@ -22,12 +22,12 @@ extern "C" {
 #include <dirent.h>
 
 /* ms_expand.c */
-char	**ms_expansion(char **argv, t_env *env);
+char	**ms_expansion(char **argv, t_env *env, int status);
 
-/* ms_expand_tilde.c */
-t_bool	ms_tilde_expansion(char **argv, t_env *env);
-t_bool	ms_get_tilde(const char *str);
-t_bool	ms_expand_tilde(char **str, char *home, t_env *env);
+/* ms_expand_param.c */
+t_bool	ms_expand_param(char **argv, t_env *env, int status);
+char	*ms_status_expansion(char *str, char *pos, int status);
+char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
 # ifdef __cplusplus
 }
