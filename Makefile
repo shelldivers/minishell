@@ -1,7 +1,7 @@
 NAME = minishell
 
 INCLUDES = ./includes/
-SOURCES = ./srcs/
+SOURCES = ./srcs/parser/
 
 CC = cc
 
