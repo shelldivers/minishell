@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 10:25:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:36:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "ms_parser.h"
-#include "../libft/includes/libft.h"
+#include "libft.h"
 
 char	*ms_extract_word(\
 char *line, size_t *start, const char **op, size_t op_size)

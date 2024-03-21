@@ -16,7 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "ms_parser.h"
-#include "../libft/includes/libft.h"
+#include "libft.h"
 
 int	ms_parser(t_ast *ast, t_token **token, size_t size)
 {

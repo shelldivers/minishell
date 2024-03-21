@@ -1,6 +1,8 @@
 NAME = minishell
 
 INCLUDES = includes/
+LIBFT_INCLUDES = libft/includes
+
 SOURCES = srcs/
 S_PARSE = parser/
 S_ERROR = error/
@@ -9,8 +11,7 @@ S_BUILTIN = builtin/
 S_ENV = env/
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
-AR = ar rcs
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 PARSER += ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_terminal2.c ms_parser.c 
@@ -22,22 +23,14 @@ ENV += ms_env_lst_utils.c ms_env_lst.c ms_env_serialize_utils.c ms_env_serialize
 
 M_FILES += minishell.c
 M_FILES += $(addprefix $(S_PARSE), $(PARSER))
-# M_FILES += $(addprefix $(S_ERROR), $(ERROR))
-# M_FILES += $(addprefix $(S_EXEC), $(EXEC))
-# M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
-# M_FILES += $(addprefix $(S_ENV), $(ENV))
 
 B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
-# M_FILES += $(addprefix $(S_ERROR), $(ERROR))
-# M_FILES += $(addprefix $(S_EXEC), $(EXEC))
-# M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
-# M_FILES += $(addprefix $(S_ENV), $(ENV))
 
 H_FILES = \
 minishell.h 
 
-LIBFT = libft/libft.a
+LIBFT = libft
 
 ifdef objs
 	SRCS = $(addprefix $(SOURCES), $(B_FILES))
@@ -56,23 +49,13 @@ all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
 	make -C ./libft
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -Iinclude -Ilibft/include -lreadline -lft
-# 제출용 : $(CC) $(CFLAGS) -o $(NAME) $(OBJS)
-# lldb용 : $(CC) -g $(CFLAGS) -o $(NAME) $(MSRCS)
-# sanitize용 : $(CC) -fsanitize=address $(CFLAGS) -o $(NAME) $(MSRCS)
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I$(INCLUDES) -I$(LIBFT_INCLUDES) -lreadline  -Llibft -lft
 
-test: $(NAME)
-	./$(NAME) $(CASE)
-
-leak: $(NAME)
-	valgrind --leak-check=full ./$(NAME) $(CASE)
-# --leak-check=full --show-leak-kinds=all --track-origins=yes
-
-# bonus: 
-# 	make objs=1 all
+bonus: 
+	make objs=1 all
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES) -I$(LIBFT_INCLUDES)
 
 clean:
 	make clean -C ./libft

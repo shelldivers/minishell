@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:50:39 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 10:25:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:37:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "ms_parser.h"
-#include "../libft/includes/libft.h"
+#include "libft.h"
 
 void	ms_clear_syntax(t_syntax *syntax)
 {
