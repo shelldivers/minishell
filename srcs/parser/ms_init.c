@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:44:20 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 16:04:17 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:25:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "minishell.h"
+#include "ms_parser.h"
 
 void	ms_init_syntax(t_syntax *syntax)
 {

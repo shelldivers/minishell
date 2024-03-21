@@ -6,16 +6,15 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 19:48:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:25:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <minishell.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "minishell.h"
+#include "ms_parser.h"
 
 int	main(int argc, char **argv, char **envp)
 {

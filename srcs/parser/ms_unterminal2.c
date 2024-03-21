@@ -6,13 +6,13 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 19:37:04 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:26:08 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "minishell.h"
+#include "ms_parser.h"
 
 size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 {

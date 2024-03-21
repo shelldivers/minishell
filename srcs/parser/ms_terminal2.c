@@ -6,13 +6,13 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:09:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 19:36:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:25:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "minishell.h"
+#include "ms_parser.h"
 
 size_t	ms_is_filename(t_ast *ast, t_token **token)
 {

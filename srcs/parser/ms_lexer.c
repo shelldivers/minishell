@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 19:26:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:25:47 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "minishell.h"
+#include "ms_parser.h"
 #include "../libft/includes/libft.h"
 
 static t_token		*ms_new_token(char *value);
