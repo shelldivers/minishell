@@ -42,7 +42,17 @@ set(SRCS includes/minishell.h
         srcs/error/ms_error_utils.c
         srcs/expand/ms_expand_param.c
         srcs/expand/ms_expand_filename.c
-        srcs/parser/ms_clear.c)
+        srcs/parser/ms_init.c
+        srcs/parser/ms_lexer.c
+        srcs/parser/ms_parser.c
+        srcs/parser/ms_terminal2.c
+        srcs/parser/ms_tokenizer.c
+        srcs/parser/ms_tokenizer2.c
+        srcs/parser/ms_unterminal.c
+        srcs/parser/ms_unterminal2.c
+        srcs/parser/ms_clear.c
+        srcs/parser/ms_terminal.c
+        )
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)

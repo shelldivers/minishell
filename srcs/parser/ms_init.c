@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "ms_parser.h"
 
 void	ms_init_syntax(t_syntax *syntax)

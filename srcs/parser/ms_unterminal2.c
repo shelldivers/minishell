@@ -10,13 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "ms_parser.h"
 
 size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 {
-	size_t	i;
 	size_t	curtok;
 
 	if (ast->token_size < 1)
