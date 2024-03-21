@@ -30,7 +30,7 @@ char	*ms_status_expansion(char *str, char *pos, int status);
 char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
 /* ms_expand_filename.c */
-char	**ms_expand_filename(char **arg, t_env *env);
+char	**ms_expand_filename(char **argv, t_env *env);
 
 # ifdef __cplusplus
 }
