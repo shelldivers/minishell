@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/20 19:49:41 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 09:54:59 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,5 @@ size_t	ms_count_word(const char *line, const char **op, size_t op_size)
 		}
 		i += token_size;
 	}
-	printf ("words_cnt: %zu\n", words_cnt);
 	return (words_cnt);
 }

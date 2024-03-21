@@ -25,8 +25,7 @@ int	ms_parser(t_ast *ast, t_token **token, size_t size)
 	ast = ms_new_ast(token, size);
 	if (!ast)
 		return (0);
-	cursor = ms_add_ast(ast, token, ms_is_pipeline, size, LEFT);
-	printf ("cursor: %zu\n", cursor);
+	cursor = ms_add_ast(ast, token, ms_is_and_or, size, LEFT);
 	if (cursor != size)
 	{
 		ms_clear_ast(ast);
