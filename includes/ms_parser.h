@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 14:42:48 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:06:24 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@ enum e_op
 	OPAND_IF,
 	OPOR_IF,
 	OPSUBSHELL,
-	OPDREAD,
-	OPDWRITE,
-	OPDGREAT,
-	OPDLESS,
 	OPCMD_WORD,
 	OPIO_HERE,
 	OPIO_FILE,
