@@ -24,14 +24,8 @@ int	ms_parser(t_ast *ast, t_token **token, size_t size)
 		return (0);
 	cursor = ms_add_ast(ast, token, ms_is_and_or, size, LEFT);
 	if (cursor != size)
-	{
-		ms_clear_ast(ast);
-		ms_clear_token(token);
-		return (0);
-	}
-	ms_clear_ast(ast);
-	ms_clear_token(token);
-	return (1);
+		return (FALSE);
+	return (TRUE);
 }
 
 size_t	ms_add_ast(t_ast *ast, t_token **token, \
