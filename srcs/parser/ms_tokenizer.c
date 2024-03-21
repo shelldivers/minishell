@@ -12,11 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "ms_parser.h"
-#include "libft.h"
 
 /**
  * separateWords - 주어진 문자열을 단어로 분리합니다.

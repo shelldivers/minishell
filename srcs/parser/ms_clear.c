@@ -12,11 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "ms_parser.h"
-#include "libft.h"
 
 void	ms_clear_syntax(t_syntax *syntax)
 {

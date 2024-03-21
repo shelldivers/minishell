@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <stdio.h>
 #include "ms_parser.h"
 
@@ -75,7 +74,7 @@ size_t	ms_is_command(t_ast *ast, t_token **token)
 	if (ast->token_size < 1)
 		return (0);
 	curtok = 0;
-	if (token[curtok] && token[curtok] && token[curtok]->type == TLPAREN)
+	if (token[curtok] && token[curtok]->type == TLPAREN)
 	{
 		curtok += ms_add_ast(ast, token + curtok, ms_is_subshell, 0, LEFT);
 		if (curtok)

@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "ms_parser.h"
 
 size_t	ms_is_filename(t_ast *ast, t_token **token)
