@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:49:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 11:37:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:00:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static enum e_type	ms_get_tokentype(char *value);
 
 t_token	**ms_lexer(t_syntax *syntax)
 {
-	int		i;
+	size_t	i;
 	t_token	**token;
 
 	if (!syntax->words_cnt)

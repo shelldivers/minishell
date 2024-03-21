@@ -23,14 +23,10 @@ ENV += ms_env_lst_utils.c ms_env_lst.c ms_env_serialize_utils.c ms_env_serialize
 
 M_FILES += minishell.c
 M_FILES += $(addprefix $(S_PARSE), $(PARSER))
+M_FILES += $(addprefix $(S_EXEC), $(EXEC))
 
 B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
-
-H_FILES = \
-minishell.h 
-
-LIBFT = libft
 
 ifdef objs
 SRCS = $(addprefix $(SOURCES), $(B_FILES))
@@ -41,9 +37,6 @@ SRCS = $(addprefix $(SOURCES), $(M_FILES))
 OBJS = $(SRCS:.c=.o)
 HEADER = $(addprefix $(INCLUDES), $(H_FILES))
 endif
-
-CASE =
-
 
 all: $(NAME) $(HEADER)
 
