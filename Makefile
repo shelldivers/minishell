@@ -42,17 +42,17 @@ all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
 	make -C ./libft
-	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I$(INCLUDES) -I$(LIBFT_INCLUDES) -lreadline  -Llibft -lft
+	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I$(INCLUDES) -I$(LIBFT_INCLUDES) -lreadline  -Llibft -lft
 
 bonus: 
 	make objs=1 all
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES) -I$(LIBFT_INCLUDES)
+	$(CC) -g $(CFLAGS) -c $< -o $@ -I$(INCLUDES) -I$(LIBFT_INCLUDES)
 
 clean:
 	make clean -C ./libft
-	$(RM) $(SRCS:.c=.o) $(SRCS:.c=.o)
+	$(RM) $(SRCS:.c=.o)
 
 fclean: clean
 	make fclean -C ./libft

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_collect_words.c                                 :+:      :+:    :+:   */
+/*   ms_words.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 16:58:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:36:06 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**ms_create_words(char *word)
 char	**ms_add_word(char **words, size_t size, char *word)
 {
 	char	**new_words;
-	int		i;
+	size_t	i;
 
 	new_words = (char **)malloc(sizeof(char *) * (size + 2));
 	if (!new_words)
