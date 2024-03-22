@@ -14,15 +14,16 @@
 #include <stdlib.h>
 #include "ms_parser.h"
 #include "libft.h"
+#include "ft_bool.h"
 
-int	ms_parser(t_ast *ast, t_token **token, size_t size)
+t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 {
 	size_t	cursor;
 
-	ast = ms_new_ast(token, size);
-	if (!ast)
+	*ast = ms_new_ast(token, size);
+	if (!*ast)
 		return (0);
-	cursor = ms_add_ast(ast, token, ms_is_and_or, size, LEFT);
+	cursor = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
 	if (cursor != size)
 		return (FALSE);
 	return (TRUE);

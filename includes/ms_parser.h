@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 16:06:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:42:43 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // # include "ms_env.h"
 
 # include <stdlib.h>
+# include "ft_bool.h"
 
 enum e_lr
 {
@@ -109,7 +110,7 @@ size_t	ms_is_cmd_word(t_ast *ast, t_token **token);
 size_t	ms_is_here_end(t_ast *ast, t_token **token);
 size_t	ms_is_filename(t_ast *ast, t_token **token);
 /*================parser.c================*/
-int		ms_parser(t_ast *ast, t_token **token, size_t size);
+t_bool	ms_parser(t_ast **ast, t_token **token, size_t size);
 t_ast	*ms_new_ast(t_token **token, size_t size);
 size_t	ms_add_ast(t_ast *ast, t_token **token, \
 size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr);
