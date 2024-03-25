@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/22 16:36:06 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:30:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-void	ms_clear_words(char **words)
+void	ms_clear_sec_dimentional(char **words)
 {
 	int	i;
 
@@ -57,7 +57,7 @@ char	**ms_add_word(char **words, size_t size, char *word)
 			new_words[i] = ft_strdup(words[i]);
 			i++;
 		}
-		ms_clear_words(words);
+		ms_clear_sec_dimentional(words);
 	}
 	new_words[i] = ft_strdup(word);
 	new_words[i + 1] = NULL;
