@@ -6,14 +6,12 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/22 16:42:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:34:36 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_PARSER_H
 # define MS_PARSER_H
-// # include "ft_bool.h"
-// # include "ms_env.h"
 
 # include <stdlib.h>
 # include "ft_bool.h"
