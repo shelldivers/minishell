@@ -62,4 +62,5 @@ TEST(ms_expand_param, ms_expand_param_status)
 	result = ms_expand_param(argv, *env, status);
 	cout << "result: " << argv[1] << endl;
 	EXPECT_EQ(result, TRUE);
+	leaks();
 }

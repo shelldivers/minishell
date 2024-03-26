@@ -21,6 +21,13 @@ extern "C" {
 #include "ms_env.h"
 #include <dirent.h>
 
+typedef struct s_queue
+{
+	size_t	size;
+	t_list	*head;
+	t_list	*tail;
+}	t_queue;
+
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
 
@@ -31,6 +38,20 @@ char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
 /* ms_expand_filename.c */
 char	**ms_expand_filename(char **argv, t_env *env);
+char	**ms_expand_loop(t_queue *queue, char *str, t_env *env);
+
+/* ms_expand_filename2.c */
+t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env);
+
+/* ms_expand_queue.c */
+t_queue	*ms_init_queue(void);
+void	ms_destroy_queue(t_queue *queue);
+void	ms_clear_queue(t_queue *queue);
+t_bool	ms_enqueue(t_queue *queue, char *str);
+t_list	*ms_dequeue(t_queue *queue);
+
+/* ms_expand_queue2.c */
+char	**ms_queue_to_array(t_queue *queue);
 
 # ifdef __cplusplus
 }

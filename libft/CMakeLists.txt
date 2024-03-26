@@ -53,7 +53,7 @@ set(SRCS
         srcs/ft_strcmp.c
         srcs/ft_atoi.c
         srcs/ft_isnumeric.c
-        )
+        srcs/ft_strsjoin.c)
 
 add_library(${NAME} STATIC ${SRCS})
 
