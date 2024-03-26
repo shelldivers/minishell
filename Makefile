@@ -24,12 +24,14 @@ ENV += ms_env_lst_utils.c ms_env_lst.c ms_env_serialize_utils.c ms_env_serialize
 M_FILES += minishell.c
 M_FILES += $(addprefix $(S_PARSE), $(PARSER))
 M_FILES += $(addprefix $(S_EXEC), $(EXEC))
+M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
 M_FILES += $(addprefix $(S_ENV), $(ENV))
 M_FILES += $(addprefix $(S_ERROR), $(ERROR))
 
 B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
 B_FILES += $(addprefix $(S_EXEC), $(EXEC))
+M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
 B_FILES += $(addprefix $(S_ENV), $(ENV))
 B_FILES += $(addprefix $(S_ERROR), $(ERROR))
 
