@@ -15,6 +15,7 @@
 #include "ms_parser.h"
 #include "libft.h"
 #include "ft_bool.h"
+#include "ms_error.h"
 
 t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 {
@@ -25,7 +26,10 @@ t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 		return (0);
 	cursor = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
 	if (cursor != size)
+	{
+		ms_puterror_syntax(token[cursor]->value);
 		return (FALSE);
+	}
 	return (TRUE);
 }
 
