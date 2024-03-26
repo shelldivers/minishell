@@ -43,6 +43,10 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env);
 /* ms_expand_filename2.c */
 t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env);
 
+/* ms_expand_filename3.c */
+char	*ms_get_path(char *str);
+char	*ms_get_pattern(char *str);
+
 /* ms_expand_queue.c */
 t_queue	*ms_init_queue(void);
 void	ms_destroy_queue(t_queue *queue);
