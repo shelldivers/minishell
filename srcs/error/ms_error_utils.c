@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_error.c                                         :+:      :+:    :+:   */
+/*   ms_error_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/04 18:50:26 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:09:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,11 @@ void	ms_puterror_env_not_set(t_env *env, char *cmd, char *key)
 	errno = 0;
 }
 
-void	ms_puterror_syntax(t_env **env, char *value)
+void	ms_puterror_syntax(char *value)
 {
-	char		*shell;
+	const char	*shell = "minishell";
 	const char	*msg = "syntax error near unexpected value";
 
-	shell = ms_getenv(*env, SHELL);
 	ft_dprintf(2, "%s: %s `%s'\n", shell, msg, value);
 	errno = 0;
 }
