@@ -5,100 +5,86 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/26 15:55:49 by jiwojung         ###   ########.fr       */
+/*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
+/*   Updated: 2024/03/27 20:15:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include "libft.h"
-#include "ms_env.h"
-#include "ms_builtin.h"
+#include <stdlib.h>
 #include "minishell.h"
+#include "libft.h"
 
-void	ms_exec_builtin(t_exec *exec_info, t_env **env)
+size_t	ms_words_size(char **words)
 {
-	const int	argc = exec_info->words_size;
-	const char	**argv = exec_info->words;
+	size_t	size;
 
-	if (ft_strcmp(argv[0], "echo") == 0)
-		exec_info->exit_code = ms_echo(argc, argv, env);
-	else if (ft_strcmp(argv[0], "cd") == 0)
-		exec_info->exit_code = ms_cd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "pwd") == 0)
-		exec_info->exit_code = ms_pwd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "export") == 0)
-		exec_info->exit_code = ms_export(argc, argv, env);
-	else if (ft_strcmp(argv[0], "unset") == 0)
-		exec_info->exit_code = ms_unset(argc, argv, env);
-	else if (ft_strcmp(argv[0], "env") == 0)
-		exec_info->exit_code = ms_env(argc, argv, env);
-	else if (ft_strcmp(argv[0], "exit") == 0)
-		exec_info->exit_code = ms_exit(argc, argv, env);
+	size = 0;
+	if (!words)
+		return (size);
+	while (words[size])
+		size++;
+	return (size);
 }
 
-t_bool	ms_exec_is_builtin(t_exec *exec_info)
+void	ms_clear_sec_dimentional(char **words)
 {
-	const char	*word = exec_info->words[0];
+	int	i;
 
-	if (ft_strcmp(word, "echo") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "cd") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "pwd") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "export") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "unset") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "env") == 0)
-		return (TRUE);
-	if (ft_strcmp(word, "exit") == 0)
-		return (TRUE);
-	return (FALSE);
-}
-
-t_bool	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
-{
-	const char	**words = exec_info->words;
-	int			pid;
-
-	pid = fork();
-	if (pid == -1)
+	i = 0;
+	if (!words)
+		return ;
+	while (words[i])
 	{
-		perror("fork");
-		return (TRUE);
+		free(words[i]);
+		i++;
 	}
-	if (pid == 0)
+	free(words);
+}
+
+t_bool	ms_create_words(t_exec *exec_info, char *word)
+{
+	char	**words;
+
+	if (exec_info->words)
+		ms_clear_sec_dimentional(exec_info->words);
+	words = (char **)malloc(sizeof(char *) * 2);
+	if (!words)
+		return (FALSE);
+	words[0] = ft_strdup(word);
+	if (!words[0])
 	{
-		if (execve(words[0], words, ms_env_serialize(env)) == -1)
+		free(words);
+		return (FALSE);
+	}
+	words[1] = NULL;
+	exec_info->words = words;
+	exec_info->words_size = 1;
+	return (TRUE);
+}
+
+t_bool	ms_add_word(t_exec *exec_info, char *word)
+{
+	char		**new_words;
+	size_t		size;
+
+	size = exec_info->words_size;
+	new_words = (char **)malloc(sizeof(char *) * (size + 2));
+	if (!new_words)
+		return (FALSE);
+	new_words[size + 1] = NULL;
+	new_words[size] = ft_strdup(word);
+	while (size--)
+	{
+		new_words[size] = ft_strdup(exec_info->words[size]);
+		if (!new_words[size])
 		{
-			perror("execve");
-			exit(1);
+			ms_clear_sec_dimentional(new_words);
+			return (FALSE);
 		}
 	}
-	else
-	{
-		waitpid(pid, &exec_info->exit_code, 0);
-		if (WIFEXITED(exec_info->exit_code))
-			exec_info->exit_code = WEXITSTATUS(exec_info->exit_code);
-	}
-}
-
-t_bool	ms_exec_words(t_exec *exec_info, t_env **env)
-{
-	const char	**words = exec_info->words;
-
-	if (words)
-	{
-		if (ms_exec_is_builtin(words[0]))
-			ms_exec_builtin(exec_info, env);
-		else
-		{
-			ms_add_path(exec_info, env);
-			ms_exec_non_builtin(exec_info, env);
-		}
-	}
-	return (FALSE);
+	if (exec_info->words)
+		ms_clear_sec_dimentional(exec_info->words);
+	exec_info->words = new_words;
+	exec_info->words_size++;
+	return (TRUE);
 }

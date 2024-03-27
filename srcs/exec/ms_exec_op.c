@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:07:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/26 18:46:47 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/27 20:14:23 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,77 +18,37 @@
 #include "ms_builtin.h"
 #include "minishell.h"
 
-t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
-{
-	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec_info->fd[1] == -1)
-	{
-		perror("minishell");
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-	{
-		perror("minishell");
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	return (TRUE);
-}
+// t_bool	ms_exec_subshell(t_ast *ast, t_exec *exec_info, t_env **env)
+// {
+// 	int		pid;
+// 	int		status;
+// 	t_ast	*subshell;
+// 	size_t	curtok;
 
-t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
-{
-	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (exec_info->fd[1] == -1)
-	{
-		perror("minishell");
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-	{
-		perror("minishell");
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	return (TRUE);
-}
-
-t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
-{
-	exec_info->fd[0] = open(filename, O_RDONLY);
-	if (exec_info->fd[0] == -1)
-	{
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
-	{
-		perror("minishell");
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	return (TRUE);
-}
-
-t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
-{
-	const char	*redirect = ast->token[0];
-	const char	*filename = ast->token[1];
-
-	if (ft_strcmp(redirect, ">") == 0)
-		return (ms_exec_io_file_write(exec_info, filename));
-	else if (ft_strcmp(redirect, ">>") == 0)
-		return (ms_exec_io_file_append(exec_info, filename));
-	else if (ft_strcmp(redirect, "<") == 0)
-		return (ms_exec_io_file_read(exec_info, filename));
-	return (FALSE);
-}
-
-t_bool	ms_exec_subshell(t_ast *ast, t_exec *exec_info, t_env **env)
-{
-	
-}
+// 	pid = fork();
+// 	if (pid == -1)
+// 	{
+// 		perror("minishell");
+// 		exec_info->exit_code = 1;
+// 		return (FALSE);
+// 	}
+// 	if (pid == 0)
+// 	{
+// 		subshell = ms_new_ast(ast->token + 1, ast->token_size - 1);
+// 		curtok = ms_parser(&subshell, ast->token + 1, ast->token_size - 1);
+// 		if (curtok != ast->token_size - 1)
+// 		{
+// 			ms_clear_ast(ast);
+// 			exit(1);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		waitpid(pid, &status, 0);
+// 		exec_info->exit_code = WEXITSTATUS(status);
+// 	}
+// 	return (TRUE);
+// }
 
 t_bool	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 {
@@ -109,8 +69,8 @@ t_bool	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		return (ms_exec_io_file(ast, exec_info, env));
 	else if (ast->op == OPIO_HERE)
 		return (ms_exec_io_here(ast, exec_info, env));
-	else if (ast->op == OPSUBSHELL)
-		return (ms_exec_subshell(ast, exec_info, env));
+	// else if (ast->op == OPSUBSHELL)
+		// return (ms_exec_subshell(ast, exec_info, env));
 	else if (ast->op == OPCMD_WORD)
 		return (ms_create_words(exec_info, ast->token[0]));
 	else if (ast->op == OPWORD)

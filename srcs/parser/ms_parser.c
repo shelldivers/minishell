@@ -27,7 +27,6 @@ t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 	cursor = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
 	if (cursor != size)
 	{
-		ms_puterror_syntax(token[cursor]->value);
 		return (FALSE);
 	}
 	return (TRUE);
