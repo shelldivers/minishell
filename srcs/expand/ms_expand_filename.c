@@ -48,6 +48,7 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env)
 	tmp = ft_strdup(str);
 	if (!tmp)
 		return (NULL);
+	ms_dequote(tmp, '\"');
 	if (!ms_enqueue(queue, tmp))
 		return (NULL);
 	depth = 0;

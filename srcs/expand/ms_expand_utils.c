@@ -5,19 +5,19 @@
 static int	get_size(char **strs);
 static void	move_strs(char **dest, char **s1, char **s2);
 
-void ms_dequote(char *str, char ch)
+void	ms_dequote(char *str, char ch)
 {
 	t_bool	quote;
 
 	quote = FALSE;
 	while (*str)
 	{
-		if (!quote && *str == '\'')
+		if (!quote && *str == ch)
 		{
 			quote = TRUE;
 			ft_memmove(str, str + 1, ft_strlen(str) + 1);
 		}
-		else if (quote && *str == '\'')
+		else if (quote && *str == ch)
 		{
 			quote = FALSE;
 			ft_memmove(str, str + 1, ft_strlen(str) + 1);
