@@ -52,15 +52,19 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env);
 /* ms_expand_filename2.c */
 t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env);
 
-/* ms_expand_wildcard.c */
+/* ms_expand_filename3.c */
+t_bool	ms_match_pattern(char *d_name, t_glob *glob);
+t_bool	ms_match_type(struct dirent *entry, t_glob *glob);
+
+/* ms_expand_glob.c */
 t_glob	*ms_parse_glob(char *str);
 t_glob	*ms_init_glob(void);
 void	ms_destroy_glob(t_glob *glob);
 
-/* ms_expand_wildcard2.c */
+/* ms_expand_glob2.c */
 t_bool	ms_get_path(t_glob *glob, char *str);
 
-/* ms_expand_wildcard3.c */
+/* ms_expand_glob3.c */
 t_bool	ms_get_pattern(t_glob *glob, char *str);
 t_bool	ms_get_remain(t_glob *glob, char *str);
 t_bool	ms_parse_pattern(t_glob *glob);

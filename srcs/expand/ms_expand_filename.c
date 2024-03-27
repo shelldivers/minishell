@@ -3,9 +3,9 @@
 #include "ms_env.h"
 #include <dirent.h>
 
-static t_bool	ms_expand_loop_inner(t_queue *queue, int size, t_env *env);
-static size_t	ms_get_max_depth(char *str);
-static char		**ms_expansion_failed(char *str);
+static t_bool	expand_loop_inner(t_queue *queue, int size, t_env *env);
+static size_t	get_max_depth(char *str);
+static char		**expansion_failed(char *str);
 
 /**
 * @details filename expansion\n
@@ -51,22 +51,22 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env)
 	if (!ms_enqueue(queue, tmp))
 		return (NULL);
 	depth = 0;
-	max_depth = ms_get_max_depth(str);
+	max_depth = get_max_depth(str);
 	while (1)
 	{
 		size = (int)queue->size;
 		if (size <= 0 || depth >= max_depth)
 			break ;
-		if (!ms_expand_loop_inner(queue, size, env))
+		if (!expand_loop_inner(queue, size, env))
 			return (NULL);
 		depth++;
 	}
 	if (depth < max_depth)
-		return (ms_expansion_failed(str));
+		return (expansion_failed(str));
 	return (ms_queue_to_array(queue));
 }
 
-static t_bool	ms_expand_loop_inner(t_queue *queue, int size, t_env *env)
+static t_bool	expand_loop_inner(t_queue *queue, int size, t_env *env)
 {
 	t_list	*node;
 	t_bool	result;
@@ -85,7 +85,7 @@ static t_bool	ms_expand_loop_inner(t_queue *queue, int size, t_env *env)
 	return (TRUE);
 }
 
-static size_t	ms_get_max_depth(char *str)
+static size_t	get_max_depth(char *str)
 {
 	size_t	max_depth;
 
@@ -99,7 +99,7 @@ static size_t	ms_get_max_depth(char *str)
 	return (max_depth);
 }
 
-static char	**ms_expansion_failed(char *str)
+static char	**expansion_failed(char *str)
 {
 	char	**expanded;
 

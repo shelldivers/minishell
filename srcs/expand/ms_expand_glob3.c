@@ -19,7 +19,7 @@ t_bool	ms_get_pattern(t_glob *glob, char *str)
 		}
 	}
 	tmp = ft_strchr(str, '/');
-	if (!tmp || *(tmp + 1) == '\0')
+	if (!tmp)
 		pattern = ft_strdup(str);
 	else
 		pattern = ft_strndup(str, tmp - str);
