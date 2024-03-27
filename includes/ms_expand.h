@@ -75,6 +75,9 @@ t_list	*ms_dequeue(t_queue *queue);
 /* ms_expand_queue2.c */
 char	**ms_queue_to_array(t_queue *queue);
 
+/* ms_expand_utils.c */
+char	**ms_strsjoin(char ***dest, char **s2);
+
 # ifdef __cplusplus
 }
 # endif

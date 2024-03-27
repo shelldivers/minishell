@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "ms_env.h"
 #include <dirent.h>
+#include <errno.h>
 
 char	*ms_join_path(char *entry, t_glob *glob)
 {
@@ -58,6 +59,7 @@ t_bool	entry_loop(t_queue *queue, DIR *dir, t_glob *glob)
 
 t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
 {
+	extern int	errno;
 	t_glob		*glob;
 	DIR			*dir;
 	t_bool		result;
@@ -65,9 +67,16 @@ t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
 	glob = ms_parse_glob(str);
 	if (!glob)
 		return (FALSE);
-	dir = opendir(str);
-	if (!dir)
+	dir = opendir(glob->path);
+	if (!dir && errno != ENOENT)
 		return (FALSE);
+	if (errno == ENOENT)
+	{
+		if (!ms_enqueue(queue, ft_strdup(str)))
+			return (FALSE);
+		ms_destroy_glob(glob);
+		return (TRUE);
+	}
 	result = entry_loop(queue, dir, glob);
 	closedir(dir);
 	ms_destroy_glob(glob);

@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "ms_expand.h"
 
 char	**ms_queue_to_array(t_queue *queue)
@@ -13,7 +14,14 @@ char	**ms_queue_to_array(t_queue *queue)
 	node = queue->head;
 	while (node)
 	{
-		array[i] = node->content;
+		array[i] = ft_strdup(node->content);
+		if (!array[i])
+		{
+			while (i--)
+				free(array[i]);
+			free(array);
+			return (NULL);
+		}
 		node = node->next;
 		i++;
 	}

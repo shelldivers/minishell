@@ -1,186 +1,69 @@
+#include "libft.h"
 #include "ms_expand.h"
 #include <gtest/gtest.h>
 
 using namespace std;
 
-void	leaks();
-
-TEST(ms_opendir_test, ms_opendir_test)
+TEST(ms_filename_test, ms_filename_test)
 {
-	DIR				*dir;
-	struct dirent	*entry;
+	char *argv[3];
+	t_env **env;
+	char **result;
 
-	dir = opendir(".");
-	EXPECT_NE(dir, nullptr);
-	closedir(dir);
+	char *envp[] = {
+		"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki",
+		"PWD=/Users/jeongwpa",
+		"SHLVL=1",
+		"HOME=/Users/jeongwpa",
+		"LOGNAME=jeongwpa",
+		nullptr,
+	};
 
-	dir = opendir("u");
-	EXPECT_NE(dir, nullptr);
-	closedir(dir);
-
-	dir = opendir("u/lll");
-	EXPECT_NE(dir, nullptr);
-	closedir(dir);
+	env = ms_env_deserialize(envp);
+	argv[0] = ft_strdup("echo");
+	argv[1] = ft_strdup("srcs/*");
+	argv[2] = nullptr;
+	result = ms_expand_filename(argv, *env);
+	EXPECT_NE(result, nullptr);
+	for (int i = 0; result[i]; i++)
+		cout << "result: " << result[i] << endl;
+	ms_env_clear(env);
+	free(env);
+	for (int i = 0; result[i]; i++)
+		free(result[i]);
+	free(result);
+	for (int i = 0; argv[i]; i++)
+		free(argv[i]);
 }
 
-TEST(ms_filename_test, ms_get_pattern_root)
+TEST(ms_filename_test, ms_filename_test2)
 {
-	char *pattern;
+	char *argv[3];
+	t_env **env;
+	char **result;
 
-	pattern = ms_get_pattern("/*");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*");
-	free(pattern);
+	char *envp[] = {
+		"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki",
+		"PWD=/Users/jeongwpa",
+		"SHLVL=1",
+		"HOME=/Users/jeongwpa",
+		"LOGNAME=jeongwpa",
+		NULL,
+	};
 
-	pattern = ms_get_pattern("*");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*");
-	free(pattern);
-
-	pattern = ms_get_pattern("*asdf");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*asdf");
-	free(pattern);
-
-	pattern = ms_get_pattern("*asdf/");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*asdf/");
-	free(pattern);
-
-	pattern = ms_get_pattern("*/asdf");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*");
-	free(pattern);
-
-	pattern = ms_get_pattern("*/asdf/asdf");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "*");
-	free(pattern);
-
-	pattern = ms_get_pattern("Asdf*asdf/asdf/asdf/asdf*/asdf");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "Asdf*asdf");
-	free(pattern);
-
-	pattern = ms_get_pattern("Asdf*asdf/");
-	printf("pattern: %s\n", pattern);
-	EXPECT_STREQ(pattern, "Asdf*asdf/");
-	free(pattern);
-
-	leaks();
+	env = ms_env_deserialize(envp);
+	argv[0] = ft_strdup("echo");
+	argv[1] = ft_strdup("u*");
+	argv[2] = NULL;
+	result = ms_expand_filename(argv, *env);
+	EXPECT_NE(result, nullptr);
+	for (int i = 0; result[i]; i++)
+		cout << "result: " << result[i] << endl;
+	ms_env_clear(env);
+	free(env);
+	for (int i = 0; result[i]; i++)
+		free(result[i]);
+	free(result);
+	for (int i = 0; argv[i]; i++)
+		free(argv[i]);
 }
-
-TEST(ms_filename_test, ms_get_path_root)
-{
-	char *path;
-
-	path = ms_get_path("/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/");
-	free(path);
-
-	path = ms_get_path("/asdf*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/");
-	free(path);
-
-	path = ms_get_path("/*asdf");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/");
-	free(path);
-
-	path = ms_get_path("/*/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/");
-	free(path);
-
-	path = ms_get_path("/usr/as*d/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/usr");
-	free(path);
-
-	path = ms_get_path("/usr/asd/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "/usr/asd");
-	free(path);
-
-	leaks();
-}
-
-
-
-TEST(ms_filename_test, ms_get_path_current)
-{
-	char *path;
-
-	path = ms_get_path("*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("*asdf");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("*/");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("*/asdf");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("asdf*/");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("asdf*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("asdf*/asdf");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, ".");
-	free(path);
-
-	path = ms_get_path("srcs/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs");
-	free(path);
-
-	path = ms_get_path("srcs/*asdf");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs");
-	free(path);
-
-
-	path = ms_get_path("srcs/*/");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs");
-	free(path);
-
-	path = ms_get_path("srcs/asdf*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs");
-	free(path);
-
-	path = ms_get_path("srcs/asdf*/");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs");
-	free(path);
-
-	path = ms_get_path("srcs/asdf/*");
-	printf("path: %s\n", path);
-	EXPECT_STREQ(path, "srcs/asdf");
-	free(path);
-
-	leaks();
-}
-
-
-
