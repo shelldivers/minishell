@@ -12,8 +12,8 @@ t_bool	ms_get_path(t_glob *glob, char *str)
 	int		is_root;
 
 	is_root = 0;
-	if (*str == '/')
-		is_root = 1;
+	while (str[is_root] && str[is_root] == '/')
+		is_root++;
 	pat = get_pat(str, is_root);
 	if (!pat)
 	{
@@ -23,7 +23,7 @@ t_bool	ms_get_path(t_glob *glob, char *str)
 			path = ft_strdup("");
 	}
 	else
-		path = ft_strndup(str, pat - str - is_root);
+		path = ft_strndup(str, pat - str);
 	if (!path)
 		return (FALSE);
 	glob->path = path;
@@ -52,5 +52,7 @@ static char	*get_pat(char *str, int is_root)
 			break ;
 		i++;
 	}
+	if (is_root > 0 && !pattern)
+		pattern = str + is_root;
 	return (pattern);
 }
