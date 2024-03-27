@@ -26,7 +26,7 @@ t_bool	ms_match_type(struct dirent *entry, t_glob *glob)
 		return (FALSE);
 	if (*(glob->remain) == '/' && entry->d_type != DT_DIR)
 		return (FALSE);
-	if (*(glob->pattern) != '.' && *(entry->d_name) == '.')
+	if (*(glob->prefix) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
 	return (TRUE);
 }

@@ -37,13 +37,20 @@ static t_bool	expand_loop_inner(t_queue *queue, int size, t_env *env)
 {
 	t_list	*node;
 	t_bool	result;
+	t_glob	*glob;
 
 	while (size--)
 	{
 		node = ms_dequeue(queue);
 		if (!node)
 			break ;
-		result = ms_filename_expansion(queue, node->content, env);
+		glob = ms_parse_glob(node->content);
+		if (!glob)
+			return (FALSE);
+		result = TRUE;
+		if (*(glob->pattern) != '\0')
+			result = ms_filename_expansion(queue, node->content, glob);
+		ms_destroy_glob(glob);
 		free(node->content);
 		free(node);
 		if (!result)

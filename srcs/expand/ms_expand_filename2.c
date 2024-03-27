@@ -7,16 +7,12 @@
 t_bool	entry_loop(t_queue *queue, DIR *dir, t_glob *glob);
 char	*join_path(char *entry, t_glob *glob);
 
-t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
+t_bool	ms_filename_expansion(t_queue *queue, char *str, t_glob *glob)
 {
 	extern int	errno;
-	t_glob		*glob;
 	DIR			*dir;
 	t_bool		result;
 
-	glob = ms_parse_glob(str);
-	if (!glob)
-		return (FALSE);
 	if (*(glob->path) == '\0')
 		dir = opendir(".");
 	else
@@ -27,12 +23,10 @@ t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
 	{
 		if (!ms_enqueue(queue, ft_strdup(str)))
 			return (FALSE);
-		ms_destroy_glob(glob);
 		return (TRUE);
 	}
 	result = entry_loop(queue, dir, glob);
 	closedir(dir);
-	ms_destroy_glob(glob);
 	return (result);
 }
 

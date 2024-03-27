@@ -35,7 +35,7 @@ typedef struct s_glob
 	char	*pattern;
 	char	*suffix;
 	char	*remain;
-} t_glob;
+}	t_glob;
 
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
@@ -50,7 +50,7 @@ char	**ms_expand_filename(char **argv, t_env *env);
 char	**ms_expand_loop(t_queue *queue, char *str, t_env *env);
 
 /* ms_expand_filename2.c */
-t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env);
+t_bool	ms_filename_expansion(t_queue *queue, char *str, t_glob *glob);
 
 /* ms_expand_filename3.c */
 t_bool	ms_match_pattern(char *d_name, t_glob *glob);

@@ -3,78 +3,54 @@
 #include "ms_env.h"
 #include <dirent.h>
 
-static char	*get_path_from_root(char *str);
-static char	*get_path_from_cur(char *str);
+static char		*get_pat(char *str, int is_root);
 
-// @TODO 여기서 quote 제거
 t_bool	ms_get_path(t_glob *glob, char *str)
 {
-	char	*tmp;
+	char	*pat;
+	char	*path;
+	int		is_root;
 
+	is_root = 0;
 	if (*str == '/')
-		tmp = get_path_from_root(str);
+		is_root = 1;
+	pat = get_pat(str, is_root);
+	if (!pat)
+	{
+		if (is_root == 1)
+			path = ft_strdup("/");
+		else
+			path = ft_strdup("");
+	}
 	else
-		tmp = get_path_from_cur(str);
-	if (!tmp)
+		path = ft_strndup(str, pat - str - is_root);
+	if (!path)
 		return (FALSE);
-	glob->path = tmp;
+	glob->path = path;
+	ms_dequote(glob->path, '\"');
 	return (TRUE);
 }
 
-static char	*get_path_from_root(char *str)
+static char	*get_pat(char *str, int is_root)
 {
 	int		i;
 	char	*pattern;
-	char	*path;
+	t_bool	quote;
 
-	i = 1;
+	quote = FALSE;
 	pattern = NULL;
-	while (str[i] != '*')
+	i = is_root;
+	while (str[i])
 	{
-		if (str[i] == '/')
+		if (!quote && str[i] == '\"')
+			quote = TRUE;
+		else if (quote && str[i] == '\"')
+			quote = FALSE;
+		else if (str[i] == '/')
 			pattern = str + i + 1;
+		else if (!quote && str[i] == '*')
+			break ;
 		i++;
 	}
-	if (!pattern)
-	{
-		path = ft_strdup("/");
-		if (!path)
-			return (NULL);
-	}
-	else
-	{
-		path = ft_strndup(str, pattern - str - 1);
-		if (!path)
-			return (NULL);
-	}
-	return (path);
-}
-
-static char	*get_path_from_cur(char *str)
-{
-	int		i;
-	char	*pattern;
-	char	*path;
-
-	i = 0;
-	pattern = NULL;
-	while (str[i] != '*')
-	{
-		if (str[i] == '/')
-			pattern = str + i + 1;
-		i++;
-	}
-	if (!pattern)
-	{
-		path = ft_strdup("");
-		if (!path)
-			return (NULL);
-	}
-	else
-	{
-		path = ft_strndup(str, pattern - str);
-		if (!path)
-			return (NULL);
-	}
-	return (path);
+	return (pattern);
 }
