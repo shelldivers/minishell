@@ -18,7 +18,7 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env)
 	if (!ms_enqueue(queue, tmp))
 		return (NULL);
 	depth = 0;
-	max_depth = get_max_depth(str);
+	max_depth = get_max_depth(str);	// @TODO: 수정 ms_filename_test15
 	while (1)
 	{
 		size = (int)queue->size;
