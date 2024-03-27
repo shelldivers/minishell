@@ -52,7 +52,7 @@ set(SRCS includes/minishell.h
         srcs/parser/ms_unterminal2.c
         srcs/parser/ms_clear.c
         srcs/parser/ms_terminal.c
-        srcs/expand/ms_expand_queue.c srcs/expand/ms_expand_queue2.c srcs/expand/ms_expand_filename2.c srcs/expand/ms_expand_glob2.c srcs/expand/ms_expand_glob.c srcs/expand/ms_expand_glob3.c srcs/expand/ms_expand_utils.c srcs/expand/ms_expand_filename3.c)
+        srcs/expand/ms_expand_queue.c srcs/expand/ms_expand_queue1.c srcs/expand/ms_expand_filename2.c srcs/expand/ms_expand_glob1.c srcs/expand/ms_expand_glob.c srcs/expand/ms_expand_glob3.c srcs/expand/ms_expand_utils.c srcs/expand/ms_expand_filename3.c srcs/expand/ms_expand_filename1.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)

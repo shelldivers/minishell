@@ -4,24 +4,7 @@
 #include "ms_expand.h"
 
 static size_t	ft_strcspn(const char *str, const char *charset);
-
-static char	*get_pos(char *str)
-{
-	t_bool	quote;
-
-	quote = FALSE;
-	while (*str)
-	{
-		if (!quote && *str == '\'')
-			quote = TRUE;
-		else if (quote && *str == '\'')
-			quote = FALSE;
-		else if (!quote && *str == '$')
-			return (str);
-		str++;
-	}
-	return (NULL);
-}
+static char		*get_pos(char *str);
 
 /**
  * @details parameter expansion\n
@@ -55,6 +38,24 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 		argv++;
 	}
 	return (TRUE);
+}
+
+static char	*get_pos(char *str)
+{
+	t_bool	quote;
+
+	quote = FALSE;
+	while (*str)
+	{
+		if (!quote && *str == '\'')
+			quote = TRUE;
+		else if (quote && *str == '\'')
+			quote = FALSE;
+		else if (!quote && *str == '$')
+			return (str);
+		str++;
+	}
+	return (NULL);
 }
 
 char	*ms_status_expansion(char *str, char *pos, int status)

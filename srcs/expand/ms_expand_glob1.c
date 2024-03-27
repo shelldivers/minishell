@@ -6,6 +6,7 @@
 static char	*get_path_from_root(char *str);
 static char	*get_path_from_cur(char *str);
 
+// @TODO 여기서 quote 제거
 t_bool	ms_get_path(t_glob *glob, char *str)
 {
 	char	*tmp;

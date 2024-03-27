@@ -9,7 +9,7 @@ TEST(ms_filename_test, basic_test)
 	char *argv[3];
 	t_env **env;
 	char **result;
-	char *input = "\"u\"*";	// input
+	char *input = "\"*\"";	// input
 
 	// given
 	char *envp[] = {
