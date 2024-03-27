@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 static int	get_size(char **strs);
-static void	move_strs(char **dest, char **s1, char **s2);
 
 void	ms_dequote(char *str, char ch)
 {
@@ -27,25 +26,24 @@ void	ms_dequote(char *str, char ch)
 	}
 }
 
-char	**ms_strsjoin(char ***dest, char **s2)
+char	**ms_strsjoin(char **s1, char **s2)
 {
-	char	**s1;
 	char	**new_strs;
-	size_t	i;
-	size_t	j;
+	size_t	s1_len;
+	size_t	s2_len;
+	int		i;
 
-	s1 = *dest;
-	i = get_size(s1);
-	j = get_size(s2);
-	new_strs = (char **)malloc(sizeof(char *) * (i + j + 1));
-	if (new_strs)
-	{
-		move_strs(new_strs, s1, s2);
-		*dest = new_strs;
-	}
-	if (s1)
-		free(s1);
-	free(s2);
+	s1_len = get_size(s1);
+	s2_len = get_size(s2);
+	new_strs = (char **)malloc(sizeof(char *) * (s1_len + s2_len + 1));
+	if (!new_strs)
+		return (NULL);
+	i = 0;
+	while (s1 && *s1)
+		new_strs[i++] = *s1++;
+	while (s2 && *s2)
+		new_strs[i++] = *s2++;
+	new_strs[s1_len + s2_len] = NULL;
 	return (new_strs);
 }
 
@@ -57,16 +55,4 @@ static int	get_size(char **strs)
 	while (strs && strs[size])
 		size++;
 	return (size);
-}
-
-static void	move_strs(char **dest, char **s1, char **s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1 && *s1)
-		dest[i++] = *s1++;
-	while (s2 && *s2)
-		dest[i++] = *s2++;
-	dest[i] = NULL;
 }

@@ -13,6 +13,7 @@
 #include "libft.h"
 #include "ms_env.h"
 #include "ms_expand.h"
+#include "ms_error.h"
 
 char	**ms_strsdup(char **strs)
 {
@@ -69,7 +70,10 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 		return (NULL);
 	expanded = ms_expand_filename(copy, env);
 	if (!expanded)
+	{
+		ms_puterror_arg("minishell: ", *argv);
 		return (NULL);
+	}
 	ms_quote_removal(expanded);
 	return (expanded);
 }
