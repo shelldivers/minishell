@@ -65,13 +65,13 @@ static char	*get_path_from_cur(char *str)
 	}
 	if (!pattern)
 	{
-		path = ft_strdup(".");
+		path = ft_strdup("");
 		if (!path)
 			return (NULL);
 	}
 	else
 	{
-		path = ft_strndup(str, pattern - str - 1);
+		path = ft_strndup(str, pattern - str);
 		if (!path)
 			return (NULL);
 	}

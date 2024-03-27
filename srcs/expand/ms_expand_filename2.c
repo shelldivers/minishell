@@ -67,7 +67,10 @@ t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
 	glob = ms_parse_glob(str);
 	if (!glob)
 		return (FALSE);
-	dir = opendir(glob->path);
+	if (*(glob->path) == '\0')
+		dir = opendir(".");
+	else
+		dir = opendir(glob->path);
 	if (!dir && errno != ENOENT)
 		return (FALSE);
 	if (errno == ENOENT)
