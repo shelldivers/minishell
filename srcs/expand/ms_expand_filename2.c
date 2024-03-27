@@ -24,11 +24,15 @@ char	*ms_join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, t_glob *glob)
+t_bool	ms_match_pattern(struct dirent *entry, t_glob *glob)
 {
+	char	*d_name;
 	size_t	prefix_len;
 	size_t	suffix_len;
 
+	d_name = entry->d_name;
+	if (*(glob->remain) == '/' && entry->d_type != DT_DIR)
+		return (FALSE);
 	prefix_len = ft_strlen(glob->prefix);
 	suffix_len = ft_strlen(glob->suffix);
 	if (ft_strncmp(d_name, glob->prefix, prefix_len) != 0)
@@ -48,7 +52,7 @@ t_bool	entry_loop(t_queue *queue, DIR *dir, t_glob *glob)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (!ms_match_pattern(entry->d_name, glob))
+		if (!ms_match_pattern(entry, glob))
 			continue ;
 		full_path = ms_join_path(entry->d_name, glob);
 		if (!ms_enqueue(queue, full_path))
