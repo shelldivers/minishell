@@ -4,6 +4,88 @@
 
 using namespace std;
 
+TEST(ms_filename_test, basic_test)
+{
+	char *argv[3];
+	t_env **env;
+	char **result;
+	char *input = "\"u\"*";	// input
+
+	// given
+	char *envp[] = {
+		"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki",
+		"PWD=/Users/jeongwpa",
+		"SHLVL=1",
+		"HOME=/Users/jeongwpa",
+		"LOGNAME=jeongwpa",
+		NULL,
+	};
+	env = ms_env_deserialize(envp);
+	argv[0] = ft_strdup("echo");
+	argv[1] = ft_strdup(input);
+	argv[2] = NULL;
+
+	// when
+	result = ms_expand_filename(argv, *env);
+
+	// then
+	cout << endl;
+	EXPECT_NE(result, nullptr);
+	for (int i = 0; result[i]; i++)
+		cout << "result: " << result[i] << endl;
+	cout << endl;
+
+	// final
+	ms_env_clear(env);
+	free(env);
+	for (int i = 0; result[i]; i++)
+		free(result[i]);
+	free(result);
+	for (int i = 0; argv[i]; i++)
+		free(argv[i]);
+}
+
+TEST(ms_filename_test, ms_filename_test10)
+{
+	char *argv[3];
+	t_env **env;
+	char **result;
+	char *input = "\"*\"";	// input
+
+	// given
+	char *envp[] = {
+		"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki",
+		"PWD=/Users/jeongwpa",
+		"SHLVL=1",
+		"HOME=/Users/jeongwpa",
+		"LOGNAME=jeongwpa",
+		NULL,
+	};
+	env = ms_env_deserialize(envp);
+	argv[0] = ft_strdup("echo");
+	argv[1] = ft_strdup(input);
+	argv[2] = NULL;
+
+	// when
+	result = ms_expand_filename(argv, *env);
+
+	// then
+	cout << endl;
+	EXPECT_NE(result, nullptr);
+	for (int i = 0; result[i]; i++)
+		cout << "result: " << result[i] << endl;
+	cout << endl;
+
+	// final
+	ms_env_clear(env);
+	free(env);
+	for (int i = 0; result[i]; i++)
+		free(result[i]);
+	free(result);
+	for (int i = 0; argv[i]; i++)
+		free(argv[i]);
+}
+
 TEST(ms_filename_test, ms_filename_test)
 {
 	char *argv[3];
@@ -24,9 +106,13 @@ TEST(ms_filename_test, ms_filename_test)
 	argv[1] = ft_strdup("srcs/*");
 	argv[2] = nullptr;
 	result = ms_expand_filename(argv, *env);
+
+	cout << endl;
 	EXPECT_NE(result, nullptr);
 	for (int i = 0; result[i]; i++)
 		cout << "result: " << result[i] << endl;
+	cout << endl;
+
 	ms_env_clear(env);
 	free(env);
 	for (int i = 0; result[i]; i++)
@@ -60,9 +146,11 @@ TEST(ms_filename_test, ms_filename_test3)
 	result = ms_expand_filename(argv, *env);
 
 	// then
+	cout << endl;
 	EXPECT_NE(result, nullptr);
 	for (int i = 0; result[i]; i++)
 		cout << "result: " << result[i] << endl;
+	cout << endl;
 
 	// final
 	ms_env_clear(env);

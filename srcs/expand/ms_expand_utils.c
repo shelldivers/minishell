@@ -1,8 +1,31 @@
+#include "libft.h"
 #include "ms_expand.h"
 #include <stdlib.h>
 
 static int	get_size(char **strs);
 static void	move_strs(char **dest, char **s1, char **s2);
+
+void ms_dequote(char *str, char ch)
+{
+	t_bool	quote;
+
+	quote = FALSE;
+	while (*str)
+	{
+		if (!quote && *str == '\'')
+		{
+			quote = TRUE;
+			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+		}
+		else if (quote && *str == '\'')
+		{
+			quote = FALSE;
+			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+		}
+		else
+			str++;
+	}
+}
 
 char	**ms_strsjoin(char ***dest, char **s2)
 {

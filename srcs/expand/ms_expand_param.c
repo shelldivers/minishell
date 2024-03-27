@@ -5,6 +5,24 @@
 
 static size_t	ft_strcspn(const char *str, const char *charset);
 
+static char	*get_pos(char *str)
+{
+	t_bool	quote;
+
+	quote = FALSE;
+	while (*str)
+	{
+		if (!quote && *str == '\'')
+			quote = TRUE;
+		else if (quote && *str == '\'')
+			quote = FALSE;
+		else if (!quote && *str == '$')
+			return (str);
+		str++;
+	}
+	return (NULL);
+}
+
 /**
  * @details parameter expansion\n
  * - 환경 변수만 처리하고, 쉘 변수는 처리하지 않습니다.\n
@@ -21,7 +39,7 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 	{
 		while (TRUE)
 		{
-			pos = ft_strchr(*argv, '$');
+			pos = get_pos(*argv);
 			if (!pos)
 				break ;
 			if (pos[1] == '?')
@@ -33,6 +51,7 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 			free(*argv);
 			*argv = replace;
 		}
+		ms_dequote(*argv, '\'');
 		argv++;
 	}
 	return (TRUE);

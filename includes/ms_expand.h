@@ -81,6 +81,7 @@ char	**ms_queue_to_array(t_queue *queue);
 
 /* ms_expand_utils.c */
 char	**ms_strsjoin(char ***dest, char **s2);
+void	ms_dequote(char *str, char ch);
 
 # ifdef __cplusplus
 }

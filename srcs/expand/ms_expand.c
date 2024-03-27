@@ -10,8 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "ms_env.h"
 #include "ms_expand.h"
+
+char	**ms_strsdup(char **strs)
+{
+	char	**copy;
+	size_t	size;
+	size_t	i;
+
+	size = 0;
+	while (strs[size])
+		size++;
+	copy = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (strs[i] && i < size)
+	{
+		copy[i] = ft_strdup(strs[i]);
+		if (!copy[i])
+		{
+			while (i--)
+				free(copy[i]);
+			return (NULL);
+		}
+		i++;
+	}
+	copy[size] = NULL;
+	return (copy);
+}
 
 /**
  * @details quote removal\n
@@ -30,11 +59,15 @@ void	ms_quote_removal(char **argv)
  */
 char	**ms_expansion(char **argv, t_env *env, int status)
 {
+	char	**copy;
 	char	**expanded;
 
-	if (!ms_expand_param(argv, env, status))
+	copy = ms_strsdup(argv);
+	if (!copy)
 		return (NULL);
-	expanded = ms_expand_filename(argv, env);
+	if (!ms_expand_param(copy, env, status))
+		return (NULL);
+	expanded = ms_expand_filename(copy, env);
 	if (!expanded)
 		return (NULL);
 	ms_quote_removal(expanded);

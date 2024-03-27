@@ -61,7 +61,7 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env)
 			return (NULL);
 		depth++;
 	}
-	if (depth < max_depth)
+	if (depth < max_depth || queue->size == 0)
 		return (expansion_failed(str));
 	return (ms_queue_to_array(queue));
 }
