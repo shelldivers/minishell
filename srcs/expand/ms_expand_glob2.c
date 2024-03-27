@@ -6,7 +6,7 @@
 static char	*get_path_from_root(char *str);
 static char	*get_path_from_cur(char *str);
 
-t_bool	ms_get_path(t_glob *wc, char *str)
+t_bool	ms_get_path(t_glob *glob, char *str)
 {
 	char	*tmp;
 
@@ -16,7 +16,7 @@ t_bool	ms_get_path(t_glob *wc, char *str)
 		tmp = get_path_from_cur(str);
 	if (!tmp)
 		return (FALSE);
-	wc->path = tmp;
+	glob->path = tmp;
 	return (TRUE);
 }
 

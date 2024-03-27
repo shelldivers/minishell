@@ -28,6 +28,15 @@ typedef struct s_queue
 	t_list	*tail;
 }	t_queue;
 
+typedef struct s_glob
+{
+	char	*path;
+	char	*prefix;
+	char	*pattern;
+	char	*suffix;
+	char	*remain;
+} t_glob;
+
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
 
@@ -43,9 +52,18 @@ char	**ms_expand_loop(t_queue *queue, char *str, t_env *env);
 /* ms_expand_filename2.c */
 t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env);
 
-/* ms_expand_filename3.c */
-char	*ms_get_path(char *str);
-char	*ms_get_pattern(char *str);
+/* ms_expand_wildcard.c */
+t_glob	*ms_parse_glob(char *str);
+t_glob	*ms_init_glob(void);
+void	ms_destroy_glob(t_glob *glob);
+
+/* ms_expand_wildcard2.c */
+t_bool	ms_get_path(t_glob *glob, char *str);
+
+/* ms_expand_wildcard3.c */
+t_bool	ms_get_pattern(t_glob *glob, char *str);
+t_bool	ms_get_remain(t_glob *glob, char *str);
+t_bool	ms_parse_pattern(t_glob *glob);
 
 /* ms_expand_queue.c */
 t_queue	*ms_init_queue(void);

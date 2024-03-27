@@ -3,42 +3,41 @@
 #include "ms_env.h"
 #include <dirent.h>
 
-typedef struct s_wildcard
+char	*ms_join_path(char *entry, t_glob *glob)
 {
-	char	*path;
-	char	*prefix;
-	char	*pattern;
-	char	*suffix;
-	char	*remainder;
-}	t_wildcard;
+	char	*full_path;
+	size_t	path_len;
+	size_t	entry_len;
+	size_t	remain_len;
 
-char	*ms_get_prefix(char *pattern)
-{
-	size_t	i;
-
-	i = 0;
-	while (pattern[i] != '*')
-	{
-		if (pattern[i] != '/')
-			i++;
-		else
-		{
-			pattern = pattern + i + 1;
-			i = 0;
-		}
-	}
-	return pattern;
+	path_len = ft_strlen(glob->path);
+	entry_len = ft_strlen(entry);
+	remain_len = ft_strlen(glob->remain);
+	full_path = (char *)malloc(path_len + entry_len + remain_len + 1);
+	if (!full_path)
+		return (NULL);
+	ft_memcpy(full_path, glob->path, path_len);
+	ft_memcpy(full_path + path_len, entry, entry_len);
+	ft_memcpy(full_path + path_len + entry_len, glob->remain, remain_len);
+	full_path[path_len + entry_len + remain_len] = '\0';
+	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, char *pattern)
+t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 {
+	size_t	prefix_len;
+	size_t	suffix_len;
 
+	prefix_len = ft_strlen(glob->prefix);
+	suffix_len = ft_strlen(glob->suffix);
+	if (ft_strncmp(d_name, glob->prefix, prefix_len) != 0)
+		return (FALSE);
+	if (ft_strcmp(d_name + ft_strlen(d_name) - suffix_len, glob->suffix) != 0)
+		return (FALSE);
+	return (TRUE);
 }
 
-/**
- * @todo : 매개변수 구조체로 합체
- */
-t_bool	entry_loop(t_queue *queue, DIR *dir, char *path, char *pattern, char *remainder)
+t_bool	entry_loop(t_queue *queue, DIR *dir, t_glob *glob)
 {
 	struct dirent	*entry;
 	char			*full_path;
@@ -48,10 +47,10 @@ t_bool	entry_loop(t_queue *queue, DIR *dir, char *path, char *pattern, char *rem
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (!ms_match_pattern(entry->d_name, pattern))
+		if (!ms_match_pattern(entry->d_name, glob))
 			continue ;
-		full_path = ms_join_path(path, entry->d_name, remainder);	// todo
-		if (!ms_enqueue(queue, entry->d_name))
+		full_path = ms_join_path(entry->d_name, glob);
+		if (!ms_enqueue(queue, full_path))
 			return (FALSE);
 	}
 	return (TRUE);
@@ -59,34 +58,18 @@ t_bool	entry_loop(t_queue *queue, DIR *dir, char *path, char *pattern, char *rem
 
 t_bool	ms_filename_expansion(t_queue *queue, char *str, t_env *env)
 {
-	char	*path;
-	char	*pattern;
-	char	*remainder;
-	DIR		*dir;
-	t_bool	result;
+	t_glob		*glob;
+	DIR			*dir;
+	t_bool		result;
 
-	path = ms_get_path(str);
-	if (!path)
+	glob = ms_parse_glob(str);
+	if (!glob)
 		return (FALSE);
-	pattern = ms_get_pattern(str);
-	if (!pattern)
-	{
-		free(path);
-		return (FALSE);
-	}
-	remainder = ms_get_remainder(str);	// todo
-	if (!remainder)
-	{
-		free(path);
-		free(pattern);
-		return (FALSE);
-	}
 	dir = opendir(str);
 	if (!dir)
 		return (FALSE);
-	result = entry_loop(queue, dir, path, pattern, remainder);
+	result = entry_loop(queue, dir, glob);
 	closedir(dir);
-	free(path);
-	free(pattern);
+	ms_destroy_glob(glob);
 	return (result);
 }

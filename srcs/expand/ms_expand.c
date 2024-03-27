@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "ms_env.h"
-#include "ms_error.h"
 #include "ms_expand.h"
 
 /**
@@ -21,9 +19,8 @@
  * - `\\"`와 `\'`는 `"`와 `'`로 치환합니다.
  * @see https://runebook.dev/ko/docs/bash/quote-removal
  */
-t_bool	ms_quote_removal(char **arg)
+void	ms_quote_removal(char **argv)
 {
-
 }
 
 /**
@@ -34,20 +31,12 @@ t_bool	ms_quote_removal(char **arg)
 char	**ms_expansion(char **argv, t_env *env, int status)
 {
 	char	**expanded;
-	int		i;
 
 	if (!ms_expand_param(argv, env, status))
 		return (NULL);
 	expanded = ms_expand_filename(argv, env);
 	if (!expanded)
 		return (NULL);
-	if (!ms_quote_removal(expanded))
-	{
-		i = 0;
-		while (expanded[i])
-			free(expanded[i++]);
-		free(expanded);
-		return (NULL);
-	}
+	ms_quote_removal(expanded);
 	return (expanded);
 }
