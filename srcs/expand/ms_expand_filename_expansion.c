@@ -9,7 +9,7 @@ static t_bool	init(t_queue *queue, t_glob *glob, char *str, DIR **dir);
 static void		finalize(DIR *dir);
 static t_bool	quit(DIR *dir);
 
-t_bool	ms_filename_expansion(t_queue *queue, t_glob *glob, char *str)
+t_bool	ms_expand_filename_expansion(t_queue *queue, t_glob *glob, char *str)
 {
 	DIR				*dir;
 	struct dirent	*entry;

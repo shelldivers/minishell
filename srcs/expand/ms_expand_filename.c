@@ -1,68 +1,79 @@
 #include "ms_expand.h"
-#include "ms_env.h"
-#include <dirent.h>
+#include "libft.h"
 
-static t_bool	init(t_queue **queue, t_queue **expanded);
-static void		finalize(t_queue **queue, t_queue **expanded);
-static void		*quit(t_queue **queue, t_queue **expanded);
+static t_bool	init(t_queue *queue, char *str, int *depth, int *max_depth);
+static int		get_max_depth(char *str);
+static char		**no_match(char *str);
 
-/**
-* @details filename expansion\n
-* - `*`를 제외한 다른 특수 패턴을 처리하지 않습니다.
-* @see https://runebook.dev/ko/docs/bash/pattern-matching
- */
-char	**ms_expand_filenames(char **argv, t_env *env)
+char	**ms_expand_filename(t_queue *queue, char *str)
 {
-	t_queue	*queue;
-	t_queue	*expanded;
-	char	**arrays;
+	int		depth;
+	int		max_depth;
+	int		size;
 
-	if (!init(&queue, &expanded))
-		return (quit(NULL, NULL));
-	while (*argv)
+	if (!init(queue, str, &depth, &max_depth))
+		return (NULL);
+	while (1)
 	{
-		arrays = ms_expand_filename(queue, *argv);
-		if (!arrays)
-			return (quit(&queue, &expanded));
-		ms_enqueue_arrays(expanded, arrays);
-		ms_clear_queue(queue);
-		argv++;
+		size = (int)queue->size;
+		if (size <= 0 || depth >= max_depth)
+			break ;
+		if (!ms_expand_filename_search(queue, size))
+			return (NULL);
+		depth++;
 	}
-	arrays = ms_queue_to_arrays(expanded);
-	finalize(&queue, &expanded);
-	return (arrays);
+	if (depth < max_depth || queue->size == 0)
+		return (no_match(str));
+	inspect_filename(queue);
+	if (queue->size == 0)
+		return (no_match(str));
+	return (ms_queue_to_arrays(queue));
 }
 
-static t_bool	init(t_queue **queue, t_queue **expanded)
+static t_bool	init(t_queue *queue, char *str, int *depth, int *max_depth)
 {
-	t_queue	*_queue;
-	t_queue	*_expanded;
+	char	*tmp;
 
-	_queue = ms_init_queue();
-	if (!_queue)
+	tmp = ft_strdup(str);
+	if (!tmp)
 		return (FALSE);
-	_expanded = ms_init_queue();
-	if (!_expanded)
-	{
-		ms_destroy_queue(_queue);
+	if (!ms_enqueue(queue, tmp))
 		return (FALSE);
-	}
-	*queue = _queue;
-	*expanded = _expanded;
+	*depth = 0;
+	*max_depth = get_max_depth(str);
 	return (TRUE);
 }
 
-static void	finalize(t_queue **queue, t_queue **expanded)
+static int	get_max_depth(char *str)
 {
-	ms_destroy_queue(*queue);
-	ms_destroy_queue(*expanded);
+	int	max_depth;
+
+	max_depth = 0;
+	while (*str)
+	{
+		if (*str == '*')
+			max_depth++;
+		str++;
+	}
+	return (max_depth);
 }
 
-static void	*quit(t_queue **queue, t_queue **expanded)
+static char	**no_match(char *str)
 {
-	if (queue)
-		ms_destroy_queue(*queue);
-	if (expanded)
-		ms_destroy_queue(*expanded);
-	return ((void *)0);
+	char	**expanded;
+	char	*dequoted;
+
+	expanded = (char **)malloc(sizeof(char *) + 2);
+	if (!expanded)
+		return (NULL);
+	dequoted = ft_strdup(str);
+	if (!dequoted)
+	{
+		free(expanded);
+		return (NULL);
+	}
+	ms_dequote(dequoted, '\"');
+	expanded[0] = dequoted;
+	expanded[1] = NULL;
+	return (expanded);
 }

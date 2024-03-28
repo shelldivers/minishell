@@ -46,7 +46,7 @@ char	*ms_status_expansion(char *str, char *pos, int status);
 char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
 /* ms_expand_filename.c */
-char	**ms_expand_filenames(char **argv, t_env *env);
+char	**ms_expand_filenames(char **argv);
 
 /* ms_expand_filenames1.c */
 char	**ms_expand_filename(t_queue *queue, char *str);
@@ -55,10 +55,10 @@ char	**ms_expand_filename(t_queue *queue, char *str);
 void	inspect_filename(t_queue *queue);
 
 /* ms_expand_filename2.c */
-t_bool	ms_expand_search(t_queue *queue, int size);
+t_bool	ms_expand_filename_search(t_queue *queue, int size);
 
 /* ms_expand_filename3.c */
-t_bool	ms_filename_expansion(t_queue *queue, t_glob *glob, char *str);
+t_bool	ms_expand_filename_expansion(t_queue *queue, t_glob *glob, char *str);
 
 /* ms_expand_filename3_utils.c */
 char	*join_path(char *entry, t_glob *glob);

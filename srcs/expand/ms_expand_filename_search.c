@@ -6,7 +6,7 @@ static t_bool	init(t_queue *queue, t_list **node, t_glob **glob);
 static void		finalize(t_glob *glob, t_list *node);
 static t_bool	quit(t_glob *glob, t_list *node);
 
-t_bool	ms_expand_search(t_queue *queue, int size)
+t_bool	ms_expand_filename_search(t_queue *queue, int size)
 {
 	t_list	*node;
 	t_glob	*glob;
@@ -20,7 +20,7 @@ t_bool	ms_expand_search(t_queue *queue, int size)
 			finalize(glob, node);
 			continue ;
 		}
-		if (!ms_filename_expansion(queue, glob, node->content))
+		if (!ms_expand_filename_expansion(queue, glob, node->content))
 			return (quit(glob, node));
 		finalize(glob, node);
 	}
