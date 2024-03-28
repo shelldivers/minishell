@@ -71,7 +71,7 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 	expanded = ms_expand_filenames(copy);
 	if (!expanded)
 	{
-		ms_puterror_arg("minishell: ", *argv);
+		ms_puterror_arg(env, *argv);
 		return (NULL);
 	}
 	ms_quote_removal(expanded);
