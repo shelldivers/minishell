@@ -5,7 +5,7 @@
 
 using namespace std;
 
-TEST(ms_expand_param, ms_expand_param3)	// TODO: FAILED
+TEST(ms_expand_param, ms_expand_param4)
 {
 	char *argv[3];
 	char *envp[] = {
@@ -22,7 +22,39 @@ TEST(ms_expand_param, ms_expand_param3)	// TODO: FAILED
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"\'$HOME\'\"");
+	argv[1] = ft_strdup("\'\"$HOME\"\'\'\"$HOME\"\'");
+	argv[2] = NULL;
+
+	result = ms_expand_param(argv, *env, status);
+	EXPECT_EQ(result, TRUE);
+	cout << endl;
+	cout << "result: " << argv[1] << endl;
+	cout << endl;
+
+	ms_env_clear(env);
+	free(env);
+	for (int i = 0; argv[i]; i++)
+		free(argv[i]);
+}
+
+TEST(ms_expand_param, ms_expand_param3)
+{
+	char *argv[3];
+	char *envp[] = {
+		"PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki",
+		"PWD=/Users/jeongwpa",
+		"SHLVL=1",
+		"HOME=/Users/jeongwpa",
+		"LOGNAME=jeongwpa",
+		NULL
+	};
+	t_env **env;
+	int status;
+	t_bool result;
+	status = 0;
+	env = ms_env_deserialize(envp);
+	argv[0] = ft_strdup("echo");
+	argv[1] = ft_strdup("\"\'$HOME\'\"\"\'$HOME\'\"");
 	argv[2] = NULL;
 
 	result = ms_expand_param(argv, *env, status);

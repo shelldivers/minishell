@@ -10,49 +10,35 @@ void	ms_remove_quote(char *str)
 	quote = FALSE;
 	while (*str)
 	{
-		if (!quote && !dquote && *str == '\"')
+		if (!quote && *str == '\"')
+			dquote = (t_bool) !dquote;
+		else if (!dquote && *str == '\'')
 		{
-			dquote = TRUE;
-			str++;
-		}
-		else if (!quote && dquote && *str == '\"')
-		{
-			dquote = FALSE;
-			str++;
-		}
-		else if (!dquote && !quote && *str == '\'')
-		{
-			quote = TRUE;
+			quote = (t_bool) !quote;
 			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+			continue ;
 		}
-		else if (!dquote && quote && *str == '\'')
-		{
-			quote = FALSE;
-			ft_memmove(str, str + 1, ft_strlen(str) + 1);
-		}
-		else
-			str++;
+		str++;
 	}
 }
 
 void	ms_remove_dquote(char *str)
 {
 	t_bool	dquote;
+	t_bool	quote;
 
 	dquote = FALSE;
+	quote = FALSE;
 	while (*str)
 	{
-		if (!dquote && *str == '\"')
+		if (!quote && *str == '\"')
 		{
-			dquote = TRUE;
+			dquote = (t_bool) !dquote;
 			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+			continue ;
 		}
-		else if (dquote && *str == '\"')
-		{
-			dquote = FALSE;
-			ft_memmove(str, str + 1, ft_strlen(str) + 1);
-		}
-		else
-			str++;
+		else if (!dquote && *str == '\'')
+			quote = (t_bool) !quote;
+		str++;
 	}
 }
