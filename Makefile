@@ -31,7 +31,7 @@ M_FILES += $(addprefix $(S_ERROR), $(ERROR))
 B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
 B_FILES += $(addprefix $(S_EXEC), $(EXEC))
-M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
+B_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
 B_FILES += $(addprefix $(S_ENV), $(ENV))
 B_FILES += $(addprefix $(S_ERROR), $(ERROR))
 

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/27 19:08:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/28 15:50:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 
 t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 {
-	const char	*redirect = ast->token[0];
-	const char	*filename = ast->token[1];
+	const char	*redirect = ast->token[0]->value;
+	const char	*filename = ast->token[1]->value;
 
 	if (ft_strcmp(redirect, ">") == 0)
 		return (ms_exec_io_file_write(exec_info, filename));

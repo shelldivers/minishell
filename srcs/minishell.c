@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/26 18:06:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/27 21:17:35 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1 || !argv || !envp)
 		return (1);
 	ms_init_syntax(&syntax);
-	env = ms_env_serialize(envp);
+	env = ms_env_deserialize(envp);
 	ast = NULL;
 	while (1)
 	{

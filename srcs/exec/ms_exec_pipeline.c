@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/27 19:35:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/28 17:57:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 //if return false, you must exit(1) and print error message "close"
 t_bool	ms_close_child_fd(t_exec *exec_info)
 {
-	const int	now_pipe = exec_info->pipe_idx % 2;
-	const int	prev_pipe = (exec_info->pipe_idx + 1) % 2;
+	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;
+	const int	prev_pipe = exec_info->pipe_idx % 2;
 
 	if (exec_info->pipe_cnt == 2)
 	{
@@ -48,8 +48,8 @@ t_bool	ms_close_child_fd(t_exec *exec_info)
 //if return false, you must exec_code = 1 and print error message "close"
 t_bool	ms_close_parent_pipe(t_exec *exec_info)
 {
-	const int	now_pipe = exec_info->pipe_idx % 2;
-	const int	prev_pipe = (exec_info->pipe_idx + 1) % 2;
+	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;
+	const int	prev_pipe = exec_info->pipe_idx % 2;
 
 	if (exec_info->pipe_cnt == 2)
 	{
@@ -60,8 +60,11 @@ t_bool	ms_close_parent_pipe(t_exec *exec_info)
 		exec_info->pipe_cnt--;
 	}
 	else if (exec_info->pipe_cnt == 1)
+	{
+		printf("pipe_cnt == 1\n");
 		if (close(exec_info->pipe[now_pipe][1]) == -1)
 			return (FALSE);
+	}
 	return (TRUE);
 }
 

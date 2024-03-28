@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/27 20:03:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/28 20:44:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@
 #include "minishell.h"
 #include "ms_error.h"
 #include "sys/errno.h"
+
+void	wait_child_process(t_exec *exec_info)
+{
+	int	i;
+
+	i = 0;
+	while (i < exec_info->cmd_cnt)
+	{
+		waitpid(-1, &exec_info->exit_code, 0);
+		i++;
+	}
+}
 
 t_exec	*ms_new_exec_info(t_env **env)
 {
@@ -40,24 +52,24 @@ t_exec	*ms_new_exec_info(t_env **env)
 	exec_info->pipe_idx = 0;
 	exec_info->pipe_cnt = 0;
 	exec_info->exit_code = 0;
+	exec_info->cmd_cnt = 0;
 	return (exec_info);
 }
 
-t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
+void	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 {
 	t_ast	*left;
 	t_ast	*right;
 
+	if (!ast)
+		return ;
 	left = ast->left;
 	right = ast->right;
-	if (!ms_exec_in_order(left, exec_info, env))
-		return (FALSE);
+	ms_exec_in_order(left, exec_info, env);
 	if (ast->op != OPNONE)
 		if (!ms_exec_based_on_op(ast, exec_info, env))
-			return (FALSE);
-	if (!ms_exec_in_order(right, exec_info, env))
-		return (FALSE);
-	return (TRUE);
+			return ;
+	ms_exec_in_order(right, exec_info, env);
 }
 
 void	ms_exec(t_ast *ast, t_env **env)
@@ -70,14 +82,12 @@ void	ms_exec(t_ast *ast, t_env **env)
 	exec_info = ms_new_exec_info(env);
 	if (!exec_info)
 		ms_env_clear(env);
-	if (!ms_exec_in_order(ast, exec_info, env))
-	{
-		free(exec_info);
-	}
-	if (exec_info->words || !ms_exec_is_builtin(exec_info->words[0]))
-	{
+	ms_exec_in_order(ast, exec_info, env);
+	if (exec_info->words || !ms_exec_is_builtin(exec_info))
 		ms_exec_words(exec_info, env);
-		ms_clear_sec_dimentional(exec_info->words);
-		exec_info->words = NULL;
-	}
+	wait_child_process(exec_info);
+	free (exec_info->words);
+	exec_info->words = NULL;
+	free (exec_info);
+	exec_info = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/27 19:55:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/28 20:48:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 #include "ms_builtin.h"
 #include "minishell.h"
 
-void	ms_exec_builtin(t_exec *exec_info, t_env **env)
+void	ms_exec_builtin2(t_exec *exec_info, t_env **env)
 {
-	const int	argc = exec_info->words_size;
-	const char	**argv = exec_info->words;
+	int		argc;
+	char	**argv;
 
+	argc = exec_info->words_size;
+	argv = exec_info->words;
 	if (ft_strcmp(argv[0], "echo") == 0)
 		exec_info->exit_code = ms_echo(argc, argv, env);
 	else if (ft_strcmp(argv[0], "cd") == 0)
@@ -38,10 +40,28 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env)
 		exec_info->exit_code = ms_exit(argc, argv, env);
 }
 
+void	ms_exec_builtin(t_exec *exec_info, t_env **env)
+{
+	int		pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return ;
+	}
+	else if (pid == 0)
+	{
+		ms_exec_builtin2(exec_info, env);
+		exit(exec_info->exit_code);
+	}
+}
+
 t_bool	ms_exec_is_builtin(t_exec *exec_info)
 {
-	const char	*word = exec_info->words[0];
+	char	*word;
 
+	word = exec_info->words[0];
 	if (ft_strcmp(word, "echo") == 0)
 		return (TRUE);
 	if (ft_strcmp(word, "cd") == 0)
@@ -61,54 +81,45 @@ t_bool	ms_exec_is_builtin(t_exec *exec_info)
 
 t_bool	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
 {
-	int			pid;
+	char	**words;
+	char	**envp;
+	int		pid;
 
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
-		return (TRUE);
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
-		if (!ms_dup_based_on_pipe_idx(exec_info))
-		{
-			perror("dup2");
-			exit(1);
-		}
-		if (ms_close_child_fd(exec_info))
-		{
-			perror("close");
-			exit(1);
-		}
-		if (execve(exec_info->words[0], exec_info->words, \
-		ms_env_serialize(*env)) == -1)
-		{
-			perror("execve");
-			exit(1);
-		}
+		words = exec_info->words;
+		envp = ms_env_serialize(*env);
 	}
 	else
 	{
-		waitpid(pid, &exec_info->exit_code, 0);
-		if (WIFEXITED(exec_info->exit_code))
-			exec_info->exit_code = WEXITSTATUS(exec_info->exit_code);
+		wait(&pid);
+		ms_close_parent_pipe(exec_info);
 	}
+	return (TRUE);
 }
 
-t_bool	ms_exec_words(t_exec *exec_info, t_env **env)
+void	ms_exec_words(t_exec *exec_info, t_env **env)
 {
-	const char	**words = exec_info->words;
+	char	**words;
 
+	words = exec_info->words;
 	if (words)
 	{
-		if (ms_exec_is_builtin(words[0]))
+		if (ms_exec_is_builtin(exec_info))
+		{
 			ms_exec_builtin(exec_info, env);
+		}
 		else
 		{
 			ms_add_path(exec_info, env);
 			ms_exec_non_builtin(exec_info, env);
 		}
+		exec_info->cmd_cnt++;
 	}
-	return (FALSE);
 }

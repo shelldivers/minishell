@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/26 15:50:47 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/27 21:05:43 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ void	ms_add_path(t_exec *exec_info, t_env **env)
 	char	**paths;
 
 	words = exec_info->words;
-	envp = ms_env_serialize(env);
+	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
 	ms_change_to_absolute(paths, words[0]);
+	ms_clear_sec_dimentional(envp);
+	ms_clear_sec_dimentional(paths);
 }
 
 char	**ms_get_paths(char **envp)
