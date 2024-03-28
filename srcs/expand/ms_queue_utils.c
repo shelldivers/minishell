@@ -9,25 +9,18 @@ void	ms_pick_queue(t_queue *queue, t_list *del)
 		return ;
 	if (queue->size == 1)
 	{
-		free(del->content);
-		free(del);
 		queue->head = NULL;
 		queue->tail = NULL;
-		queue->size = 0;
-		return ;
 	}
-	if (queue->head == del)
-	{
+	else if (queue->head == del)
 		queue->head = del->next;
-		free(del->content);
-		free(del);
-		queue->size--;
-		return ;
+	else
+	{
+		node = queue->head;
+		while (node->next != del)
+			node = node->next;
+		node->next = del->next;
 	}
-	node = queue->head;
-	while (node->next != del)
-		node = node->next;
-	node->next = del->next;
 	free(del->content);
 	free(del);
 	queue->size--;

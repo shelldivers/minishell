@@ -45,33 +45,35 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status);
 char	*ms_status_expansion(char *str, char *pos, int status);
 char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
-/* ms_expand_filenames.c */
+/* ms_expand_filename.c */
 char	**ms_expand_filenames(char **argv, t_env *env);
 
 /* ms_expand_filenames1.c */
 char	**ms_expand_filename(t_queue *queue, char *str);
-t_bool	ms_expand_search(t_queue *queue, int size);
+
+/* ms_expand_filenames1_utils.c */
 void	inspect_filename(t_queue *queue);
 
 /* ms_expand_filename2.c */
-t_bool	ms_filename_expansion(t_queue *queue, t_glob *glob, char *str);
+t_bool	ms_expand_search(t_queue *queue, int size);
 
 /* ms_expand_filename3.c */
-t_bool	entry_loop(t_queue *queue, DIR *dir, t_glob *glob);
+t_bool	ms_filename_expansion(t_queue *queue, t_glob *glob, char *str);
 
+/* ms_expand_filename3_utils.c */
 char	*join_path(char *entry, t_glob *glob);
 t_bool	ms_match_pattern(char *d_name, t_glob *glob);
 t_bool	ms_match_type(struct dirent *entry, t_glob *glob);
 
 /* ms_expand_glob.c */
 t_glob	*ms_init_glob(char *str);
-void	ms_destroy_glob(t_glob *glob);
 t_bool	ms_parse_glob(t_glob *glob, char *str);
+void	ms_destroy_glob(t_glob *glob);
 
-/* ms_expand_glob2.c */
+/* ms_expand_glob1.c */
 t_bool	ms_get_path(t_glob *glob, char *str);
 
-/* ms_expand_glob3.c */
+/* ms_expand_glob2.c */
 t_bool	ms_get_pattern(t_glob *glob, char *str);
 t_bool	ms_get_remain(t_glob *glob, char *str);
 t_bool	ms_parse_pattern(t_glob *glob);
