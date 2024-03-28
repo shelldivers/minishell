@@ -95,7 +95,8 @@ t_queue	*ms_enqueue_arrays(t_queue *queue, char **arrays);
 char	**ms_queue_to_arrays(t_queue *queue);
 
 /* ms_expand_utils.c */
-void	ms_dequote(char *str, char ch);
+void	ms_remove_dquote(char *str);
+void	ms_remove_quote(char *str);
 
 # ifdef __cplusplus
 }

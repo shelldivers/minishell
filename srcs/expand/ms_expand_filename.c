@@ -72,7 +72,7 @@ static char	**no_match(char *str)
 		free(expanded);
 		return (NULL);
 	}
-	ms_dequote(dequoted, '\"');
+	ms_remove_dquote(dequoted);
 	expanded[0] = dequoted;
 	expanded[1] = NULL;
 	return (expanded);

@@ -24,7 +24,7 @@ t_bool	ms_get_path(t_glob *glob, char *str)
 	if (!path)
 		return (FALSE);
 	glob->path = path;
-	ms_dequote(glob->path, '\"');
+	ms_remove_dquote(glob->path);
 	return (TRUE);
 }
 

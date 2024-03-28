@@ -86,7 +86,7 @@ t_bool	ms_parse_pattern(t_glob *glob)
 	glob->suffix = ft_strdup(pos + 1);
 	if (!glob->suffix)
 		return (FALSE);
-	ms_dequote(glob->prefix, '\"');
-	ms_dequote(glob->suffix, '\"');
+	ms_remove_dquote(glob->prefix);
+	ms_remove_dquote(glob->suffix);
 	return (TRUE);
 }
