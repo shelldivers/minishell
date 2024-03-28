@@ -1,81 +1,33 @@
 #include "ms_expand.h"
 #include "libft.h"
 
-static char	*get_pos(char *str);
-
-t_bool	ms_get_pattern(t_glob *glob, char *str) // TODO : Failed to parse pattern
+char	*get_pat(char *str, int is_root) // TODO : Failed to parse pattern
 {
-	char	*pos;
-	char	*start;
-	char	*end;
+	int		i;
+	char	*pattern;
+	t_bool	quote;
 
-	pos = get_pos(str);
-	if (!pos)
+	quote = FALSE;
+	pattern = NULL;
+	i = is_root;
+	while (str[i])
 	{
-		glob->pattern = ft_strdup("");
-		return (TRUE);
+		if (!quote && str[i] == '\"')
+			quote = TRUE;
+		else if (quote && str[i] == '\"')
+			quote = FALSE;
+		else if (str[i] == '/')
+			pattern = str + i + 1;
+		else if (!quote && str[i] == '*')
+			break ;
+		i++;
 	}
-	start = pos;
-	while (start != str && *start != '/')
-		start--;
-	if (*start == '/')
-		start++;
-	end = pos;
-	while (*end && *end != '/')
-		end++;
-	glob->pattern = ft_strndup(start, end - start);
-	if (!glob->pattern)
-		return (FALSE);
-	return (TRUE);
+	if (is_root > 0 && !pattern)
+		pattern = str + is_root;
+	return (pattern);
 }
 
-t_bool	ms_get_remain(t_glob *glob, char *str)
-{
-	char	*pos;
-	char	*remain;
-
-	pos = get_pos(str);
-	if (!pos)
-	{
-		glob->remain = ft_strdup("");
-		return (TRUE);
-	}
-	remain = ft_strchr(pos, '/');
-	if (!remain)
-		remain = ft_strdup("");
-	else
-		remain = ft_strdup(remain);
-	if (!remain)
-		return (FALSE);
-	glob->remain = remain;
-	return (TRUE);
-}
-
-t_bool	ms_parse_pattern(t_glob *glob)
-{
-	char	*pos;
-
-	if (!glob->pattern)
-		return (FALSE);
-	if (*(glob->pattern) == '\0')
-	{
-		glob->prefix = ft_strdup("");
-		glob->suffix = ft_strdup("");
-		return (TRUE);
-	}
-	pos = get_pos(glob->pattern);
-	glob->prefix = ft_strndup(glob->pattern, pos - glob->pattern);
-	if (!glob->prefix)
-		return (FALSE);
-	glob->suffix = ft_strdup(pos + 1);
-	if (!glob->suffix)
-		return (FALSE);
-	ms_dequote(glob->prefix, '\"');
-	ms_dequote(glob->suffix, '\"');
-	return (TRUE);
-}
-
-static char	*get_pos(char *str)
+char	*get_glob_pos(char *str)
 {
 	t_bool	quote;
 
@@ -91,4 +43,50 @@ static char	*get_pos(char *str)
 		str++;
 	}
 	return (NULL);
+}
+
+char	*get_glob_start(const char *str, char *glob_pos)
+{
+	char	*glob_start;
+
+	glob_start = glob_pos;
+	while (glob_start != str && *glob_start != '/')
+		glob_start--;
+	if (*glob_start == '/')
+		glob_start++;
+	return (glob_start);
+}
+
+char	*get_glob_end(char *glob_pos)
+{
+	char	*glob_end;
+
+	glob_end = glob_pos;
+	while (*glob_end && *glob_end != '/')
+		glob_end++;
+	return (glob_end);
+}
+
+t_bool	ms_parse_pattern(t_glob *glob)
+{
+	char	*pos;
+
+	if (!glob->pattern)
+		return (FALSE);
+	if (*(glob->pattern) == '\0')
+	{
+		glob->prefix = ft_strdup("");
+		glob->suffix = ft_strdup("");
+		return (TRUE);
+	}
+	pos = get_glob_pos(glob->pattern);
+	glob->prefix = ft_strndup(glob->pattern, pos - glob->pattern);
+	if (!glob->prefix)
+		return (FALSE);
+	glob->suffix = ft_strdup(pos + 1);
+	if (!glob->suffix)
+		return (FALSE);
+	ms_dequote(glob->prefix, '\"');
+	ms_dequote(glob->suffix, '\"');
+	return (TRUE);
 }

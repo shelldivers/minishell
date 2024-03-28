@@ -70,12 +70,16 @@ t_glob	*ms_init_glob(char *str);
 t_bool	ms_parse_glob(t_glob *glob, char *str);
 void	ms_destroy_glob(t_glob *glob);
 
-/* ms_expand_glob1.c */
+/* ms_expand_glob_utils.c */
 t_bool	ms_get_path(t_glob *glob, char *str);
-
-/* ms_expand_glob2.c */
 t_bool	ms_get_pattern(t_glob *glob, char *str);
 t_bool	ms_get_remain(t_glob *glob, char *str);
+
+/* ms_expand_glob_utils2.c */
+char	*get_pat(char *str, int is_root);
+char	*get_glob_pos(char *str);
+char	*get_glob_start(const char *str, char *glob_pos);
+char	*get_glob_end(char *glob_pos);
 t_bool	ms_parse_pattern(t_glob *glob);
 
 /* ms_expand_queue.c */
