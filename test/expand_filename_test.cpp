@@ -27,7 +27,7 @@ TEST(ms_filename_test, ms_filename_test15)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -70,7 +70,7 @@ TEST(ms_filename_test, ms_filename_test14)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -107,7 +107,7 @@ TEST(ms_filename_test, ms_filename_test13)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -148,7 +148,7 @@ TEST(ms_filename_test, ms_filename_test12)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -189,7 +189,7 @@ TEST(ms_filename_test, ms_filename_test11)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -230,7 +230,7 @@ TEST(ms_filename_test, ms_filename_test10)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -268,7 +268,7 @@ TEST(ms_filename_test, ms_filename_test)
 	argv[0] = ft_strdup("echo");
 	argv[1] = ft_strdup("srcs/*");
 	argv[2] = nullptr;
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	cout << endl;
 	EXPECT_NE(result, nullptr);
@@ -306,7 +306,7 @@ TEST(ms_filename_test, ms_filename_test3)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	cout << endl;
@@ -346,7 +346,7 @@ TEST(ms_filename_test, ms_filename_test9)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	int count = 0;
@@ -385,7 +385,7 @@ TEST(ms_filename_test, ms_filename_test8)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	int count = 0;
@@ -424,7 +424,7 @@ TEST(ms_filename_test, ms_filename_test5)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	EXPECT_NE(result, nullptr);
@@ -462,7 +462,7 @@ TEST(ms_filename_test, ms_filename_test4)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	EXPECT_NE(result, nullptr);
@@ -500,7 +500,7 @@ TEST(ms_filename_test, ms_filename_test2)
 	argv[2] = NULL;
 
 	// when
-	result = ms_expand_filename(argv, *env);
+	result = ms_expand_filenames(argv, *env);
 
 	// then
 	EXPECT_NE(result, nullptr);

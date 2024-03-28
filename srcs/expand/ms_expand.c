@@ -68,7 +68,7 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 		return (NULL);
 	if (!ms_expand_param(copy, env, status))
 		return (NULL);
-	expanded = ms_expand_filename(copy, env);
+	expanded = ms_expand_filenames(copy, env);
 	if (!expanded)
 	{
 		ms_puterror_arg("minishell: ", *argv);
