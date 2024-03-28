@@ -3,7 +3,7 @@
 
 static char	*get_pos(char *str);
 
-t_bool	ms_get_pattern(t_glob *glob, char *str)
+t_bool	ms_get_pattern(t_glob *glob, char *str) // TODO : Failed to parse pattern
 {
 	char	*pos;
 	char	*start;

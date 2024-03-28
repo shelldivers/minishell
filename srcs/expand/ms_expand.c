@@ -62,6 +62,7 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 {
 	char	**copy;
 	char	**expanded;
+	int		i;
 
 	copy = ms_strsdup(argv);
 	if (!copy)
@@ -69,6 +70,10 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 	if (!ms_expand_param(copy, env, status))
 		return (NULL);
 	expanded = ms_expand_filenames(copy);
+	i = 0;
+	while (copy[i])
+		free(copy[i++]);
+	free(copy);
 	if (!expanded)
 	{
 		ms_puterror_arg(env, *argv);
