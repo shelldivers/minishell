@@ -49,18 +49,25 @@ static int	get_max_depth(char *str)
 	int		max_depth;
 	t_bool	quote;
 	t_bool	dquote;
+	t_bool	path;
 
+	path = TRUE;
 	quote = FALSE;
 	dquote = FALSE;
 	max_depth = 0;
 	while (*str)
 	{
+		if (*str == '/')
+			path = TRUE;
 		if (!dquote && *str == '\'')
 			quote = (t_bool) !quote;
 		else if (!quote && *str == '\"')
 			dquote = (t_bool) !dquote;
-		else if (!quote && !dquote && *str == '*')
+		else if (!quote && !dquote && path && *str == '*')
+		{
+			path = FALSE;
 			max_depth++;
+		}
 		str++;
 	}
 	return (max_depth);

@@ -23,17 +23,28 @@ char	*join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, t_glob *glob)
+t_bool	ms_match_pattern(char *d_name, t_glob *glob)	// todo : '*' 여러개 있을 떄 매치해야함
 {
 	size_t	prefix_len;
 	size_t	suffix_len;
+	char	*pos;
 
 	prefix_len = ft_strlen(glob->prefix);
 	suffix_len = ft_strlen(glob->suffix);
 	if (ft_strncmp(d_name, glob->prefix, prefix_len) != 0)
 		return (FALSE);
-	if (ft_strcmp(d_name + ft_strlen(d_name) - suffix_len, glob->suffix) != 0)
-		return (FALSE);
+	pos = ft_strchr(glob->suffix, '*');
+	if (pos == NULL)
+	{
+		if (ft_strcmp(d_name + ft_strlen(d_name) - suffix_len, glob->suffix) != 0)
+			return (FALSE);
+	}
+	else
+	{
+		if (ft_strncmp(d_name + ft_strlen(d_name) - suffix_len, glob->suffix,
+				pos - glob->suffix) != 0)
+			return (FALSE);
+	}
 	return (TRUE);
 }
 
