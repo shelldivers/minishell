@@ -1,92 +1,111 @@
 #include "ms_expand.h"
 #include "libft.h"
+#include "ms_env.h"
 
-char	*get_pat(char *str, int is_root) // TODO : Failed to parse pattern
+static void	init(const char *str, char *pos, char **start, char **end);
+static char	*ms_get_end(char *str);
+
+t_bool	ms_parse_patterns(t_glob *glob, char *str, char *pos)
 {
-	int		i;
-	char	*pattern;
-	t_bool	quote;
+	char	*start;
+	char	*end;
 
-	quote = FALSE;
-	pattern = NULL;
-	i = is_root;
-	while (str[i])
+	init(str, pos, &start, &end);
+	if (start - str > 0)
+		glob->path = ft_strndup(str, start - str + 1);
+	else
+		glob->path = ft_strndup(str, start - str);
+	if (!glob->path)
+		return (FALSE);
+	glob->remain = ft_strdup(end);
+	if (!glob->remain)
+		return (FALSE);
+	if (*glob->path == '\0')
 	{
-		if (!quote && str[i] == '\"')
-			quote = TRUE;
-		else if (quote && str[i] == '\"')
-			quote = FALSE;
-		else if (str[i] == '/')
-			pattern = str + i + 1;
-		else if (!quote && str[i] == '*')
-			break ;
-		i++;
+		glob->pattern = ft_strndup(start, end - start);
+		if (!glob->pattern)
+			return (FALSE);
+		if (pos - start > 0)
+			glob->prefix = ft_strndup(start, pos - start);
+		else
+			glob->prefix = ft_strdup("");
+		if (!glob->prefix)
+			return (FALSE);
+		if (end - pos > 1)
+			glob->suffix = ft_strndup(pos + 1, end - pos - 1);
+		else
+			glob->suffix = ft_strdup("");
+		if (!glob->suffix)
+			return (FALSE);
 	}
-	if (is_root > 0 && !pattern)
-		pattern = str + is_root;
-	return (pattern);
-}
-
-char	*get_glob_pos(char *str)
-{
-	t_bool	quote;
-
-	quote = FALSE;
-	while (*str)
+	else
 	{
-		if (!quote && *str == '\"')
-			quote = TRUE;
-		else if (quote && *str == '\"')
-			quote = FALSE;
-		else if (!quote && *str == '*')
-			return (str);
-		str++;
+		glob->pattern = ft_strndup(start + 1, end - start - 1);
+		if (!glob->pattern)
+			return (FALSE);
+		if (pos - start > 0)
+			glob->prefix = ft_strndup(start + 1, pos - start - 1);
+		else
+			glob->prefix = ft_strdup("");
+		if (!glob->prefix)
+			return (FALSE);
+		if (end - pos > 1 && *end != '\0')
+			glob->suffix = ft_strndup(pos + 1, end - pos - 1);
+		else
+			glob->suffix = ft_strdup("");
+		if (!glob->suffix)
+			return (FALSE);
 	}
-	return (NULL);
+	return (TRUE);
 }
 
-char	*get_glob_start(const char *str, char *glob_pos)
-{
-	char	*glob_start;
-
-	glob_start = glob_pos;
-	while (glob_start != str && *glob_start != '/')
-		glob_start--;
-	if (*glob_start == '/')
-		glob_start++;
-	return (glob_start);
-}
-
-char	*get_glob_end(char *glob_pos)
-{
-	char	*glob_end;
-
-	glob_end = glob_pos;
-	while (*glob_end && *glob_end != '/')
-		glob_end++;
-	return (glob_end);
-}
-
-t_bool	ms_parse_pattern(t_glob *glob)
+static char	*ms_get_end(char *str)
 {
 	char	*pos;
+	t_bool	quote;
+	t_bool	dquote;
 
-	if (!glob->pattern)
-		return (FALSE);
-	if (*(glob->pattern) == '\0')
+	quote = FALSE;
+	dquote = FALSE;
+	pos = str;
+	while (*pos)
 	{
-		glob->prefix = ft_strdup("");
-		glob->suffix = ft_strdup("");
-		return (TRUE);
+		if (!dquote && *pos == '\'')
+		{
+			quote = (t_bool) !quote;
+			ft_memmove(pos, pos + 1, ft_strlen(pos) + 1);
+		}
+		else if (!quote && *pos == '\"')
+		{
+			dquote = (t_bool) !dquote;
+			ft_memmove(pos, pos + 1, ft_strlen(pos) + 1);
+		}
+		else if (!quote && !dquote && *pos == '/')
+			break ;
+		else
+			pos++;
 	}
-	pos = get_glob_pos(glob->pattern);
-	glob->prefix = ft_strndup(glob->pattern, pos - glob->pattern);
-	if (!glob->prefix)
-		return (FALSE);
-	glob->suffix = ft_strdup(pos + 1);
-	if (!glob->suffix)
-		return (FALSE);
-	ms_remove_dquote(glob->prefix);
-	ms_remove_dquote(glob->suffix);
-	return (TRUE);
+	return (pos);
+}
+
+static void	init(const char *str, char *pos, char **start, char **end)
+{
+	char	*_start;
+	char	*next_pos;
+	char	*_end;
+
+	_start = pos;
+	while (_start > str && *_start != '/')
+		_start--;
+	*start = _start;
+	next_pos = ms_get_end(pos);
+	if (*next_pos == '\0')
+		*end = next_pos;
+	else
+	{
+		_end = pos;
+		while (_end <= next_pos && *_end != '/')
+			_end++;
+		*end = _end;
+	}
 }

@@ -67,20 +67,11 @@ t_bool	ms_match_type(struct dirent *entry, t_glob *glob);
 
 /* ms_expand_glob.c */
 t_glob	*ms_init_glob(char *str);
-t_bool	ms_parse_glob(t_glob *glob, char *str);
 void	ms_destroy_glob(t_glob *glob);
 
 /* ms_expand_glob_utils.c */
-t_bool	ms_get_path(t_glob *glob, char *str);
-t_bool	ms_get_pattern(t_glob *glob, char *str);
-t_bool	ms_get_remain(t_glob *glob, char *str);
-
-/* ms_expand_glob_utils2.c */
-char	*get_pat(char *str, int is_root);
-char	*get_glob_pos(char *str);
-char	*get_glob_start(const char *str, char *glob_pos);
-char	*get_glob_end(char *glob_pos);
-t_bool	ms_parse_pattern(t_glob *glob);
+t_bool	ms_parse_glob(t_glob *glob, char *pos);
+t_bool	ms_parse_patterns(t_glob *glob, char *str, char *pos);
 
 /* ms_expand_queue.c */
 t_queue	*ms_init_queue(void);
@@ -95,7 +86,7 @@ t_queue	*ms_enqueue_arrays(t_queue *queue, char **arrays);
 char	**ms_queue_to_arrays(t_queue *queue);
 
 /* ms_expand_utils.c */
-void	ms_remove_dquote(char *str);
+void	ms_remove_dquote(char *_str);
 void	ms_remove_quote(char *str);
 
 # ifdef __cplusplus

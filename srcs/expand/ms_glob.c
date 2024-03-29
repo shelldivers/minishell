@@ -4,27 +4,24 @@
 t_glob	*ms_init_glob(char *str)
 {
 	t_glob	*glob;
+	t_bool	result;
+	char	*raw;
 
+	raw = ft_strdup(str);
+	if (!raw)
+		return (NULL);
 	glob = (t_glob *)malloc(sizeof(t_glob));
 	if (!glob)
+	{
+		free(raw);
 		return (NULL);
+	}
 	ft_memset(glob, 0, sizeof(t_glob));
-	if (!ms_parse_glob(glob, str))
+	result = ms_parse_glob(glob, str);
+	free(raw);
+	if (!result)
 		return (NULL);
 	return (glob);
-}
-
-t_bool	ms_parse_glob(t_glob *glob, char *str)
-{
-	if (!ms_get_path(glob, str)
-		|| !ms_get_pattern(glob, str)
-		|| !ms_get_remain(glob, str)
-		|| !ms_parse_pattern(glob))
-	{
-		ms_destroy_glob(glob);
-		return (FALSE);
-	}
-	return (TRUE);
 }
 
 void	ms_destroy_glob(t_glob *glob)

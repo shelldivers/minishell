@@ -2,70 +2,31 @@
 #include "libft.h"
 #include "ms_env.h"
 
-t_bool	ms_get_path(t_glob *glob, char *str)
-{
-	char	*pat;
-	char	*path;
-	int		is_root;
-
-	is_root = 0;
-	while (str[is_root] && str[is_root] == '/')
-		is_root++;
-	pat = get_pat(str, is_root);
-	if (!pat)
-	{
-		if (is_root == 1)
-			path = ft_strdup("/");
-		else
-			path = ft_strdup("");
-	}
-	else
-		path = ft_strndup(str, pat - str);
-	if (!path)
-		return (FALSE);
-	glob->path = path;
-	ms_remove_dquote(glob->path);
-	return (TRUE);
-}
-
-t_bool	ms_get_pattern(t_glob *glob, char *str) // TODO : Failed to parse pattern
-{
-	char	*glob_pos;
-	char	*glob_start;
-	char	*glob_end;
-
-	glob_pos = get_glob_pos(str);
-	if (!glob_pos)
-	{
-		glob->pattern = ft_strdup("");
-		return (TRUE);
-	}
-	glob_start = get_glob_start(str, glob_pos);
-	glob_end = get_glob_end(glob_pos);
-	glob->pattern = ft_strndup(glob_start, glob_end - glob_start);
-	if (!glob->pattern)
-		return (FALSE);
-	return (TRUE);
-}
-
-t_bool	ms_get_remain(t_glob *glob, char *str)
+t_bool	ms_parse_glob(t_glob *glob, char *str)
 {
 	char	*pos;
-	char	*remain;
+	t_bool	quote;
+	t_bool	dquote;
 
-	pos = get_glob_pos(str);
-	if (!pos)
+	quote = FALSE;
+	dquote = FALSE;
+	pos = str;
+	while (*pos)
 	{
-		glob->remain = ft_strdup("");
-		return (TRUE);
+		if (!dquote && *pos == '\'')
+		{
+			quote = (t_bool) !quote;
+			ft_memmove(pos, pos + 1, ft_strlen(pos) + 1);
+		}
+		else if (!quote && *pos == '\"')
+		{
+			dquote = (t_bool) !dquote;
+			ft_memmove(pos, pos + 1, ft_strlen(pos) + 1);
+		}
+		else if (!quote && !dquote && *pos == '*')
+			return (ms_parse_patterns(glob, str, pos));
+		else
+			pos++;
 	}
-	remain = ft_strchr(pos, '/');
-	if (!remain)
-		remain = ft_strdup("");
-	else
-		remain = ft_strdup(remain);
-	if (!remain)
-		return (FALSE);
-	glob->remain = remain;
 	return (TRUE);
 }

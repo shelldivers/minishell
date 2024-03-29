@@ -46,12 +46,20 @@ static t_bool	init(t_queue *queue, char *str, int *depth, int *max_depth)
 
 static int	get_max_depth(char *str)
 {
-	int	max_depth;
+	int		max_depth;
+	t_bool	quote;
+	t_bool	dquote;
 
+	quote = FALSE;
+	dquote = FALSE;
 	max_depth = 0;
 	while (*str)
 	{
-		if (*str == '*')
+		if (!dquote && *str == '\'')
+			quote = (t_bool) !quote;
+		else if (!quote && *str == '\"')
+			dquote = (t_bool) !dquote;
+		else if (!quote && !dquote && *str == '*')
 			max_depth++;
 		str++;
 	}

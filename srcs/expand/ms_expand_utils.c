@@ -24,21 +24,23 @@ void	ms_remove_quote(char *str)
 
 void	ms_remove_dquote(char *str)
 {
+	char	*_str;
 	t_bool	dquote;
 	t_bool	quote;
 
+	_str = str;
 	dquote = FALSE;
 	quote = FALSE;
-	while (*str)
+	while (*_str)
 	{
-		if (!quote && *str == '\"')
+		if (!quote && *_str == '\"' && (str == _str || *(_str - 1) != '\\'))
 		{
 			dquote = (t_bool) !dquote;
-			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+			ft_memmove(_str, _str + 1, ft_strlen(_str) + 1);
 			continue ;
 		}
-		else if (!dquote && *str == '\'')
+		else if (!dquote && *_str == '\'')
 			quote = (t_bool) !quote;
-		str++;
+		_str++;
 	}
 }
