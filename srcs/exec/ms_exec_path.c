@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/27 21:05:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:29:25 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,26 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void	ms_add_path(t_exec *exec_info, t_env **env)
+t_bool	ms_add_path(t_exec *exec_info, t_env **env)
 {
 	char	**words;
 	char	**envp;
 	char	**paths;
 
+	if (access(exec_info->words[0], F_OK & X_OK) == 0)
+		return (TRUE);
 	words = exec_info->words;
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
-	ms_change_to_absolute(paths, words[0]);
+	if (!ms_change_to_absolute(paths, &words[0]))
+	{
+		ms_clear_sec_dimentional(envp);
+		ms_clear_sec_dimentional(paths);
+		return (FALSE);
+	}
 	ms_clear_sec_dimentional(envp);
 	ms_clear_sec_dimentional(paths);
+	return (TRUE);
 }
 
 char	**ms_get_paths(char **envp)
@@ -41,11 +49,9 @@ char	**ms_get_paths(char **envp)
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			path = ft_strdup(envp[i] + 5);
-			if (!path)
+			paths = ft_split(envp[i], ':');
+			if (!paths)
 				return (NULL);
-			paths = ft_split(path, ':');
-			free(path);
 			return (paths);
 		}
 		i++;
@@ -54,7 +60,7 @@ char	**ms_get_paths(char **envp)
 }
 
 
-t_bool	ms_change_to_absolute(char **paths, char *cmd_word)
+t_bool	ms_change_to_absolute(char **paths, char **cmd_word)
 {
 	char	*path;
 	char	*tmp;
@@ -67,16 +73,16 @@ t_bool	ms_change_to_absolute(char **paths, char *cmd_word)
 		path = ft_strjoin(paths[i], "/");
 		if (!path)
 			return (FALSE);
-		tmp = ft_strjoin(path, cmd_word);
+		tmp = ft_strjoin(path, *cmd_word);
 		free(path);
 		if (!tmp)
 			return (FALSE);
 		if (access(tmp, F_OK & X_OK) == 0)
 		{
-			free(cmd_word);
-			cmd_word = tmp;
+			*cmd_word = tmp;
 			return (TRUE);
 		}
+		free(tmp);
 		i++;
 	}
 	return (FALSE);

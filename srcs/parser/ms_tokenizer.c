@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 11:36:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/29 19:31:18 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ms_tokenizer(t_syntax *syntax)
 	size_t		i;
 	size_t		start;
 
+	if (!syntax->line)
+		return ;
 	syntax->words_cnt = ms_count_word(syntax->line, op, 9);
 	syntax->words = (char **)malloc(sizeof(char *) * (syntax->words_cnt + 1));
 	if (!syntax->words)

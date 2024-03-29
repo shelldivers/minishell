@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/28 20:44:02 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/29 20:25:48 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ t_exec	*ms_new_exec_info(t_env **env)
 	}
 	exec_info->words = NULL;
 	exec_info->words_size = 0;
+	exec_info->origin_fd[0] = dup(STDIN_FILENO);
+	exec_info->origin_fd[1] = dup(STDOUT_FILENO);
 	exec_info->fd[0] = -1;
 	exec_info->fd[1] = -1;
 	exec_info->pipe[0][0] = -1;
@@ -83,8 +85,9 @@ void	ms_exec(t_ast *ast, t_env **env)
 	if (!exec_info)
 		ms_env_clear(env);
 	ms_exec_in_order(ast, exec_info, env);
-	if (exec_info->words || !ms_exec_is_builtin(exec_info))
+	if (exec_info->words)
 		ms_exec_words(exec_info, env);
+	ms_reset_fd(exec_info);
 	wait_child_process(exec_info);
 	free (exec_info->words);
 	exec_info->words = NULL;
