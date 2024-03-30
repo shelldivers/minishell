@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:07:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 20:06:30 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/30 18:29:13 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_bool	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		ms_exec_words(exec_info, env);
 	}
 	else if (ast->op == OPIO_FILE)
-		ms_exec_io_file(ast, exec_info, env);
+		return (ms_exec_io_file(ast, exec_info, env));
 	else if (ast->op == OPCMD_WORD)
 		return (ms_create_words(exec_info, ast->token[0]->value));
 	else if (ast->op == OPWORD)

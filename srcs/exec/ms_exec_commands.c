@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 19:04:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/30 17:59:03 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,20 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 	{
 		exec_info->cmd_cnt++;
 		if (ms_exec_is_builtin(exec_info))
-		{
 			ms_exec_builtin(exec_info, env);
-		}
 		else
 		{
 			if (!ms_add_path(exec_info, env))
 			{
-				printf ("minishell: %s: command not found\n", words[0]);
+				write (2, "command not found\n", 18);
 				exec_info->exit_code = 127;
 				return ;
 			}
 			ms_exec_non_builtin(exec_info, env);
-			free (words[0]);
+			free(exec_info->words[0]);
 		}
 	}
+	reset_io(exec_info);
 }
 
 t_bool	ms_exec_is_builtin(t_exec *exec_info)

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 20:25:52 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/30 18:41:26 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ typedef struct s_exec
 
 /*================ exec ==================*/
 void	ms_exec(t_ast *ast, t_env **env);
-void	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env);
+t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env);
 void	wait_child_process(t_exec *exec_info);
 t_exec	*ms_new_exec_info(t_env **env);
 /*================ op ==================*/
 t_bool	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env);
 // t_bool	ms_exec_subshell(t_ast *ast, t_exec *exec_info, t_env **env);
-void	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env);
-void	ms_exec_io_file_write(t_exec *exec_info, const char *filename);
-void	ms_exec_io_file_append(t_exec *exec_info, const char *filename);
-void	ms_exec_io_file_read(t_exec *exec_info, const char *filename);
+t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env);
+t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename);
+t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename);
+t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename);
 t_bool	ms_create_words(t_exec *exec_info, char *word);
 t_bool	ms_add_word(t_exec *exec_info, char *word);
 size_t	ms_words_size(char **words);
@@ -54,10 +54,12 @@ void	ms_exec_words(t_exec *exec_info, t_env **env);
 void	ms_exec_builtin(t_exec *exec_info, t_env **env);
 void	ms_exec_builtin2(t_exec *exec_info, t_env **env);
 /*================ pipe, fd ==================*/
-t_bool	ms_reset_fd(t_exec *exec_info);
+t_bool	ms_close_all_fd(t_exec *exec_info);
+t_bool	ms_close_all_fd2(t_exec *exec_info);
 t_bool	ms_close_parent_pipe(t_exec *exec_info);
 t_bool	ms_dup_based_on_pipe_idx(t_exec *exec_info);
 t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info, t_env **env);
+void	reset_io(t_exec *exec_info);
 /*================ path ==================*/
 t_bool	ms_add_path(t_exec *exec_info, t_env **env);
 t_bool	**ms_get_paths(char **envp);

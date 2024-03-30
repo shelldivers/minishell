@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 20:25:48 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/30 18:26:47 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 #include "minishell.h"
 #include "ms_error.h"
 #include "sys/errno.h"
+
+void	reset_io(t_exec *exec_info)
+{
+	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == -1)
+		perror("dup2");
+	if (dup2(exec_info->origin_fd[1], STDOUT_FILENO) == -1)
+		perror("dup2");
+}
 
 void	wait_child_process(t_exec *exec_info)
 {
@@ -58,20 +66,23 @@ t_exec	*ms_new_exec_info(t_env **env)
 	return (exec_info);
 }
 
-void	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
+t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 {
 	t_ast	*left;
 	t_ast	*right;
 
 	if (!ast)
-		return ;
+		return (TRUE);
 	left = ast->left;
 	right = ast->right;
-	ms_exec_in_order(left, exec_info, env);
+	if (!ms_exec_in_order(left, exec_info, env))
+		return (FALSE);
 	if (ast->op != OPNONE)
 		if (!ms_exec_based_on_op(ast, exec_info, env))
-			return ;
-	ms_exec_in_order(right, exec_info, env);
+			return (FALSE);
+	if (!ms_exec_in_order(right, exec_info, env))
+		return (FALSE);
+	return (TRUE);
 }
 
 void	ms_exec(t_ast *ast, t_env **env)
@@ -87,7 +98,8 @@ void	ms_exec(t_ast *ast, t_env **env)
 	ms_exec_in_order(ast, exec_info, env);
 	if (exec_info->words)
 		ms_exec_words(exec_info, env);
-	ms_reset_fd(exec_info);
+	ms_close_all_fd(exec_info);
+	reset_io(exec_info);
 	wait_child_process(exec_info);
 	free (exec_info->words);
 	exec_info->words = NULL;

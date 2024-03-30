@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 15:29:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/03/30 17:49:50 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ t_bool	ms_add_path(t_exec *exec_info, t_env **env)
 	char	**envp;
 	char	**paths;
 
-	if (access(exec_info->words[0], F_OK & X_OK) == 0)
-		return (TRUE);
 	words = exec_info->words;
+	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
+		return (TRUE);
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
 	if (!ms_change_to_absolute(paths, &words[0]))
@@ -49,7 +49,11 @@ char	**ms_get_paths(char **envp)
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			paths = ft_split(envp[i], ':');
+			path = ft_strndup(envp[i] + 5, ft_strlen(envp[i]) - 5);
+			if (!path)
+				return (NULL);
+			paths = ft_split(path, ':');
+			free(path);
 			if (!paths)
 				return (NULL);
 			return (paths);
