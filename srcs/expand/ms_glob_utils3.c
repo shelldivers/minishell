@@ -50,10 +50,9 @@ t_bool	ms_enqueue_patterns(t_glob *glob, char *pos1)
 		else
 			pos1++;
 	}
-	if (pos1 != pos2)
-		return (ms_enqueue_pattern(glob, pos1, pos2));
-	else
-		return (ms_enqueue(glob->pattern, ft_strdup("")));	// todo : check
+	if (!ms_enqueue_pattern(glob, pos1, pos2))
+		return (FALSE);
+	return (TRUE);
 }
 
 static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote)
