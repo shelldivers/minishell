@@ -9,7 +9,7 @@ static void		*quit(t_queue **queue, t_queue **expanded);
 /**
 * @details filename expansion\n
 * - `*`를 제외한 다른 특수 패턴을 처리하지 않습니다.
-* @see https://runebook.dev/ko/docs/bash/pattern-matching
+* @see https://runebook.dev/ko/docs/bash/content-matching
  */
 char	**ms_expand_filenames(char **argv)
 {

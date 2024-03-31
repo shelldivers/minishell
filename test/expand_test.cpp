@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TEST(ms_expand_test, basic_case3) // TODO : Failed to parse pattern
+TEST(ms_expand_test, basic_case3) // TODO : Failed to parse content
 {
 	char *argv[3];
 	char *envp[] = {
@@ -20,7 +20,7 @@ TEST(ms_expand_test, basic_case3) // TODO : Failed to parse pattern
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"/Users/jeongwpa/\"pro*jct*");
+	argv[1] = ft_strdup("\"/Users/jeongwpa/\"pro*ct*");
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);
@@ -41,7 +41,7 @@ TEST(ms_expand_test, basic_case3) // TODO : Failed to parse pattern
 	free(result);
 }
 
-TEST(ms_expand_test, basic_case2) // TODO : Failed to parse pattern
+TEST(ms_expand_test, basic_case2) // TODO : Failed to parse content
 {
 	char *argv[3];
 	char *envp[] = {
@@ -78,7 +78,7 @@ TEST(ms_expand_test, basic_case2) // TODO : Failed to parse pattern
 	free(result);
 }
 
-TEST(ms_expand_test, basic_case) // TODO : Failed to parse pattern
+TEST(ms_expand_test, basic_case) // TODO : Failed to parse content
 {
 	char *argv[3];
 	char *envp[] = {

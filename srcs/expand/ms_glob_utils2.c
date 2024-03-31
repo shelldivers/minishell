@@ -21,41 +21,13 @@ t_bool	ms_parse_patterns(t_glob *glob, char *str, char *pos)
 	if (!glob->remain)
 		return (FALSE);
 	if (*glob->path == '\0')
-	{
-		glob->pattern = ft_strndup(start, end - start);
-		if (!glob->pattern)
-			return (FALSE);
-		if (pos - start > 0)
-			glob->prefix = ft_strndup(start, pos - start);
-		else
-			glob->prefix = ft_strdup("");
-		if (!glob->prefix)
-			return (FALSE);
-		if (end - pos > 1)
-			glob->suffix = ft_strndup(pos + 1, end - pos - 1);
-		else
-			glob->suffix = ft_strdup("");
-		if (!glob->suffix)
-			return (FALSE);
-	}
+		glob->content = ft_strndup(start, end - start);
 	else
-	{
-		glob->pattern = ft_strndup(start + 1, end - start - 1);
-		if (!glob->pattern)
-			return (FALSE);
-		if (pos - start > 0)
-			glob->prefix = ft_strndup(start + 1, pos - start - 1);
-		else
-			glob->prefix = ft_strdup("");
-		if (!glob->prefix)
-			return (FALSE);
-		if (end - pos > 1 && *end != '\0')
-			glob->suffix = ft_strndup(pos + 1, end - pos - 1);
-		else
-			glob->suffix = ft_strdup("");
-		if (!glob->suffix)
-			return (FALSE);
-	}
+		glob->content = ft_strndup(start + 1, end - start - 1);
+	if (!glob->content)
+		return (FALSE);
+	if (!ms_parse_pattern(glob))
+		return (FALSE);
 	return (TRUE);
 }
 
