@@ -23,7 +23,7 @@ char	*join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, t_glob *glob)
+t_bool	ms_match_pattern(char *d_name, t_glob *glob)	// TODO: 다시 패턴매칭을 잘 해봅시다.
 {
 	t_list	*node;
 	size_t	len;
