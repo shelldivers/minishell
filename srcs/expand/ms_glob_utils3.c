@@ -1,7 +1,9 @@
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_expand.h"
 
 static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote);
+static t_bool	ms_enqueue_pattern(t_glob *glob, char *pos1, char *pos2);
 
 t_bool	ms_parse_pattern(t_glob *glob)
 {
@@ -48,7 +50,10 @@ t_bool	ms_enqueue_patterns(t_glob *glob, char *pos1)
 		else
 			pos1++;
 	}
-	return (TRUE);
+	if (pos1 != pos2)
+		return (ms_enqueue_pattern(glob, pos1, pos2));
+	else
+		return (ms_enqueue(glob->pattern, ft_strdup("")));	// todo : check
 }
 
 static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote)
@@ -68,7 +73,7 @@ static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote)
 	return (FALSE);
 }
 
-t_bool	ms_enqueue_pattern(t_glob *glob, char *pos1, char *pos2)
+static t_bool	ms_enqueue_pattern(t_glob *glob, char *pos1, char *pos2)
 {
 	char	*pattern;
 

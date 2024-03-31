@@ -70,8 +70,7 @@ t_bool	ms_parse_glob(t_glob *glob, char *pos);
 t_bool	ms_parse_patterns(t_glob *glob, char *str, char *pos);
 t_bool	ms_parse_pattern(t_glob *glob);
 /* ms_expand_glob_utils3.c */
-t_bool ms_enqueue_patterns(t_glob *glob, char *pos1);
-t_bool	ms_enqueue_pattern(t_glob *glob, char *pos1, char *pos2);
+t_bool	ms_enqueue_patterns(t_glob *glob, char *pos1);
 
 /* ms_expand_queue.c */
 t_queue	*ms_init_queue(void);

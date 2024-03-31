@@ -23,9 +23,27 @@ char	*join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, t_glob *glob)	// todo : '*' 여러개 있을 떄 매치해야함
+t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 {
-	// todo : parse with patterns in queue
+	t_list	*node;
+	size_t	len;
+	int		depth;
+
+	depth = 0;
+	node = glob->pattern->head;
+	while (node)
+	{
+		len = ft_strlen(node->content);
+		if (ft_strncmp(node->content, d_name, len) != 0)
+		{
+			if (depth == 0)
+				return (FALSE);
+			d_name++;
+		}
+		d_name += len;
+		node = node->next;
+		depth++;
+	}
 	return (TRUE);
 }
 
@@ -37,7 +55,7 @@ t_bool	ms_match_type(struct dirent *entry, t_glob *glob)
 		return (FALSE);
 	if (*(glob->remain) == '/' && entry->d_type != DT_DIR)
 		return (FALSE);
-	if (*(glob->prefix) != '.' && *(entry->d_name) == '.')
+	if (*(glob->content) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
 	return (TRUE);
 }
