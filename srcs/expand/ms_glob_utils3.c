@@ -24,6 +24,14 @@ t_bool	ms_parse_pattern(t_glob *glob)
 		free(dup);
 		return (FALSE);
 	}
+	// debug
+	t_list *node = glob->pattern->head;
+	while (node)
+	{
+		ft_printf("pattern: %s\n", (char *)node->content);
+		node = node->next;
+	}
+	// debug
 	free(dup);
 	return (TRUE);
 }

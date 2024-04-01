@@ -34,6 +34,8 @@ t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 		pat = node->content;
 		if (!pat)
 			return (TRUE);
+		if (*pat == '\0' && node->next == NULL)
+			return (TRUE);
 		if (*pat != '\0')
 		{
 			while (node != glob->pattern->head && *d_name && *d_name != *pat)
@@ -48,6 +50,8 @@ t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 		}
 		node = node->next;
 	}
+	if (*d_name != '\0')
+		return (FALSE);
 	return (TRUE);
 }
 
