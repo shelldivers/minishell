@@ -14,7 +14,7 @@ CC = cc
 # CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
-PARSER += ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_terminal2.c ms_parser.c 
+PARSER += ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_parser.c 
 ERROR += ms_error_utils.c ms_error.c
 EXEC += ms_exec.c ms_exec_op.c ms_exec_words.c ms_exec_path.c ms_exec_pipeline.c ms_exec_redirect.c ms_exec_commands.c
 BUILTIN += ms_cd.c ms_echo.c ms_env.c ms_exit.c ms_export.c ms_pwd.c ms_unset.c

@@ -44,16 +44,16 @@ size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 	if (!new)
 		return (0);
 	curtok = (f(new, new->token));
-	if (curtok && lr == LEFT)
+	if (lr == LEFT)
 	{
 		if (ast->left)
 			new->left = ast->left;
 		ast->left = new;
 	}
-	else if (curtok && lr == RIGHT)
+	else if (lr == RIGHT)
 	{
-		if (ast->right)
-			new->right = ast->right;
+		while (ast->right)
+			ast = ast->right;
 		ast->right = new;
 	}
 	else

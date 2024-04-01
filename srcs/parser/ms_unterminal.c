@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 15:01:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:58:36 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ size_t	ms_is_and_or(t_ast *ast, t_token **token)
 		return (0);
 	op_pos = ms_get_op_pos(token, TAND_IF, TOR_IF);
 	curtok = 0;
-	if (op_pos && (token[op_pos]->type == TAND_IF
-		|| token[op_pos]->type == TOR_IF))
+	if (op_pos && (token[op_pos]->type == TAND_IF \
+	|| token[op_pos]->type == TOR_IF))
 	{
 		if (token[op_pos]->type == TAND_IF)
 			ast->op = OPAND_IF;
@@ -76,10 +76,10 @@ size_t	ms_is_command(t_ast *ast, t_token **token)
 	curtok = 0;
 	if (token[curtok] && token[curtok]->type == TLPAREN)
 	{
-		curtok += ms_add_ast(ast, token + curtok, ms_is_subshell, 0, LEFT);
+		curtok += ms_add_ast(ast, token + curtok, ms_is_subshell, 0, RIGHT);
 		if (curtok)
-			curtok += ms_add_ast(ast, token + curtok, ms_is_io_redirect, \
-			0, RIGHT);
+			curtok += ms_add_ast(ast, token + curtok, ms_is_redirect_list, \
+			0, LEFT);
 	}
 	else
 		curtok += ms_add_ast(ast, token + curtok, ms_is_simple_command, \
