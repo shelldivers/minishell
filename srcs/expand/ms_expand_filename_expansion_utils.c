@@ -1,7 +1,10 @@
-#include "ms_expand.h"
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_env.h"
+#include "ms_expand.h"
 #include <dirent.h>
+
+static void	match(t_glob *glob, const t_list *node, char **d_name, char **pat);
 
 char	*join_path(char *entry, t_glob *glob)
 {
@@ -23,6 +26,19 @@ char	*join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
+t_bool	ms_match_type(struct dirent *entry, t_glob *glob)
+{
+	if (ft_strcmp(entry->d_name, ".") == 0)
+		return (FALSE);
+	if (ft_strcmp(entry->d_name, "..") == 0)
+		return (FALSE);
+	if (*(glob->remain) == '/' && entry->d_type != DT_DIR)
+		return (FALSE);
+	if (*(glob->content) != '.' && *(entry->d_name) == '.')
+		return (FALSE);
+	return (TRUE);
+}
+
 t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 {
 	t_list	*node;
@@ -38,32 +54,24 @@ t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 			return (TRUE);
 		if (*pat != '\0')
 		{
-			while (node != glob->pattern->head && *d_name && *d_name != *pat)
-				d_name++;
-			while (*d_name && *pat && *d_name == *pat)
-			{
-				d_name++;
-				pat++;
-			}
+			match(glob, node, &d_name, &pat);
 			if (*pat != '\0')
 				return (FALSE);
 		}
 		node = node->next;
 	}
-	if (*d_name != '\0')
+	if (*d_name != '\0' || node != NULL)
 		return (FALSE);
 	return (TRUE);
 }
 
-t_bool	ms_match_type(struct dirent *entry, t_glob *glob)
+static void	match(t_glob *glob, const t_list *node, char **d_name, char **pat)
 {
-	if (ft_strcmp(entry->d_name, ".") == 0)
-		return (FALSE);
-	if (ft_strcmp(entry->d_name, "..") == 0)
-		return (FALSE);
-	if (*(glob->remain) == '/' && entry->d_type != DT_DIR)
-		return (FALSE);
-	if (*(glob->content) != '.' && *(entry->d_name) == '.')
-		return (FALSE);
-	return (TRUE);
+	while (node != glob->pattern->head && *(*d_name) && *(*d_name) != *(*pat))
+		(*d_name)++;
+	while (*(*d_name) && *(*pat) && *(*d_name) == *(*pat))
+	{
+		(*d_name)++;
+		(*pat)++;
+	}
 }
