@@ -2,7 +2,7 @@
 #include "libft.h"
 #include "ms_expand.h"
 
-static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote);
+static t_bool	ms_dequote_pattern(char *pos1, t_bool *quote, t_bool *dquote);
 static t_bool	ms_enqueue_pattern(t_glob *glob, char *pos1, char *pos2);
 
 t_bool	ms_parse_pattern(t_glob *glob)
@@ -39,7 +39,7 @@ t_bool	ms_enqueue_patterns(t_glob *glob, char *pos1)
 	pos2 = pos1;
 	while (*pos1)
 	{
-		if (ms_dquote_pattern(pos1, &quote, &dquote))
+		if (ms_dequote_pattern(pos1, &quote, &dquote))
 			continue ;
 		else if (!quote && !dquote && *pos1 == '*')
 		{
@@ -55,7 +55,7 @@ t_bool	ms_enqueue_patterns(t_glob *glob, char *pos1)
 	return (TRUE);
 }
 
-static t_bool	ms_dquote_pattern(char *pos1, t_bool *quote, t_bool *dquote)
+static t_bool	ms_dequote_pattern(char *pos1, t_bool *quote, t_bool *dquote)
 {
 	if (!*dquote && *pos1 == '\'')
 	{

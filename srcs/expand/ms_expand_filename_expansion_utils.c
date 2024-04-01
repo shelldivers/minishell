@@ -23,26 +23,30 @@ char	*join_path(char *entry, t_glob *glob)
 	return (full_path);
 }
 
-t_bool	ms_match_pattern(char *d_name, t_glob *glob)	// TODO: 다시 패턴매칭을 잘 해봅시다.
+t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 {
 	t_list	*node;
-	size_t	len;
-	int		depth;
+	char	*pat;
 
-	depth = 0;
 	node = glob->pattern->head;
-	while (node)
+	while (node && *d_name)
 	{
-		len = ft_strlen(node->content);
-		if (ft_strncmp(node->content, d_name, len) != 0)
+		pat = node->content;
+		if (!pat)
+			return (TRUE);
+		if (*pat != '\0')
 		{
-			if (depth == 0)
+			while (node != glob->pattern->head && *d_name && *d_name != *pat)
+				d_name++;
+			while (*d_name && *pat && *d_name == *pat)
+			{
+				d_name++;
+				pat++;
+			}
+			if (*pat != '\0')
 				return (FALSE);
-			d_name++;
 		}
-		d_name += len;
 		node = node->next;
-		depth++;
 	}
 	return (TRUE);
 }
