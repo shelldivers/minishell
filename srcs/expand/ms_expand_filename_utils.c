@@ -39,3 +39,23 @@ static t_bool	is_exist(char *str)
 		closedir(dir);
 	return (result);
 }
+
+char	**no_match(char *str)
+{
+	char	**expanded;
+	char	*dequoted;
+
+	expanded = (char **)malloc(sizeof(char *) + 2);
+	if (!expanded)
+		return (NULL);
+	dequoted = ft_strdup(str);
+	if (!dequoted)
+	{
+		free(expanded);
+		return (NULL);
+	}
+	ms_remove_dquote(dequoted);
+	expanded[0] = dequoted;
+	expanded[1] = NULL;
+	return (expanded);
+}
