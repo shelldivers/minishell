@@ -60,9 +60,9 @@ t_bool	ms_match_pattern(char *d_name, t_glob *glob)
 		}
 		node = node->next;
 	}
-	if (*d_name != '\0' || node != NULL)
-		return (FALSE);
-	return (TRUE);
+	if (*d_name == '\0' && (node == NULL || *(char *)node->content == '\0'))
+		return (TRUE);
+	return (FALSE);
 }
 
 static void	match(t_glob *glob, const t_list *node, char **d_name, char **pat)
