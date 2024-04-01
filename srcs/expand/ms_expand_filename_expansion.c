@@ -15,6 +15,8 @@ t_bool	ms_expand_filename_expansion(t_queue *queue, t_glob *glob, char *str)
 	struct dirent	*entry;
 	char			*path;
 
+	if (*(glob->content) == '\0')
+		return (TRUE);
 	if (!init(queue, glob, str, &dir))
 		return (FALSE);
 	while (dir)

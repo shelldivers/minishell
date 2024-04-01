@@ -15,11 +15,6 @@ t_bool	ms_expand_filename_search(t_queue *queue, int size)
 	{
 		if (!init(queue, &node, &glob))
 			return (quit(NULL, NULL));
-		if (*(glob->content) == '\0')
-		{
-			finalize(glob, node);
-			continue ;
-		}
 		if (!ms_expand_filename_expansion(queue, glob, node->content))
 			return (quit(glob, node));
 		finalize(glob, node);
