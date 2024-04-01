@@ -2,7 +2,7 @@
 #include "ms_env.h"
 #include "ms_expand.h"
 
-static char		*get_pos(char *str);
+static char	*get_pos(const char *str);
 
 /**
  * @details parameter expansion\n
@@ -38,26 +38,24 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 	return (TRUE);
 }
 
-static char	*get_pos(char *str)
+static char	*get_pos(const char *str)
 {
+	char	*pos;
 	t_bool	dquote;
 	t_bool	quote;
 
+	pos = str;
 	dquote = FALSE;
 	quote = FALSE;
-	while (*str)
+	while (*pos)
 	{
-		if (!quote && !dquote && *str == '\"')
-			dquote = TRUE;
-		else if (!quote && dquote && *str == '\"')
-			dquote = FALSE;
-		else if (!dquote && !quote && *str == '\'')
-			quote = TRUE;
-		else if (!dquote && quote && *str == '\'')
-			quote = FALSE;
-		else if (!quote && *str == '$')
-			return (str);
-		str++;
+		if (!quote && *pos == '\"')
+			dquote = (t_bool) !dquote;
+		else if (!dquote && *pos == '\'')
+			quote = (t_bool) !quote;
+		else if (!quote && *pos == '$')
+			return (pos);
+		pos++;
 	}
 	return (NULL);
 }

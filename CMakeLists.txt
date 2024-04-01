@@ -41,7 +41,6 @@ set(SRCS includes/minishell.h
         includes/ms_builtin.h
         srcs/error/ms_error_utils.c
         srcs/expand/ms_expand_param.c
-        srcs/expand/ms_expand_filenames.c
         srcs/parser/ms_init.c
         srcs/parser/ms_lexer.c
         srcs/parser/ms_parser.c
@@ -52,7 +51,7 @@ set(SRCS includes/minishell.h
         srcs/parser/ms_unterminal2.c
         srcs/parser/ms_clear.c
         srcs/parser/ms_terminal.c
-        srcs/expand/ms_queue.c srcs/expand/ms_queue_utils.c srcs/expand/ms_expand_filename_search.c srcs/expand/ms_glob_utils.c srcs/expand/ms_glob.c srcs/expand/ms_expand_utils.c srcs/expand/ms_expand_filename_expansion.c srcs/expand/ms_expand_filename.c srcs/expand/ms_expand_filename_expansion_utils.c srcs/expand/ms_expand_filename_utils.c srcs/expand/ms_expand_param_utils.c srcs/expand/ms_glob_utils2.c srcs/expand/ms_glob_utils3.c)
+        srcs/expand/ms_expand_utils.c srcs/expand/ms_expand_param_utils.c srcs/expand/ms_expand_filename.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)
