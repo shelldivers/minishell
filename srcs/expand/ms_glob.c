@@ -32,10 +32,6 @@ void	ms_destroy_glob(t_glob *glob)
 		free(glob->content);
 	if (glob->remain)
 		free(glob->remain);
-	if (glob->prefix)
-		free(glob->prefix);
-	if (glob->suffix)
-		free(glob->suffix);
 	if (glob->pattern)
 		ms_destroy_queue(glob->pattern);
 	free(glob);

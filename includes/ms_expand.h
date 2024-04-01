@@ -33,8 +33,6 @@ typedef struct s_glob
 	char	*path;
 	char	*content;
 	t_queue	*pattern;
-	char	*prefix;
-	char	*suffix;
 	char	*remain;
 }	t_glob;
 
