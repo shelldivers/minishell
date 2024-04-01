@@ -99,23 +99,23 @@ and_or :               		     pipeline
                  ;
 pipeline         :               command
                  | pipeline PIPE command
-				 ;
+				     ;
 command          : simple_command
                  | subshell
-				 | subshell io_redirect
+				     | subshell redirect_list
                  ;
 subshell         : LBRACE and_or RBRACE
                  ;
-simple_command   : cmd_prefix cmd_word cmd_suffix
-                 | cmd_prefix cmd_word
-                 | cmd_prefix
+simple_command   : redirect_list cmd_word cmd_suffix
+                 | redirect_list cmd_word
+                 | redirect_list
                  | cmd_word cmd_suffix
                  | cmd_word
                  ;
 cmd_word         : WORD
                  ;
-cmd_prefix       :            io_redirect
-                 | cmd_prefix io_redirect
+redirect_list    :               io_redirect
+                 | redirect_list io_redirect
                  ;
 cmd_suffix       :            io_redirect
                  | cmd_suffix io_redirect
@@ -123,9 +123,7 @@ cmd_suffix       :            io_redirect
                  | cmd_suffix WORD
                  ;
 io_redirect      :           io_file
-                 | IO_NUMBER io_file
                  |           io_here
-                 | IO_NUMBER io_here
                  ;
 io_file          : DREAD     filename
                  | DWRITE    filename
