@@ -13,43 +13,6 @@
 #include "libft.h"
 #include "ms_expand.h"
 
-t_bool	ms_parse_glob(t_glob *glob)
-{
-	char	*start;
-	char	*end;
-	char	*pos;
-
-	start = glob->content;
-	end = start;
-	pos = start;
-	while (*pos)
-	{
-		if (*pos == ASTERISK)
-			break ;
-		if (*pos == '/')
-			end = pos;
-		pos++;
-	}
-	glob->path = ft_strndup(start, end - start);
-	if (!glob->path)
-		return (FALSE);
-	start = end;
-	while (*pos)
-	{
-		if (*pos == '/')
-			break ;
-		pos++;
-	}
-	end = pos;
-	glob->pattern = ft_strndup(start, end - start);
-	if (!glob->pattern)
-		return (FALSE);
-	glob->rest = ft_strdup(pos);
-	if (!glob->rest)
-		return (FALSE);
-	return (TRUE);
-}
-
 t_glob	*ms_init_glob(char *str)
 {
 	t_glob	*glob;

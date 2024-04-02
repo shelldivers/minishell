@@ -71,6 +71,7 @@ void	ms_remove_dquote(char *_str);
 /* ms_glob.c */
 t_glob	*ms_init_glob(char *str);
 void	ms_destroy_glob(t_glob *glob);
+t_bool	ms_parse_glob(t_glob *glob);
 
 /* ms_queue.c */
 t_queue	*ms_init_queue(void);
