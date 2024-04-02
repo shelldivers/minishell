@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/01 19:58:36 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:27:58 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ size_t	ms_is_and_or(t_ast *ast, t_token **token)
 	}
 	else
 		curtok += ms_add_ast(ast, token, ms_is_pipeline, 0, LEFT);
-	if (curtok == ast->token_size)
-		return (curtok);
-	return (ast->token_size - curtok);
+	return (curtok);
 }
 
 size_t	ms_is_pipeline(t_ast *ast, t_token **token)
@@ -64,7 +62,7 @@ size_t	ms_is_pipeline(t_ast *ast, t_token **token)
 		curtok += ms_add_ast(ast, token, ms_is_command, 0, LEFT);
 	if (curtok == ast->token_size)
 		return (curtok);
-	return (ast->token_size - curtok);
+	return (curtok);
 }
 
 size_t	ms_is_command(t_ast *ast, t_token **token)
@@ -90,29 +88,27 @@ size_t	ms_is_command(t_ast *ast, t_token **token)
 
 size_t	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2)
 {
-	size_t	pos1;
-	size_t	pos2;
+	size_t	op_idx;
+	size_t	curtok;
+	size_t	paren;
 
 	if (token == NULL)
 		return (0);
-	pos1 = ms_tokenlen(token);
-	pos2 = ms_tokenlen(token);
-	while (pos1)
+	op_idx = 0;
+	curtok = 0;
+	paren = 0;
+	while (token[curtok])
 	{
-		pos1--;
-		if (token[pos1]->type == op1)
-			break ;
+		if (token[curtok]->type == TLPAREN)
+			paren++;
+		else if (token[curtok]->type == TRPAREN && paren > 0)
+			paren--;
+		else if (token[curtok]->type == TRPAREN && paren == 0)
+			return (0);
+		if ((token[curtok]->type == op1 \
+		|| token[curtok]->type == op2) && paren == 0)
+			op_idx = curtok;
+		curtok++;
 	}
-	if (op2 != TNONE)
-	{
-		while (pos2)
-		{
-			pos2--;
-			if (token[pos2]->type == op2)
-				break ;
-		}
-		if (pos1 < pos2)
-			return (pos2);
-	}
-	return (pos1);
+	return (op_idx);
 }

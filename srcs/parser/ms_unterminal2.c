@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/01 19:56:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:31:58 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,36 @@ size_t	ms_is_io_redirect(t_ast *ast, t_token **token)
 	else
 		curtok += ms_is_io_file(ast, token);
 	return (curtok);
+}
+
+/*
+** need to expand AST for subshell
+*/
+size_t	ms_is_subshell(t_ast *ast, t_token **token)
+{
+	size_t	curtok;
+	size_t	paren;
+
+	curtok = 0;
+	paren = 0;
+	while (token[curtok])
+	{
+		if (token[curtok]->type == TLPAREN)
+			paren++;
+		else if (token[curtok]->type == TRPAREN \
+		&& token[curtok - 1]->type == TRPAREN && paren > 0)
+			return (0);
+		else if (token[curtok]->type == TRPAREN && paren > 0)
+			paren--;
+		else if ((token[curtok]->type == TRPAREN && paren == 0))
+			return (0);
+		if (token[curtok] && token[curtok]->type == TRPAREN && paren == 0)
+		{
+			ast->op = OPSUBSHELL;
+			ast->token_size = curtok + 1;
+			return (curtok + 1);
+		}
+		curtok++;
+	}
+	return (0);
 }

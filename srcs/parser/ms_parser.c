@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ms_parser.h"
@@ -19,14 +20,17 @@
 
 t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 {
-	size_t	cursor;
+	size_t	curtok;
 
 	*ast = ms_new_ast(token, size);
 	if (!*ast)
 		return (0);
-	cursor = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
-	if (cursor != size)
+	curtok = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
+	if (curtok != size)
 	{
+		write (2, "syntax error : ", 15);
+		write (2, token[curtok]->value, ft_strlen(token[curtok]->value));
+		write (2, "\n", 1);
 		return (FALSE);
 	}
 	return (TRUE);
