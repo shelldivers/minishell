@@ -13,6 +13,8 @@
 #include "libft.h"
 #include "ms_expand.h"
 
+static void	*quit(char **expanded, t_queue *result);
+
 char	**ms_expand_filenames(char **argv)
 {
 	t_queue	*result;
@@ -26,11 +28,10 @@ char	**ms_expand_filenames(char **argv)
 		ms_mark_asterisk(*argv);
 		expanded = ms_expand_filename(*argv);
 		if (!expanded)
-		{
-			ms_destroy_queue(result, free);
-			return (NULL);
-		}
-		ms_enqueue_array(result, expanded);
+			return (quit(NULL, result));
+		if (!ms_enqueue_array(result, expanded))
+			return (quit(expanded, result));
+		free(expanded);
 		argv++;
 	}
 	expanded = ms_queue_to_array(result);
@@ -63,4 +64,18 @@ void	ms_mark_asterisk(char *str)
 			*str = ASTERISK;
 		str++;
 	}
+}
+
+static void	*quit(char **expanded, t_queue *result)
+{
+	int	i;
+
+	if (expanded)
+	{
+		i = 0;
+		while (expanded[i])
+			free(expanded[i++]);
+	}
+	ms_destroy_queue(result, free);
+	return (NULL);
 }

@@ -37,7 +37,7 @@ void	ms_queue_remove(t_queue *queue, t_list *target, void *del)
 	queue->size--;
 }
 
-t_queue	*ms_enqueue_array(t_queue *queue, char **array)
+t_bool	ms_enqueue_array(t_queue *queue, char **array)
 {
 	size_t	i;
 
@@ -45,11 +45,10 @@ t_queue	*ms_enqueue_array(t_queue *queue, char **array)
 	while (array[i])
 	{
 		if (!ms_enqueue(queue, array[i]))
-			return (NULL);
+			return (FALSE);
 		i++;
 	}
-	free(array);
-	return (queue);
+	return (TRUE);
 }
 
 char	**ms_queue_to_array(t_queue *queue)
