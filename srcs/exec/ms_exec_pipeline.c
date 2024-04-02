@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/30 15:10:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:08:14 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,25 @@ t_bool	ms_dup_based_on_pipe_idx(t_exec *exec_info)
 {
 	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;
 	const int	prev_pipe = exec_info->pipe_idx % 2;
+	int			fd;
 
 	if (exec_info->pipe_cnt == 2)
 	{
-		if (dup2(exec_info->pipe[prev_pipe][0], STDIN_FILENO) == -1)
-			return (FALSE);
-		if (dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO) == -1)
-			return (FALSE);
+		if (exec_info->fd[STDIN_FILENO] == -1)
+			if (dup2(exec_info->pipe[prev_pipe][0], STDIN_FILENO) == -1)
+				return (FALSE);
+		if (exec_info->fd[STDOUT_FILENO] == -1)
+			if (dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO) == -1)
+				return (FALSE);
 	}
 	else if (exec_info->pipe_cnt == 1 \
 	&& exec_info->pipe_idx < exec_info->cmd_cnt)
-	{
-		if (dup2(exec_info->pipe[now_pipe][0], STDIN_FILENO) == -1)
-			return (FALSE);
-	}
+		fd = STDIN_FILENO;
 	else if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1)
+		fd = STDOUT_FILENO;
+	if (exec_info->fd[fd] == -1)
 	{
-		if (dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO) == -1)
+		if (dup2(exec_info->pipe[now_pipe][fd], fd) == -1)
 			return (FALSE);
 	}
 	return (TRUE);
