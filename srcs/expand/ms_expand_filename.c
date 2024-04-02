@@ -17,6 +17,7 @@
 
 static t_bool	init(t_queue **queue, int *depth, char *str);
 static int		get_depth(char *str);
+static void		ms_mark_asterisk(char *str);
 static t_bool	is_exist(char *str);
 
 char	**ms_expand_filename(char *str)
@@ -39,6 +40,33 @@ char	**ms_expand_filename(char *str)
 	return (ms_inspect_filename(queue, depth, str));
 }
 
+static void	ms_mark_asterisk(char *str)
+{
+	t_bool	quote;
+	t_bool	dquote;
+
+	quote = FALSE;
+	dquote = FALSE;
+	while (*str)
+	{
+		if (!quote && *str == '\"')
+		{
+			dquote = (t_bool) !dquote;
+			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+			continue ;
+		}
+		else if (!dquote && *str == '\'')
+		{
+			quote = (t_bool) !quote;
+			ft_memmove(str, str + 1, ft_strlen(str) + 1);
+			continue ;
+		}
+		else if (!quote && !dquote && *str == '*')
+			*str = ASTERISK;
+		str++;
+	}
+}
+
 static t_bool	init(t_queue **queue, int *depth, char *str)
 {
 	char	*tmp;
@@ -53,6 +81,7 @@ static t_bool	init(t_queue **queue, int *depth, char *str)
 		ms_destroy_queue(*queue, free);
 		return (FALSE);
 	}
+	ms_mark_asterisk(tmp);
 	ms_enqueue(*queue, tmp);
 	return (TRUE);
 }

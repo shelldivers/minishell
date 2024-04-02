@@ -14,13 +14,12 @@
 #include "ms_expand.h"
 
 static t_bool	match_type(struct dirent *entry, t_glob *glob);
-static t_bool	match_pattern(char *d_name, char *pattern);
 
 t_bool	ms_match(struct dirent *entry, t_glob *glob)
 {
-	if (!match_type(entry, glob))
-		return (FALSE);
 	if (!match_pattern(entry->d_name, glob->pattern))
+		return (FALSE);
+	if (!match_type(entry, glob))
 		return (FALSE);
 	return (TRUE);
 }
@@ -36,11 +35,6 @@ static t_bool	match_type(struct dirent *entry, t_glob *glob)
 	if (*(glob->pattern) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
 	return (TRUE);
-}
-
-static t_bool	match_pattern(char *d_name, char *pattern)
-{
-	// TODO
 }
 
 char	*ms_join_path(t_glob *glob, char *d_name)
