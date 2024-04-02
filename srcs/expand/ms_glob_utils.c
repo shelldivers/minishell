@@ -14,8 +14,8 @@
 #include "ms_expand.h"
 
 static t_bool	get_path(t_glob *glob, char **start, char **end, char **pos);
-static t_bool	get_pattern(t_glob *glob, char **start, char **end, char **pos);
-static t_bool	get_rest(t_glob *glob, char **start, char **end, char **pos);
+static t_bool	get_pattern(t_glob *glob, char **end, char **pos);
+static t_bool	get_rest(t_glob *glob, char **pos);
 
 t_bool	ms_parse_glob(t_glob *glob)
 {
@@ -29,10 +29,10 @@ t_bool	ms_parse_glob(t_glob *glob)
 	get_path(glob, &start, &end, &pos);
 	if (!glob->path)
 		return (FALSE);
-	get_pattern(glob, &start, &end, &pos);
+	get_pattern(glob, &end, &pos);
 	if (!glob->pattern)
 		return (FALSE);
-	get_rest(glob, &start, &end, &pos);
+	get_rest(glob, &pos);
 	if (!glob->rest)
 		return (FALSE);
 	return (TRUE);
@@ -48,14 +48,22 @@ static t_bool	get_path(t_glob *glob, char **start, char **end, char **pos)
 			*end = *pos;
 		(*pos)++;
 	}
-	glob->path = ft_strndup(*start, *end - *start);
+	if (*start == *end)
+		glob->path = ft_strndup(*start, *end - *start);
+	else
+		glob->path = ft_strndup(*start, *end - *start + 1);
 	if (!glob->path)
 		return (FALSE);
 	return (TRUE);
 }
 
-static t_bool	get_pattern(t_glob *glob, char **start, char **end, char **pos)
+static t_bool	get_pattern(t_glob *glob, char **end, char **pos)
 {
+	char	*start;
+
+	if (**end == '/')
+		(*end)++;
+	start = *end;
 	while (**pos)
 	{
 		if (**pos == '/')
@@ -63,16 +71,14 @@ static t_bool	get_pattern(t_glob *glob, char **start, char **end, char **pos)
 		(*pos)++;
 	}
 	*end = *pos;
-	glob->pattern = ft_strndup(*start, *end - *start);
+	glob->pattern = ft_strndup(start, *end - start);
 	if (!glob->pattern)
 		return (FALSE);
 	return (TRUE);
 }
 
-static t_bool	get_rest(t_glob *glob, char **start, char **end, char **pos)
+static t_bool	get_rest(t_glob *glob, char **pos)
 {
-	(void *)start;
-	(void *)end;
 	glob->rest = ft_strdup(*pos);
 	if (!glob->rest)
 		return (FALSE);
