@@ -30,10 +30,10 @@ t_bool	ms_parse_glob(t_glob *glob)
 			end = pos;
 		pos++;
 	}
-	glob->path = ft_strndup(start, end - start + 1);
+	glob->path = ft_strndup(start, end - start);
 	if (!glob->path)
 		return (FALSE);
-	start = end + 1;
+	start = end;
 	while (*pos)
 	{
 		if (*pos == '/')

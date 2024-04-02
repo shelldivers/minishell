@@ -15,67 +15,52 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static t_bool	init(t_queue **queue, int *depth, char *str);
-static int		get_depth(char *str);
+static char		**no_match(t_queue *queue, const char *str);
+static char		**match(t_queue *queue);
 static t_bool	is_exist(char *str);
 
-char	**ms_expand_filename(char *str)
+char	**ms_inspect_filename(t_queue *queue, int depth, char *str)
 {
-	t_queue	*queue;
-	int		depth;
+	if (depth > 0 || queue->size == 0)
+		return (no_match(queue, str));
+	return (match(queue));
+}
 
-	if (!init(&queue, &depth, str))
+static char	**no_match(t_queue *queue, const char *str)
+{
+	char	**result;
+
+	ms_destroy_queue(queue, free);
+	result = (char **)malloc(sizeof(char *) * 2);
+	if (!result)
 		return (NULL);
-	while (1)
+	result[0] = ft_strdup(str);
+	if (!result[0])
 	{
-		if (queue->size <= 0 || depth-- < 0)
-			break ;
-		if (!ms_expand_filename_search(queue, queue->size))
-		{
-			ms_destroy_queue(queue, free);
-			return (NULL);
-		}
+		free(result);
+		return (NULL);
 	}
-	return (ms_inspect_filename(queue, depth, str));
+	result[1] = NULL;
+	return (result);
 }
 
-static t_bool	init(t_queue **queue, int *depth, char *str)
+static char	**match(t_queue *queue)
 {
-	char	*tmp;
+	char	**result;
+	t_list	*node;
+	t_list	*tmp;
 
-	*queue = ms_init_queue();
-	if (!*queue)
-		return (FALSE);
-	*depth = get_depth(str);
-	tmp = ft_strdup(str);
-	if (!tmp)
+	node = queue->head;
+	while (node)
 	{
-		ms_destroy_queue(*queue, free);
-		return (FALSE);
+		tmp = node->next;
+		if (!is_exist(node->content))
+			ms_queue_remove(queue, node, free);
+		node = tmp;
 	}
-	ms_enqueue(*queue, tmp);
-	return (TRUE);
-}
-
-static int	get_depth(char *str)
-{
-	int		max_depth;
-	t_bool	path;
-
-	path = TRUE;
-	max_depth = 0;
-	while (*str)
-	{
-		if (*str == '/')
-			path = TRUE;
-		else if (path && *str == ASTERISK)
-		{
-			path = FALSE;
-			max_depth++;
-		}
-		str++;
-	}
-	return (max_depth);
+	result = ms_queue_to_array(queue);
+	ms_destroy_queue(queue, free);
+	return (result);
 }
 
 static t_bool	is_exist(char *str)

@@ -12,32 +12,33 @@
 
 #include "libft.h"
 #include "ms_expand.h"
+#include <errno.h>
 
 static t_bool	init(t_glob *glob, DIR **dir);
-static t_bool	quit(char *path, DIR *dir);
+static t_bool	quit(char *next, DIR *dir);
 
 t_bool	ms_expand_filename_expand(t_queue *queue, t_glob *glob)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	char			*path;
+	char			*next;
 
 	if (!init(glob, &dir))
 		return (FALSE);
-	while (1)
+	while (dir)
 	{
 		entry = readdir(dir);
 		if (!entry)
 			break ;
 		if (!ms_match(entry, glob))
 			continue ;
-		path = ms_join_path(glob, entry->d_name);
-		if (!path)
+		next = ms_join_path(glob, entry->d_name);
+		if (!next)
 			return (FALSE);
-		if (!ms_enqueue(queue, path))
-			return (quit(path, dir));
+		if (!ms_enqueue(queue, next))
+			return (quit(next, dir));
 	}
-	closedir(dir);
+	quit(NULL, dir);
 	return (TRUE);
 }
 
@@ -47,14 +48,18 @@ static t_bool	init(t_glob *glob, DIR **dir)
 		*dir = opendir(".");
 	else
 		*dir = opendir(glob->path);
-	if (!*dir)
-		return (FALSE);
-	return (TRUE);
+	if (*dir)
+		return (TRUE);
+	if (!*dir && errno == ENOENT)
+		return (TRUE);
+	return (FALSE);
 }
 
-static t_bool	quit(char *path, DIR *dir)
+static t_bool	quit(char *next, DIR *dir)
 {
-	free(path);
-	closedir(dir);
+	if (next)
+		free(next);
+	if (dir)
+		closedir(dir);
 	return (FALSE);
 }

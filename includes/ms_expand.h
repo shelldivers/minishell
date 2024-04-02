@@ -53,6 +53,7 @@ void	ms_mark_asterisk(char *str);
 
 /* ms_expand_filename.c */
 char	**ms_expand_filename(char *str);
+char	**ms_inspect_filename(t_queue *queue, int depth, char *str);
 
 /* ms_expand_filename_search.c */
 t_bool	ms_expand_filename_search(t_queue *queue, size_t size);

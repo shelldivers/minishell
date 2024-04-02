@@ -75,6 +75,7 @@ static void	*quit(char **expanded, t_queue *result)
 		i = 0;
 		while (expanded[i])
 			free(expanded[i++]);
+		free(expanded);
 	}
 	ms_destroy_queue(result, free);
 	return (NULL);
