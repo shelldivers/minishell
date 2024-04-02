@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 14:27:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:25:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ size_t	ms_is_command(t_ast *ast, t_token **token)
 	{
 		curtok += ms_add_ast(ast, token + curtok, ms_is_subshell, 0, RIGHT);
 		if (curtok)
+		{
 			curtok += ms_add_ast(ast, token + curtok, ms_is_redirect_list, \
 			0, LEFT);
+		}
 	}
 	else
 		curtok += ms_add_ast(ast, token + curtok, ms_is_simple_command, \

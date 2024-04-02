@@ -6,15 +6,18 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/30 17:49:50 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:52:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
-#include "ms_env.h"
 #include <unistd.h>
-#include <stdio.h>
+#include "libft.h"
+#include "ms_error.h"
+#include "ms_env.h"
+#include "ms_exec.h"
+
+static char		**ms_get_paths(char **envp);
+static t_bool	ms_change_to_absolute(char **paths, char **cmd_word);
 
 t_bool	ms_add_path(t_exec *exec_info, t_env **env)
 {
@@ -38,7 +41,7 @@ t_bool	ms_add_path(t_exec *exec_info, t_env **env)
 	return (TRUE);
 }
 
-char	**ms_get_paths(char **envp)
+static char	**ms_get_paths(char **envp)
 {
 	char	*path;
 	char	**paths;
@@ -63,8 +66,7 @@ char	**ms_get_paths(char **envp)
 	return (NULL);
 }
 
-
-t_bool	ms_change_to_absolute(char **paths, char **cmd_word)
+static t_bool	ms_change_to_absolute(char **paths, char **cmd_word)
 {
 	char	*path;
 	char	*tmp;

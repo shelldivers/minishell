@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/01 19:52:57 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 15:15:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ size_t	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2);
 size_t	ms_is_io_file(t_ast *ast, t_token **token);
 size_t	ms_is_io_here(t_ast *ast, t_token **token);
 size_t	ms_is_word(t_ast *ast, t_token **token);
-size_t	ms_is_cmd_word(t_ast *ast, t_token **token);
 /*================parser.c================*/
 t_bool	ms_parser(t_ast **ast, t_token **token, size_t size);
 t_ast	*ms_new_ast(t_token **token, size_t size);

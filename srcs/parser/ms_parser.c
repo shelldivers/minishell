@@ -31,6 +31,8 @@ t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
 		write (2, "syntax error : ", 15);
 		write (2, token[curtok]->value, ft_strlen(token[curtok]->value));
 		write (2, "\n", 1);
+		ms_clear_ast(*ast);
+		*ast = NULL;
 		return (FALSE);
 	}
 	return (TRUE);

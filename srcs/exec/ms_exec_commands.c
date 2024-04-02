@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/30 17:59:03 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:42:50 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,8 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 		if (ms_exec_is_builtin(exec_info))
 			ms_exec_builtin(exec_info, env);
 		else
-		{
-			if (!ms_add_path(exec_info, env))
-			{
-				write (2, "command not found\n", 18);
-				exec_info->exit_code = 127;
-				return ;
-			}
 			ms_exec_non_builtin(exec_info, env);
-			free(exec_info->words[0]);
-		}
+		reset_exec_info(exec_info);
 	}
 	reset_io(exec_info);
 }
@@ -87,31 +79,6 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env)
 	}
 }
 
-void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
-{
-	char *const	*words = exec_info->words;
-	int			pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		return ;
-	}
-	if (pid == 0)
-	{
-		ms_dup_based_on_pipe_idx(exec_info);
-		ms_close_all_fd(exec_info);
-		execve(words[0], words, ms_env_serialize(*env));
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		ms_close_parent_pipe(exec_info);
-	}
-}
-
 void	ms_exec_builtin2(t_exec *exec_info, t_env **env)
 {
 	int		argc;
@@ -133,4 +100,36 @@ void	ms_exec_builtin2(t_exec *exec_info, t_env **env)
 		exec_info->exit_code = ms_env(argc, argv, env);
 	else if (ft_strcmp(argv[0], "exit") == 0)
 		exec_info->exit_code = ms_exit(argc, argv, env);
+}
+
+void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
+{
+	char *const	*words = exec_info->words;
+	int			pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return ;
+	}
+	if (pid == 0)
+	{
+		if (!ms_add_path(exec_info, env))
+		{
+			write(2, "minishell: command not found: ", 30);
+			write(2, words[0], ft_strlen(words[0]));
+			write(2, "\n", 1);
+			exit(3);
+		}
+		ms_dup_based_on_pipe_idx(exec_info);
+		ms_close_all_fd(exec_info);
+		execve(words[0], words, ms_env_serialize(*env));
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		ms_close_parent_pipe(exec_info);
+	}
 }

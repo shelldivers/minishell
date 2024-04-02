@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 14:58:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:13:47 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,26 @@
 #include "ms_env.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
+void	ms_max_heredoc(t_ast *ast)
+{
+	size_t	i;
+
+	i = 0;
+	if (!ast)
+		return ;
+	if (ast->op == OPIO_HERE)
+		i++;
+	if (ast->left)
+		ms_max_heredoc(ast->left);
+	if (ast->right)
+		ms_max_heredoc(ast->right);
+	if (i > 7)
+	{
+		write(2, "maximum here-document count exceeded\n", 36);
+		exit(2);
+	}
+}
 
 void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 {
@@ -41,11 +61,16 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		syntax.line = readline("minishell$ ");
-		if (syntax.line)
-			add_history(syntax.line);
+		if (!syntax.line)
+		{
+			write(1, "exit\n", 5);
+			return (0);
+		}
+		add_history(syntax.line);
 		ms_tokenizer(&syntax);
 		token = ms_lexer(&syntax);
 		ms_parser(&ast, token, syntax.words_cnt);
+		ms_max_heredoc(ast);
 		ms_exec(ast, env);
 		clear_all(&syntax, token, ast);
 	}

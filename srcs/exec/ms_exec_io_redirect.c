@@ -1,22 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_exec_redirect.c                                 :+:      :+:    :+:   */
+/*   ms_exec_io_redirect.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/30 18:50:23 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:53:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include "libft.h"
-#include "ms_env.h"
-#include "ms_builtin.h"
-#include "minishell.h"
+#include <unistd.h>
+#include "ms_error.h"
+#include "ms_exec.h"
+
+t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info)
+{
+	const char	*redirect = ast->token[0]->value;
+	const char	*filename = ast->token[1]->value;
+
+	if (ft_strcmp(redirect, ">") == 0)
+		return (ms_exec_io_file_write(exec_info, filename));
+	else if (ft_strcmp(redirect, ">>") == 0)
+		return (ms_exec_io_file_append(exec_info, filename));
+	else if (ft_strcmp(redirect, "<") == 0)
+		return (ms_exec_io_file_read(exec_info, filename));
+	return (FALSE);
+}
 
 // error handling in this function
 t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
@@ -106,18 +117,4 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 		return (FALSE);
 	}
 	return (TRUE);
-}
-
-t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
-{
-	const char	*redirect = ast->token[0]->value;
-	const char	*filename = ast->token[1]->value;
-
-	if (ft_strcmp(redirect, ">") == 0)
-		return (ms_exec_io_file_write(exec_info, filename));
-	else if (ft_strcmp(redirect, ">>") == 0)
-		return (ms_exec_io_file_append(exec_info, filename));
-	else if (ft_strcmp(redirect, "<") == 0)
-		return (ms_exec_io_file_read(exec_info, filename));
-	return (FALSE);
 }
