@@ -34,6 +34,8 @@ static t_bool	match_type(struct dirent *entry, t_glob *glob)
 		return (FALSE);
 	if (*(glob->pattern) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
+	if (*(glob->pattern) == '.' && *(entry->d_name) != '.')
+		return (FALSE);
 	return (TRUE);
 }
 
