@@ -33,7 +33,7 @@ static t_bool	match_type(struct dirent *entry, t_glob *glob)
 		return (FALSE);
 	if (*(glob->rest) == '/' && entry->d_type != DT_DIR)
 		return (FALSE);
-	if (*(glob->content) != '.' && *(entry->d_name) == '.')
+	if (*(glob->pattern) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
 	return (TRUE);
 }
