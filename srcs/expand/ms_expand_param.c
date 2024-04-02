@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_expand_param.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
+/*   Updated: 2024/04/02 17:13:09 by jeongwpa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #include "ms_env.h"
 #include "ms_expand.h"
@@ -44,7 +56,7 @@ static char	*get_pos(const char *str)
 	t_bool	dquote;
 	t_bool	quote;
 
-	pos = str;
+	pos = (char *) str;
 	dquote = FALSE;
 	quote = FALSE;
 	while (*pos)
