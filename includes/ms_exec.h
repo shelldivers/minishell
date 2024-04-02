@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:49:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:11:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int		ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env);
 void	ms_wait_child_process(t_exec *exec_info);
 t_exec	*ms_new_exec_info(t_env **env);
 void	reset_exec_info(t_exec *exec_info);
+void	ms_max_heredoc(t_ast *ast);
 
 /*================ init & clear ==================*/
 void	ms_init_exec_info(t_exec *exec_info);
@@ -64,7 +65,7 @@ void	ms_exec_builtin2(t_exec *exec_info, t_env **env);
 t_bool	ms_add_word(t_exec *exec_info, char *word);
 
 /*================ pipe ==================*/
-t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info, t_env **env);
+t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info);
 t_bool	ms_dup_based_on_pipe_idx(t_exec *exec_info);
 t_bool	ms_close_parent_pipe(t_exec *exec_info);
 

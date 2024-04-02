@@ -6,12 +6,13 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:53:42 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:07:41 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
+#include "libft.h"
 #include "ms_error.h"
 #include "ms_exec.h"
 

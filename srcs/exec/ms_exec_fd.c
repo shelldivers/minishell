@@ -6,13 +6,12 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:55:12 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:05:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "ms_error.h"
-#include "ms_env.h"
 #include "ms_exec.h"
 
 static t_bool	ms_close_all_fd2(t_exec *exec_info);
@@ -65,7 +64,11 @@ static t_bool	ms_close_all_fd2(t_exec *exec_info)
 void	reset_io(t_exec *exec_info)
 {
 	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == -1)
-		perror("dup2");
+	{
+		write(2, "function : reset_io, dup2\n", 27);
+	}
 	if (dup2(exec_info->origin_fd[1], STDOUT_FILENO) == -1)
-		perror("dup2");
+	{
+		write(2, "function : reset_io, dup2\n", 27);
+	}
 }

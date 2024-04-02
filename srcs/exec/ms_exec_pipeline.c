@@ -6,20 +6,15 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:21:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:59:18 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include "libft.h"
-#include "ms_env.h"
-#include "ms_builtin.h"
-#include "minishell.h"
+#include "ms_exec.h"
 
 //if return false, you must exit(1) and print error message "pipe"
-t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info, t_env **env)
+t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info)
 {
 	if (pipe(exec_info->pipe[exec_info->pipe_idx % 2]) == -1)
 		return (FALSE);

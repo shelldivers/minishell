@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:52:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:15:03 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,26 @@
 #include "ms_error.h"
 #include "ms_env.h"
 #include "ms_exec.h"
+
+void	ms_max_heredoc(t_ast *ast)
+{
+	size_t	i;
+
+	i = 0;
+	if (!ast)
+		return ;
+	if (ast->op == OPIO_HERE)
+		i++;
+	if (ast->left)
+		ms_max_heredoc(ast->left);
+	if (ast->right)
+		ms_max_heredoc(ast->right);
+	if (i > 7)
+	{
+		write(2, "maximum here-document count exceeded\n", 36);
+		exit(2);
+	}
+}
 
 void	ms_wait_child_process(t_exec *exec_info)
 {
@@ -44,12 +64,12 @@ t_exec	*ms_new_exec_info(t_env **env)
 
 void	reset_exec_info(t_exec *exec_info)
 {
-	ms_clear_all_fd(exec_info);
+	ms_close_all_fd(exec_info);
 	reset_io(exec_info);
 	if (access(".heredoc", F_OK) == 0)
 		unlink(".heredoc");
-	free (exec_info->words);
+	if (exec_info->words)
+		free (exec_info->words);
 	exec_info->words = NULL;
-	free (exec_info);
-	exec_info = NULL;
+	exec_info->words_size = 0;
 }

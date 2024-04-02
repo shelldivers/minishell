@@ -6,15 +6,16 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:08:10 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:54:35 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:10:32 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include "libft.h"
 #include "ms_error.h"
-#include "ms_env.h"
 #include "ms_exec.h"
 #include <readline/readline.h>
 

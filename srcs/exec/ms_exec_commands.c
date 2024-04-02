@@ -6,16 +6,15 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:42:50 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:14:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <unistd.h>
 #include "libft.h"
 #include "ms_env.h"
 #include "ms_builtin.h"
-#include "minishell.h"
+#include "ms_exec.h"
 
 void	ms_exec_words(t_exec *exec_info, t_env **env)
 {
@@ -29,9 +28,8 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 			ms_exec_builtin(exec_info, env);
 		else
 			ms_exec_non_builtin(exec_info, env);
-		reset_exec_info(exec_info);
 	}
-	reset_io(exec_info);
+	reset_exec_info(exec_info);
 }
 
 t_bool	ms_exec_is_builtin(t_exec *exec_info)
@@ -63,7 +61,7 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork");
+		write(2, "fork in builtin\n", 16);
 		return ;
 	}
 	else if (pid == 0)
@@ -110,7 +108,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork");
+		write(2, "fork in nonbuiltin\n", 19);
 		return ;
 	}
 	if (pid == 0)
@@ -125,7 +123,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
 		ms_dup_based_on_pipe_idx(exec_info);
 		ms_close_all_fd(exec_info);
 		execve(words[0], words, ms_env_serialize(*env));
-		perror("execve");
+		write(2, "execve in non builtin\n", 22);
 		exit(EXIT_FAILURE);
 	}
 	else
