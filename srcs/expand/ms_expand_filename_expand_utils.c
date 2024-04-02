@@ -6,7 +6,7 @@
 /*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/02 17:13:12 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:41:02 by jeongwpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,7 @@ static t_bool	match_type(struct dirent *entry, t_glob *glob)
 
 static t_bool	match_pattern(char *d_name, char *pattern)
 {
-	while (*d_name && *pattern)
-	{
-		if (*pattern == ASTERISK)
-		{
-			while (*pattern == ASTERISK)
-				pattern++;
-			if (!*pattern)
-				return (TRUE);
-			while (*d_name)
-			{
-				if (match_pattern(d_name, pattern))
-					return (TRUE);
-				d_name++;
-			}
-			return (FALSE);
-		}
-		if (*d_name != *pattern)
-			return (FALSE);
-		d_name++;
-		pattern++;
-	}
-	if (*d_name || *pattern)
-		return (FALSE);
-	return (TRUE);
+	// TODO
 }
 
 char	*ms_join_path(t_glob *glob, char *d_name)
