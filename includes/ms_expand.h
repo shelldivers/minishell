@@ -49,6 +49,10 @@ typedef struct s_table
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
 
+/* ms_expand_utils.c */
+void	ms_remove_quote(char *str);
+void	ms_remove_dquote(char *_str);
+
 /* ms_expand_param.c */
 t_bool	ms_expand_param(char **argv, t_env *env, int status);
 /* ms_expand_param_utils.c */
@@ -57,15 +61,12 @@ char	*ms_param_expansion(char *str, char *pos, t_env *env);
 
 /* ms_expand_filenames.c */
 char	**ms_expand_filenames(char **argv);
-
 /* ms_expand_filename.c */
 char	**ms_expand_filename(char *str);
 /* ms_expand_filename_utils.c */
 char	**ms_inspect_filename(t_queue *queue, int depth, char *str);
-
 /* ms_expand_filename_search.c */
 t_bool	ms_expand_filename_search(t_queue *queue, size_t size);
-
 /* ms_expand_filename_expand.c */
 t_bool	ms_expand_filename_expand(t_queue *queue, t_glob *glob);
 /* ms_expand_filename_match1.c */
@@ -74,9 +75,6 @@ t_bool	match_type(struct dirent *entry, t_glob *glob);
 char	*ms_join_path(t_glob *glob, char *d_name);
 /* ms_expand_filename_match2.c */
 t_bool	match_pattern(char *d_name, char *pattern);
-/* ms_expand_utils.c */
-void	ms_remove_quote(char *str);
-void	ms_remove_dquote(char *_str);
 
 /* ms_glob.c */
 t_glob	*ms_init_glob(char *str);
@@ -89,8 +87,6 @@ t_queue	*ms_init_queue(void);
 t_bool	ms_enqueue(t_queue *queue, void *content);
 t_list	*ms_dequeue(t_queue *queue);
 void	ms_destroy_queue(t_queue *queue, void *del);
-void	ms_clear_queue(t_queue *queue, void *del);
-
 /* ms_queue_utils.c */
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del);
 t_bool	ms_enqueue_array(t_queue *queue, char **array);
