@@ -130,9 +130,15 @@ TEST(ms_expand_param, ms_expand_param)
 	argv[0] = ft_strdup("echo");
 	argv[1] = ft_strdup("$HOME $TERM$? $?$PWD");
 	argv[2] = NULL;
+
 	result = ms_expand_param(argv, *env, status);
 	cout << "result: " << argv[1] << endl;
-	EXPECT_EQ(result, TRUE);
+	EXPECT_EQ(result, true);
+
+	for(int i = 0; argv[i]; i++)
+		free(argv[i]);
+	ms_env_clear(env);
+	free(env);
 }
 
 TEST(ms_expand_param, ms_expand_param_status)
@@ -148,7 +154,13 @@ TEST(ms_expand_param, ms_expand_param_status)
 	argv[0] = ft_strdup("echo");
 	argv[1] = ft_strdup("$?$?$? $?");
 	argv[2] = NULL;
+
 	result = ms_expand_param(argv, *env, status);
 	cout << "result: " << argv[1] << endl;
 	EXPECT_EQ(result, TRUE);
+
+	for(int i = 0; argv[i]; i++)
+		free(argv[i]);
+	ms_env_clear(env);
+	free(env);
 }
