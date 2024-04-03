@@ -28,7 +28,7 @@ typedef struct s_queue
 {
 	struct s_list	*head;
 	struct s_list	*tail;
-	size_t	size;
+	size_t			size;
 }	t_queue;
 
 typedef struct s_glob
