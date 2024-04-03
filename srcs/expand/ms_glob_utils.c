@@ -48,7 +48,7 @@ static t_bool	get_path(t_glob *glob, char **start, char **end, char **pos)
 			*end = *pos;
 		(*pos)++;
 	}
-	if (*start == *end)
+	if (*start == *end && **end != '/')
 		glob->path = ft_strndup(*start, *end - *start);
 	else
 		glob->path = ft_strndup(*start, *end - *start + 1);
