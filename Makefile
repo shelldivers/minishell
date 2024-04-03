@@ -29,13 +29,13 @@ B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
 
 ifdef objs
-SRCS = $(addprefix $(SOURCES), $(B_FILES))
-OBJS = $(SRCS:.c=.o)
-HEADER = $(addprefix $(INCLUDES), $(H_FILES))
+	SRCS = $(addprefix $(SOURCES), $(B_FILES))
+	OBJS = $(SRCS:.c=.o)
+	HEADER = $(addprefix $(INCLUDES), $(H_FILES))
 else
-SRCS = $(addprefix $(SOURCES), $(M_FILES))
-OBJS = $(SRCS:.c=.o)
-HEADER = $(addprefix $(INCLUDES), $(H_FILES))
+	SRCS = $(addprefix $(SOURCES), $(M_FILES))
+	OBJS = $(SRCS:.c=.o)
+	HEADER = $(addprefix $(INCLUDES), $(H_FILES))
 endif
 
 all: $(NAME) $(HEADER)
@@ -60,4 +60,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY:all bonus clean fclean re
+.PHONY: all bonus clean fclean re

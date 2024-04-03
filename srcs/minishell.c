@@ -16,6 +16,7 @@
 #include <readline/history.h>
 #include "ms_parser.h"
 
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	t_syntax	syntax;
@@ -39,3 +40,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+*/

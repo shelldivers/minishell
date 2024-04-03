@@ -21,6 +21,8 @@ FetchContent_MakeAvailable(googletest)
 
 # 소스파일 및 헤더파일 목록
 set(SRCS includes/minishell.h
+        srcs/expand/ms_expand.c
+        includes/ms_expand.h
         includes/ms_env.h
         srcs/minishell.c
         srcs/builtin/ms_cd.c
@@ -38,16 +40,18 @@ set(SRCS includes/minishell.h
         includes/ms_error.h
         includes/ms_builtin.h
         srcs/error/ms_error_utils.c
+        srcs/expand/ms_expand_param.c
         srcs/parser/ms_init.c
         srcs/parser/ms_lexer.c
-        srcs/parser/ms_init.c
         srcs/parser/ms_parser.c
         srcs/parser/ms_terminal2.c
         srcs/parser/ms_tokenizer.c
         srcs/parser/ms_tokenizer2.c
         srcs/parser/ms_unterminal.c
         srcs/parser/ms_unterminal2.c
-        srcs/parser/ms_clear.c srcs/parser/ms_terminal.c)
+        srcs/parser/ms_clear.c
+        srcs/parser/ms_terminal.c
+        srcs/expand/ms_expand_utils.c srcs/expand/ms_expand_param_utils.c srcs/expand/ms_expand_filenames.c srcs/expand/ms_queue.c srcs/expand/ms_queue_utils.c srcs/expand/ms_expand_filename.c srcs/expand/ms_expand_filename_search.c srcs/expand/ms_glob.c srcs/expand/ms_expand_filename_expand.c srcs/expand/ms_expand_filename_match1.c srcs/expand/ms_expand_filename_utils.c srcs/expand/ms_glob_utils.c srcs/expand/ms_expand_filename_match2.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)
