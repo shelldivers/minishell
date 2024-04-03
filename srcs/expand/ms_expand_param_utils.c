@@ -15,7 +15,7 @@
 #include "ms_env.h"
 #include "ms_expand.h"
 
-static size_t	ft_strcspn(const char *str, const char *charset);
+static size_t	get_key_length(const char *str);
 
 char	*ms_status_expansion(char *str, char *pos, int status)
 {
@@ -53,7 +53,7 @@ char	*ms_param_expansion(char *str, char *pos, t_env *env)
 	char	*tmp2;
 	char	*replace;
 
-	key = ft_strndup(pos + 1, ft_strcspn(pos + 1, " \t\n\"'\\$"));
+	key = ft_strndup(pos + 1, get_key_length(pos + 1));
 	if (!key)
 		return (NULL);
 	val = ms_getenv(env, key);
@@ -67,29 +67,23 @@ char	*ms_param_expansion(char *str, char *pos, t_env *env)
 	free(tmp);
 	if (!tmp2)
 		return (NULL);
-	replace = ft_strjoin(tmp2, pos + ft_strcspn(pos + 1, " \t\n\"'\\$") + 1);
+	replace = ft_strjoin(tmp2, pos + get_key_length(pos + 1) + 1);
 	free(tmp2);
 	if (!replace)
 		return (NULL);
 	return (replace);
 }
 
-static size_t	ft_strcspn(const char *str, const char *charset)
+static size_t	get_key_length(const char *str)
 {
-	size_t	i;
-	size_t	j;
+	size_t	len;
 
-	i = 0;
-	while (str[i])
+	len = 0;
+	while (str[len])
 	{
-		j = 0;
-		while (charset[j])
-		{
-			if (str[i] == charset[j])
-				return (i);
-			j++;
-		}
-		i++;
+		if (!ft_isalnum(str[len]) && str[len] != '_')
+			return (len);
+		len++;
 	}
-	return (i);
+	return (len);
 }

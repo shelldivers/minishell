@@ -14,17 +14,9 @@
 #include "ft_printf.h"
 #include "ms_expand.h"
 
-typedef struct t_table
-{
-	int	**arr;
-	int	x;
-	int	y;
-}	t_table;
-
 static t_bool	dp_loop(const char *d_name, const char *pattern, t_table table);
 static t_bool	init_table(char *d_name, char *pattern, t_table *table);
 static void		destroy_table(t_table *table);
-static void		print_table_debug(t_table table, const char *d_name, const char *pattern);
 
 t_bool	match_pattern(char *d_name, char *pattern)
 {
@@ -37,28 +29,6 @@ t_bool	match_pattern(char *d_name, char *pattern)
 	result = dp_loop(d_name, pattern, table);
 	destroy_table(&table);
 	return (result);
-}
-
-static void	print_table_debug(t_table table, const char *d_name, const char *pattern)
-{
-	int	i;
-	int	j;
-
-	ft_printf("d_name: %s, pattern: %s\n", d_name, pattern);
-	i = 0;
-	j = 0;
-	while (j <= table.y)
-	{
-		while (i <= table.x)
-		{
-			ft_printf("%d ", table.arr[j][i]);
-			i++;
-		}
-		ft_printf("\n");
-		j++;
-		i = 0;
-	}
-	ft_printf("\n");
 }
 
 t_bool	dp_loop(const char *d_name, const char *pattern, t_table table)
@@ -74,9 +44,7 @@ t_bool	dp_loop(const char *d_name, const char *pattern, t_table table)
 		{
 			if (pattern[j - 1] == ASTERISK)
 			{
-				if (table.arr[j - 1][i])
-					table.arr[j][i] = 1;
-				if (i > 0 && table.arr[j][i - 1])
+				if (table.arr[j - 1][i] || (i > 0 && table.arr[j][i - 1]))
 					table.arr[j][i] = 1;
 			}
 			else if (i == 0)
@@ -88,7 +56,6 @@ t_bool	dp_loop(const char *d_name, const char *pattern, t_table table)
 		j++;
 		i = 0;
 	}
-//	print_table_debug(table, d_name, pattern);
 	return ((t_bool) table.arr[table.y][table.x]);
 }
 

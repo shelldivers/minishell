@@ -18,6 +18,7 @@ extern "C" {
 # endif
 
 #define ASTERISK (-1)
+#define CSPN " \t\n\"'\\$"
 
 #include "ft_type.h"
 #include "ms_env.h"
@@ -37,6 +38,13 @@ typedef struct s_glob
 	char	*pattern;
 	char	*rest;
 }	t_glob;
+
+typedef struct s_table
+{
+	int	**arr;
+	int	x;
+	int	y;
+}	t_table;
 
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);

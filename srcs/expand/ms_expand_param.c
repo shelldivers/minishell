@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "ft_printf.h"
 #include "ms_env.h"
 #include "ms_expand.h"
 
-static char	*get_pos(const char *str);
+static char		*get_pos(const char *str);
+static t_bool	is_cspn(char ch, const char *cspn);
 
 /**
  * @details parameter expansion\n
@@ -37,7 +39,7 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 				break ;
 			if (pos[1] == '?')
 				replace = ms_status_expansion(*argv, pos, status);
-			else
+			else if (ft_isalnum(pos[1]) || pos[1] == '_')
 				replace = ms_param_expansion(*argv, pos, env);
 			if (!replace)
 				return (FALSE);
@@ -65,9 +67,23 @@ static char	*get_pos(const char *str)
 			dquote = (t_bool) !dquote;
 		else if (!dquote && *pos == '\'')
 			quote = (t_bool) !quote;
-		else if (!quote && *pos == '$')
+		else if (!quote && *pos == '$' && !is_cspn(*(pos + 1), CSPN))
 			return (pos);
 		pos++;
 	}
 	return (NULL);
+}
+
+static t_bool	is_cspn(char ch, const char *cspn)
+{
+	int	i;
+
+	i = 0;
+	while (cspn[i])
+	{
+		if (cspn[i] == ch)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
 }
