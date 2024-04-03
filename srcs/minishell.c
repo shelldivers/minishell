@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 17:00:19 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:28:22 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,27 @@ void	ms_clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_syntax	syntax;
-	t_token		**token;
-	t_env		**env;
-	t_ast		*ast;
+	t_minishell	shell;
 
 	if (argc != 1 || !argv || !envp)
 		return (1);
-	ms_init_syntax(&syntax);
-	env = ms_env_deserialize(envp);
-	ast = NULL;
+	ms_init_syntax(&shell.syntax);
+	shell.env = ms_env_deserialize(envp);
+	shell.ast = NULL;
 	while (1)
 	{
-		syntax.line = readline("minishell$ ");
-		if (!syntax.line)
+		shell.syntax.line = readline("minishell$ ");
+		if (!shell.syntax.line)
 		{
 			write(1, "exit\n", 5);
 			return (0);
 		}
-		add_history(syntax.line);
-		ms_tokenizer(&syntax);
-		token = ms_lexer(&syntax);
-		ms_parser(&ast, token, syntax.words_cnt);
-		ms_exec(ast, env);
-		ms_clear_all(&syntax, token, ast);
+		add_history(shell.syntax.line);
+		ms_tokenizer(&shell.syntax);
+		shell.token = ms_lexer(&shell.syntax);
+		ms_parser(&shell.ast, shell.token, shell.syntax.words_cnt);
+		ms_exec(shell.ast, shell.env);
+		ms_clear_all(&shell.syntax, shell.token, shell.ast);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 17:38:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 21:10:56 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ms_exec(t_ast *ast, t_env **env)
 	exec_info = ms_new_exec_info(env);
 	if (!exec_info)
 		ms_env_clear(env);
+	ms_exec_heredoc_before(exec_info->heredoc, ast, 0);
 	ms_exec_in_order(ast, exec_info, env);
 	if (exec_info->words)
 		ms_exec_words(exec_info, env);
