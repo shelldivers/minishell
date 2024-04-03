@@ -13,6 +13,7 @@ TEST(ms_expand_test, basic_case4) // TODO : Failed to parse content
 		"SHLVL=1",
 		"HOME=/Users/jeongwpa",
 		"LOGNAME=jeongwpa",
+		"a=\'asd",
 		NULL
 	};
 	t_env **env;
@@ -20,7 +21,7 @@ TEST(ms_expand_test, basic_case4) // TODO : Failed to parse content
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("");
+	argv[1] = ft_strdup("$a@");	// ???
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);
@@ -57,7 +58,7 @@ TEST(ms_expand_test, basic_case3) // TODO : Failed to parse content
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"/Users/jeongwpa/*****\"**ject*");
+	argv[1] = ft_strdup("\"/Users/jeongwpa/\"*p*ject*");
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);
@@ -94,7 +95,7 @@ TEST(ms_expand_test, basic_case2) // TODO : Failed to parse content
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"/Users/jeongwpa/\"\"asdf\"*");
+	argv[1] = ft_strdup("\"/Users/jeongwpa/\"\"pro\"*");
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);
@@ -131,7 +132,7 @@ TEST(ms_expand_test, basic_case) // TODO : Failed to parse content
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"/Users/jeongwpa/\"*");
+	argv[1] = ft_strdup("\"/Users/jeongwpa/*\"*");
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);

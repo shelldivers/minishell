@@ -40,6 +40,7 @@ static char	**no_match(t_queue *queue, const char *str)
 		free(result);
 		return (NULL);
 	}
+	ms_remove_dquote(result[0]);
 	result[1] = NULL;
 	return (result);
 }
