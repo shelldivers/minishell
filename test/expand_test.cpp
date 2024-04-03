@@ -21,7 +21,7 @@ TEST(ms_expand_test, basic_case5) // TODO : Failed to parse content
 	status = 0;
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("\"$HOME\\\"\"");	// ???
+	argv[1] = ft_strdup("\"$HOME\\\"");	// ???
 	argv[2] = NULL;
 
 	char **result = ms_expansion(argv, *env, status);

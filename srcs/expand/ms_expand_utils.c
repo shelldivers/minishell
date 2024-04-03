@@ -45,7 +45,7 @@ void	ms_remove_dquote(char *str)
 	quote = FALSE;
 	while (*_str)
 	{
-		if (!quote && *_str == '\"' && (str == _str || *(_str - 1) != '\\'))
+		if (!quote && *_str == '\"')
 		{
 			dquote = (t_bool) !dquote;
 			ft_memmove(_str, _str + 1, ft_strlen(_str) + 1);
