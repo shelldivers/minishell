@@ -6,7 +6,7 @@
 /*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:13:00 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/02 18:40:47 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/03 13:03:17 by jeongwpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,3 @@ static t_bool	get_rest(t_glob *glob, char **pos)
 		return (FALSE);
 	return (TRUE);
 }
-
-
