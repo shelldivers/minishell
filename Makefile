@@ -9,6 +9,7 @@ S_ERROR = error/
 S_EXEC = exec/
 S_BUILTIN = builtin/
 S_ENV = env/
+S_EXPAND = expand/
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror
@@ -19,6 +20,8 @@ ERROR += ms_error_utils.c ms_error.c
 EXEC += ms_exec.c ms_exec_utils.c ms_exec_init_clear.c ms_exec_words.c ms_exec_path.c ms_exec_fd.c ms_exec_pipeline.c ms_exec_commands.c ms_exec_io_redirect.c ms_exec_heredoc.c
 BUILTIN += ms_cd.c ms_echo.c ms_env.c ms_exit.c ms_export.c ms_pwd.c ms_unset.c
 ENV += ms_env_lst_utils.c ms_env_lst.c ms_env_serialize_utils.c ms_env_serialize.c
+EXPAND += ms_expand.c ms_expand_utils.c ms_queue.c ms_queue_utils.c ms_glob.c ms_glob_utils.c ms_expand_param.c ms_expand_param_utils.c ms_expand_filename.c ms_expand_filenames.c ms_expand_filename_utils.c \
+			ms_expand_filename_search.c ms_expand_filename_match1.c ms_expand_filename_match2.c ms_expand_filename_expand.c
 
 
 M_FILES += minishell.c
@@ -27,6 +30,7 @@ M_FILES += $(addprefix $(S_EXEC), $(EXEC))
 M_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
 M_FILES += $(addprefix $(S_ENV), $(ENV))
 M_FILES += $(addprefix $(S_ERROR), $(ERROR))
+M_FILES += $(addprefix $(S_EXPAND), $(EXPAND))
 
 B_FILES += minishell.c
 B_FILES += $(addprefix $(S_PARSE), $(PARSER))
@@ -34,6 +38,7 @@ B_FILES += $(addprefix $(S_EXEC), $(EXEC))
 B_FILES += $(addprefix $(S_BUILTIN), $(BUILTIN))
 B_FILES += $(addprefix $(S_ENV), $(ENV))
 B_FILES += $(addprefix $(S_ERROR), $(ERROR))
+B_FILES += $(addprefix $(S_EXPAND), $(EXPAND))
 
 ifdef objs
 	SRCS = $(addprefix $(SOURCES), $(B_FILES))

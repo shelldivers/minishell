@@ -6,10 +6,12 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:15:17 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:38:49 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <unistd.h>
 #include "ms_env.h"
 #include "ms_exec.h"
 
@@ -28,7 +30,11 @@ void	ms_exec(t_ast *ast, t_env **env)
 	if (exec_info->words)
 		ms_exec_words(exec_info, env);
 	ms_wait_child_process(exec_info);
-	reset_exec_info(exec_info);
+	ms_reset_exec_info(exec_info);
+	ms_close_all_fd(exec_info);
+	ms_reset_io(exec_info);
+	if (access(".heredoc", F_OK) == 0)
+		unlink(".heredoc");
 	free(exec_info);
 }
 

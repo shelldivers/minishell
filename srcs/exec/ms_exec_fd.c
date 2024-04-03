@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:05:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:01:15 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static t_bool	ms_close_all_fd2(t_exec *exec_info)
 	return (TRUE);
 }
 
-void	reset_io(t_exec *exec_info)
+void	ms_reset_io(t_exec *exec_info)
 {
 	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == -1)
 	{

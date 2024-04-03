@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:08:10 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:10:32 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:15:16 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,17 @@ t_bool	ms_exec_io_here(t_exec *exec_info, const char *here_end)
 			free(line);
 			break ;
 		}
-		write(exec_info->fd[1], line, ft_strlen(line));
-		write(exec_info->fd[1], "\n", 1);
+		write(exec_info->fd[0], line, ft_strlen(line));
+		write(exec_info->fd[0], "\n", 1);
 		free(line);
 	}
-	dup2 (exec_info->fd[1], STDIN_FILENO);
 	return (TRUE);
 }
 
 static t_bool	set_here_fd(t_exec *exec_info)
 {
-	if (exec_info->fd[1] != -1)
-	{
-		if (close(exec_info->fd[1]) == -1)
-		{
-			write(2, "close\n", 6);
-			return (FALSE);
-		}
-	}
-	exec_info->fd[1] = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec_info->fd[1] == -1)
-	{
-		write(2, "No such file or directory : .heredoc\n", 36);
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
+	if (exec_info->fd[0] != -1)
+		close(exec_info->fd[0]);
+	exec_info->fd[0] = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	return (TRUE);
 }

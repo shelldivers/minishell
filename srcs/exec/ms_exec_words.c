@@ -6,14 +6,12 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:50:18 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:24:46 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "ms_exec.h"
-
-static size_t	ms_words_size(char **words);
 
 t_bool	ms_add_word(t_exec *exec_info, char *word)
 {
@@ -38,7 +36,7 @@ t_bool	ms_add_word(t_exec *exec_info, char *word)
 	return (TRUE);
 }
 
-static size_t	ms_words_size(char **words)
+size_t	ms_words_size(char **words)
 {
 	size_t	size;
 

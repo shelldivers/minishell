@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:52:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:35:21 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@
 static char		**ms_get_paths(char **envp);
 static t_bool	ms_change_to_absolute(char **paths, char **cmd_word);
 
-t_bool	ms_add_path(t_exec *exec_info, t_env **env)
+t_bool	ms_add_path(char **words, t_env **env)
 {
-	char	**words;
 	char	**envp;
 	char	**paths;
 
-	words = exec_info->words;
 	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
 		return (TRUE);
 	envp = ms_env_serialize(*env);

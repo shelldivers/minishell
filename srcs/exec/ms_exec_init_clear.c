@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:23:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 19:54:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:01:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	ms_init_exec_info(t_exec *exec_info)
 	exec_info->origin_fd[1] = dup(STDOUT_FILENO);
 	exec_info->fd[0] = -1;
 	exec_info->fd[1] = -1;
+	exec_info->here_fd[0] = -1;
+	exec_info->here_fd[1] = -1;
 	exec_info->pipe[0][0] = -1;
 	exec_info->pipe[0][1] = -1;
 	exec_info->pipe[1][0] = -1;
@@ -29,6 +31,7 @@ void	ms_init_exec_info(t_exec *exec_info)
 	exec_info->pipe_cnt = 0;
 	exec_info->exit_code = 0;
 	exec_info->cmd_cnt = 0;
+	exec_info->execed_cmd_cnt = 0;
 }
 
 void	ms_clear_sec_dimentional(char **words)

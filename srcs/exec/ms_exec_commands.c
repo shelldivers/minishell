@@ -6,37 +6,44 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:14:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:39:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
 #include "libft.h"
 #include "ms_env.h"
 #include "ms_builtin.h"
 #include "ms_exec.h"
+#include "ms_expand.h"
 
 void	ms_exec_words(t_exec *exec_info, t_env **env)
 {
 	char	**words;
 
-	words = exec_info->words;
-	if (words)
+	exec_info->cmd_cnt++;
+	if (exec_info->words)
 	{
-		exec_info->cmd_cnt++;
-		if (ms_exec_is_builtin(exec_info))
-			ms_exec_builtin(exec_info, env);
+		words = ms_expansion(exec_info->words, *env, exec_info->exit_code);
+		exec_info->execed_cmd_cnt++;
+		if (ms_exec_is_builtin(words))
+			ms_exec_builtin(exec_info, env, words);
 		else
-			ms_exec_non_builtin(exec_info, env);
+			ms_exec_non_builtin(exec_info, env, words);
+		ms_clear_sec_dimentional(words);
+		free(exec_info->words);
+		exec_info->words = NULL;
+		words = NULL;
 	}
-	reset_exec_info(exec_info);
+	ms_reset_exec_info(exec_info);
 }
 
-t_bool	ms_exec_is_builtin(t_exec *exec_info)
+t_bool	ms_exec_is_builtin(char **words)
 {
 	char	*word;
 
-	word = exec_info->words[0];
+	word = words[0];
 	if (ft_strcmp(word, "echo") == 0)
 		return (TRUE);
 	if (ft_strcmp(word, "cd") == 0)
@@ -54,7 +61,7 @@ t_bool	ms_exec_is_builtin(t_exec *exec_info)
 	return (FALSE);
 }
 
-void	ms_exec_builtin(t_exec *exec_info, t_env **env)
+void	ms_exec_builtin(t_exec *exec_info, t_env **env, char **words)
 {
 	int		pid;
 
@@ -68,7 +75,7 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env)
 	{
 		ms_dup_based_on_pipe_idx(exec_info);
 		ms_close_all_fd(exec_info);
-		ms_exec_builtin2(exec_info, env);
+		ms_exec_builtin2(exec_info, env, words);
 		exit(exec_info->exit_code);
 	}
 	else
@@ -77,32 +84,28 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env)
 	}
 }
 
-void	ms_exec_builtin2(t_exec *exec_info, t_env **env)
+void	ms_exec_builtin2(t_exec *exec_info, t_env **env, char **words)
 {
-	int		argc;
-	char	**argv;
+	const size_t	argc = ms_words_size(words);
 
-	argc = exec_info->words_size;
-	argv = exec_info->words;
-	if (ft_strcmp(argv[0], "echo") == 0)
-		exec_info->exit_code = ms_echo(argc, argv, env);
-	else if (ft_strcmp(argv[0], "cd") == 0)
-		exec_info->exit_code = ms_cd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "pwd") == 0)
-		exec_info->exit_code = ms_pwd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "export") == 0)
-		exec_info->exit_code = ms_export(argc, argv, env);
-	else if (ft_strcmp(argv[0], "unset") == 0)
-		exec_info->exit_code = ms_unset(argc, argv, env);
-	else if (ft_strcmp(argv[0], "env") == 0)
-		exec_info->exit_code = ms_env(argc, argv, env);
-	else if (ft_strcmp(argv[0], "exit") == 0)
-		exec_info->exit_code = ms_exit(argc, argv, env);
+	if (ft_strcmp(words[0], "echo") == 0)
+		exec_info->exit_code = ms_echo(argc, words, env);
+	else if (ft_strcmp(words[0], "cd") == 0)
+		exec_info->exit_code = ms_cd(argc, words, env);
+	else if (ft_strcmp(words[0], "pwd") == 0)
+		exec_info->exit_code = ms_pwd(argc, words, env);
+	else if (ft_strcmp(words[0], "export") == 0)
+		exec_info->exit_code = ms_export(argc, words, env);
+	else if (ft_strcmp(words[0], "unset") == 0)
+		exec_info->exit_code = ms_unset(argc, words, env);
+	else if (ft_strcmp(words[0], "env") == 0)
+		exec_info->exit_code = ms_env(argc, words, env);
+	else if (ft_strcmp(words[0], "exit") == 0)
+		exec_info->exit_code = ms_exit(argc, words, env);
 }
 
-void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
+void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 {
-	char *const	*words = exec_info->words;
 	int			pid;
 
 	pid = fork();
@@ -113,7 +116,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env)
 	}
 	if (pid == 0)
 	{
-		if (!ms_add_path(exec_info, env))
+		if (!ms_add_path(words, env))
 		{
 			write(2, "minishell: command not found: ", 30);
 			write(2, words[0], ft_strlen(words[0]));

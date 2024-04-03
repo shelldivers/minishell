@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:15:03 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:59:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ void	ms_max_heredoc(t_ast *ast)
 
 void	ms_wait_child_process(t_exec *exec_info)
 {
-	int	status;
+	int		status;
 
-	while (exec_info->cmd_cnt)
+	while (exec_info->execed_cmd_cnt)
 	{
 		waitpid(-1, &status, 0);
 		exec_info->exit_code = WEXITSTATUS(status);
-		exec_info->cmd_cnt--;
+		exec_info->execed_cmd_cnt--;
 	}
 }
 
@@ -62,12 +62,8 @@ t_exec	*ms_new_exec_info(t_env **env)
 	return (exec_info);
 }
 
-void	reset_exec_info(t_exec *exec_info)
+void	ms_reset_exec_info(t_exec *exec_info)
 {
-	ms_close_all_fd(exec_info);
-	reset_io(exec_info);
-	if (access(".heredoc", F_OK) == 0)
-		unlink(".heredoc");
 	if (exec_info->words)
 		free (exec_info->words);
 	exec_info->words = NULL;

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:07:41 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:34:15 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,15 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
+	// while (1)
+	// {
+	// 	line = readline(NULL);
+	// 	if (line == 0)
+	// 		break ;
+	// 	write(exec_info->fd[0], line, ft_strlen(line));
+	// 	write(exec_info->fd[0], "\n", 1);
+	// 	free(line);
+	// }
 	return (TRUE);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 20:11:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:00:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
+void	ms_clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 {
 	ms_clear_syntax(syntax);
 	ms_clear_token(token);
 	ms_clear_ast(ast);
 }
 
-/*
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_syntax	syntax;
@@ -51,8 +51,7 @@ int	main(int argc, char **argv, char **envp)
 		token = ms_lexer(&syntax);
 		ms_parser(&ast, token, syntax.words_cnt);
 		ms_exec(ast, env);
-		clear_all(&syntax, token, ast);
+		ms_clear_all(&syntax, token, ast);
 	}
 	return (0);
 }
-*/
