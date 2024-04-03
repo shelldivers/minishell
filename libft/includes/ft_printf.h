@@ -13,6 +13,10 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 # define BUFFER_SIZE 512
 # include <stdarg.h>
 # include "ft_bool.h"
@@ -59,5 +63,9 @@ t_fmt	*parse_hex(t_fmt *fmt, unsigned int arg, const char hex[17]);
 void	strs_add_back(t_strs **lst, t_strs *new_node);
 void	strs_clear(t_strs **lst);
 t_strs	*strs_new(char *content, int size);
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif

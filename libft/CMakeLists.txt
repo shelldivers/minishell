@@ -48,10 +48,12 @@ set(SRCS
         includes/ft_printf.h
         includes/get_next_line.h
         includes/ft_bool.h
-        srcs/ft_strtrim.c
+        srcs/ft_memmove.c
+        srcs/ft_isalnum.c
         srcs/ft_strcmp.c
         srcs/ft_atoi.c
-        srcs/ft_isnumeric.c)
+        srcs/ft_isnumeric.c
+        )
 
 add_library(${NAME} STATIC ${SRCS})
 

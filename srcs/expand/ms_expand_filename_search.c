@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   ms_expand_filename_search.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 12:37:28 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/01/05 18:47:34 by jeongwpa         ###   ########.fr       */
+/*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
+/*   Updated: 2024/04/03 13:02:53 by jeongwpa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_expand.h"
 
-/**
- * @notice You must free head node after calling this function
- */
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+t_bool	ms_expand_filename_search(t_queue *queue, size_t size)
 {
 	t_list	*node;
-	t_list	*next;
+	t_glob	*glob;
+	t_bool	result;
 
-	if (!lst || !del)
-		return ;
-	node = *lst;
-	while (node)
+	while (size--)
 	{
-		next = node->next;
-		del(node->content);
-		free(node);
-		node = next;
+		node = ms_dequeue(queue);
+		glob = ms_init_glob(node->content);
+		if (!glob)
+			return (FALSE);
+		result = ms_expand_filename_expand(queue, glob);
+		ft_lstdelone(node, free);
+		ms_destroy_glob(glob);
+		if (!result)
+			return (FALSE);
 	}
-	*lst = 0;
+	return (TRUE);
 }

@@ -25,6 +25,7 @@ void	clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 	ms_clear_ast(ast);
 }
 
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	t_syntax	syntax;
@@ -54,3 +55,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+*/
