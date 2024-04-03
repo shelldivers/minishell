@@ -1,6 +1,7 @@
+#include "ft_printf.h"
 #include "libft.h"
-#include "ms_expand.h"
 #include "ms_error.h"
+#include "ms_expand.h"
 #include <gtest/gtest.h>
 
 using namespace std;
@@ -118,12 +119,18 @@ TEST(ms_filename_test, ms_filename_test14)
 	// then
 	cout << endl;
 	EXPECT_EQ(result, nullptr);
-
-	ms_puterror_arg(*env, *argv);
+	ft_dprintf(2, "error: %s\n", strerror(errno));
+//	EXPECT_NE(result, nullptr);
+//	for (int i = 0; result[i]; i++)
+//		cout << "result: " << result[i] << endl;
+//	cout << endl;
 
 	// final
 	ms_env_clear(env);
 	free(env);
+//	for (int i = 0; result[i]; i++)
+//		free(result[i]);
+//	free(result);
 	for (int i = 0; argv[i]; i++)
 		free(argv[i]);
 }
@@ -345,7 +352,7 @@ TEST(ms_filename_test, ms_filename_test3)
 	};
 	env = ms_env_deserialize(envp);
 	argv[0] = ft_strdup("echo");
-	argv[1] = ft_strdup("./u*");
+	argv[1] = ft_strdup("");
 	argv[2] = NULL;
 
 	// when

@@ -67,30 +67,13 @@ static void	ms_mark_asterisk(char *str)
 	}
 }
 
-static t_bool	init(t_queue **queue, int *depth, char *str)
-{
-	char	*tmp;
-
-	*queue = ms_init_queue();
-	if (!*queue)
-		return (FALSE);
-	*depth = get_depth(str);
-	tmp = ft_strdup(str);
-	if (!tmp)
-	{
-		ms_destroy_queue(*queue, free);
-		return (FALSE);
-	}
-	ms_mark_asterisk(tmp);
-	ms_enqueue(*queue, tmp);
-	return (TRUE);
-}
-
 static int	get_depth(char *str)
 {
 	int		max_depth;
 	t_bool	path;
 
+	if (*str == '\0')
+		return (0);
 	path = TRUE;
 	max_depth = 0;
 	while (*str)
@@ -104,7 +87,28 @@ static int	get_depth(char *str)
 		}
 		str++;
 	}
+	if (path && *(str - 1) == '/')
+		max_depth--;
 	return (max_depth);
+}
+
+static t_bool	init(t_queue **queue, int *depth, char *str)
+{
+	char	*tmp;
+
+	*queue = ms_init_queue();
+	if (!*queue)
+		return (FALSE);
+	tmp = ft_strdup(str);
+	if (!tmp)
+	{
+		ms_destroy_queue(*queue, free);
+		return (FALSE);
+	}
+	ms_mark_asterisk(tmp);
+	*depth = get_depth(tmp);
+	ms_enqueue(*queue, tmp);
+	return (TRUE);
 }
 
 static t_bool	is_exist(char *str)

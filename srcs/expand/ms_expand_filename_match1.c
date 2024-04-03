@@ -17,9 +17,9 @@ static t_bool	match_type(struct dirent *entry, t_glob *glob);
 
 t_bool	ms_match(struct dirent *entry, t_glob *glob)
 {
-	if (!match_pattern(entry->d_name, glob->pattern))
-		return (FALSE);
 	if (!match_type(entry, glob))
+		return (FALSE);
+	if (!match_pattern(entry->d_name, glob->pattern))
 		return (FALSE);
 	return (TRUE);
 }
