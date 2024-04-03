@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 18:00:48 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:57:46 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,18 @@
 # include "ms_parser.h"
 # include "ms_env.h"
 
+typedef struct s_heredoc
+{
+	char				*filename;
+	char				*here_end;
+	struct s_heredoc	*next;
+}				t_heredoc;
 typedef struct s_exec
 {
 	char	**words;
 	int		words_size;
 	int		origin_fd[2];
 	int		fd[2];
-	int		here_fd[2];
 	int		pipe[2][2];
 	int		pipe_idx;
 	int		pipe_cnt;
