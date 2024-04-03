@@ -15,33 +15,7 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-char	**ms_strsdup(char **strs)
-{
-	char	**copy;
-	size_t	size;
-	size_t	i;
-
-	size = 0;
-	while (strs[size])
-		size++;
-	copy = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (strs[i] && i < size)
-	{
-		copy[i] = ft_strdup(strs[i]);
-		if (!copy[i])
-		{
-			while (i--)
-				free(copy[i]);
-			return (NULL);
-		}
-		i++;
-	}
-	copy[size] = NULL;
-	return (copy);
-}
+static char	**ms_strsdup(char **strs);
 
 /**
  * @details 쉘 확장은 다음 순서로 진행됩니다.\n
@@ -70,4 +44,32 @@ char	**ms_expansion(char **argv, t_env *env, int status)
 		return (NULL);
 	}
 	return (expanded);
+}
+
+static char	**ms_strsdup(char **strs)
+{
+	char	**copy;
+	size_t	size;
+	size_t	i;
+
+	size = 0;
+	while (strs[size])
+		size++;
+	copy = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (strs[i] && i < size)
+	{
+		copy[i] = ft_strdup(strs[i]);
+		if (!copy[i])
+		{
+			while (i--)
+				free(copy[i]);
+			return (NULL);
+		}
+		i++;
+	}
+	copy[size] = NULL;
+	return (copy);
 }

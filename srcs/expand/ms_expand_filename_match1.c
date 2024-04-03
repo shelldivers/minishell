@@ -13,8 +13,6 @@
 #include "libft.h"
 #include "ms_expand.h"
 
-static t_bool	match_type(struct dirent *entry, t_glob *glob);
-
 t_bool	ms_match(struct dirent *entry, t_glob *glob)
 {
 	if (!match_type(entry, glob))
@@ -24,7 +22,7 @@ t_bool	ms_match(struct dirent *entry, t_glob *glob)
 	return (TRUE);
 }
 
-static t_bool	match_type(struct dirent *entry, t_glob *glob)
+t_bool	match_type(struct dirent *entry, t_glob *glob)
 {
 	if (ft_strcmp(entry->d_name, ".") == 0)
 		return (FALSE);

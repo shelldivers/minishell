@@ -68,13 +68,12 @@ t_bool	ms_expand_filename_search(t_queue *queue, size_t size);
 
 /* ms_expand_filename_expand.c */
 t_bool	ms_expand_filename_expand(t_queue *queue, t_glob *glob);
-/* ms_expand_filename_expand_utils.c */
+/* ms_expand_filename_match1.c */
 t_bool	ms_match(struct dirent *entry, t_glob *glob);
+t_bool	match_type(struct dirent *entry, t_glob *glob);
 char	*ms_join_path(t_glob *glob, char *d_name);
-
-/* ms_expand_filename_match.c */
+/* ms_expand_filename_match2.c */
 t_bool	match_pattern(char *d_name, char *pattern);
-
 /* ms_expand_utils.c */
 void	ms_remove_quote(char *str);
 void	ms_remove_dquote(char *_str);

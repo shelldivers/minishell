@@ -72,14 +72,3 @@ t_list	*ms_dequeue(t_queue *queue)
 	queue->size--;
 	return (node);
 }
-
-void	ms_clear_queue(t_queue *queue, void *del)
-{
-	t_list	*node;
-
-	while (queue->size > 0)
-	{
-		node = ms_dequeue(queue);
-		ft_lstdelone(node, del);
-	}
-}
