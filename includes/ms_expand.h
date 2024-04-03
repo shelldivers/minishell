@@ -11,18 +11,18 @@
 /* ************************************************************************** */
 
 #ifndef MS_EXPAND_H
-#define MS_EXPAND_H
+# define MS_EXPAND_H
 
 # ifdef __cplusplus
 extern "C" {
 # endif
 
-#define ASTERISK (-1)
-#define CSPN " \t\n\"'\\$"
+# define ASTERISK (-1)
+# define CSPN " \t\n\"'\\$"
 
-#include "ft_type.h"
-#include "ms_env.h"
-#include <dirent.h>
+# include "ft_type.h"
+# include "ms_env.h"
+# include <dirent.h>
 
 typedef struct s_queue
 {
