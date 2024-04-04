@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:23:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:48:09 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:17:22 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	ms_clear_heredoc(t_exec *exec_info)
 
 	while (exec_info->heredoc_seq)
 	{
+		exec_info->heredoc_seq--;
 		filename = ms_get_heredoc_filename(exec_info->heredoc_seq);
 		if (!filename)
 		{
@@ -74,7 +75,6 @@ void	ms_clear_heredoc(t_exec *exec_info)
 		if (access(filename, F_OK & X_OK) == 0)
 			if (unlink(filename) == -1)
 				ms_puterror_cmd(NULL, "unlink");
-		exec_info->heredoc_seq--;
 		free(filename);
 	}
 }
