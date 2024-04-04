@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 14:57:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:10:09 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	dup2_fd(t_exec *exec_info)
 
 	if (exec_info->fd[0] != -1)
 		dup2(exec_info->fd[0], STDIN_FILENO);
-	else if (exec_info->fd[0] == -1)
+	else if (exec_info->fd[0] == -1 && exec_info->heredoc_cnt > 0)
 	{
 		cnt = 1;
 		heredoc = exec_info->heredoc;
