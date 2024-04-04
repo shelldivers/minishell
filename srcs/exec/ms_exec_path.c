@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:56:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:49:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ms_add_path(char **words, t_env **env)
 	add_path = ms_change_to_absolute(paths, words);
 	if (!add_path)
 	{
-		ms_puterror_no_file(words[0]);
+		ms_puterror_no_command(words[0]);
 		exit(127);
 	}
 	ms_clear_sec_dimentional(envp);

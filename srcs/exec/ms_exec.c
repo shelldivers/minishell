@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 20:42:06 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:45:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	ms_after_exec(t_exec *exec_info)
 {
 	ms_wait_child_process(exec_info);
 	ms_reset_exec_info(exec_info);
-	ms_close_all_fd(exec_info);
 	ms_reset_io(exec_info);
+	ms_close_all_fd(exec_info);
 	ms_clear_heredoc(exec_info);
 	free(exec_info);
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 18:31:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:49:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,13 @@ void	ms_puterror_max_here_doc(void)
 	const char	*msg = "maximum here-document count exceeded";
 
 	ft_dprintf(2, "minishell: %s\n", msg);
+	errno = 0;
+}
+
+void	ms_puterror_no_command(char *path)
+{
+	const char	*msg = "command not found";
+
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
 }
