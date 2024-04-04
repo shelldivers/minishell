@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 14:59:07 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:21:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(int argc, char **argv, char **envp)
 		ms_tokenizer(&shell.syntax);
 		shell.token = ms_lexer(&shell.syntax);
 		ms_parser(&shell.ast, shell.token, shell.syntax.words_cnt);
+		ms_max_heredoc(shell.token);
 		ms_exec(shell.ast, shell.env);
 		ms_clear_all(&shell.syntax, shell.token, shell.ast);
 	}

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 11:29:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:20:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,22 @@ void	get_line_with_fd(const char *type, char *end, int fd)
 	}
 }
 
-void	ms_max_heredoc(t_ast *ast)
+void	ms_max_heredoc(t_token **token)
 {
 	size_t	i;
 
 	i = 0;
-	if (!ast)
+	if (!token || !*token)
 		return ;
-	if (ast->op == OPIO_HERE)
-		i++;
-	if (ast->left)
-		ms_max_heredoc(ast->left);
-	if (ast->right)
-		ms_max_heredoc(ast->right);
+	while (token[i])
+	{
+		if (token[i]->type == TDLESS)
+			i++;
+	}
 	if (i > 7)
 	{
-		write(2, "maximum here-document count exceeded\n", 36);
-		exit(2);
+		write(2, "minishell: maximum mini-here-document count exceeded\n", 52);
+		exit(1);
 	}
 }
 
