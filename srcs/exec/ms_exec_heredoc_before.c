@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:56:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:19:39 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 		ms_puterror_cmd(NULL, "open");
 		return (FALSE);
 	}
-	ms_get_line_with_fd("heredoc> ", ast->token[1]->value, fd);
+	ms_get_line_with_fd(HEREDOC, ast->token[1]->value, fd);
 	if (close(fd) == -1)
 		ms_puterror_cmd(NULL, "close");
 	free (filename);
@@ -83,10 +83,9 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 
 char	*ms_get_heredoc_filename(int idx)
 {
-	const char	*prefix = ".shelldivers";
 	char		*filename;
 
-	filename = ft_sprintf("%s_%d", prefix, idx);
+	filename = ft_sprintf("%s_%d", SHELLNAME, idx);
 	if (!filename)
 		return (NULL);
 	return (filename);

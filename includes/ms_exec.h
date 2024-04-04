@@ -6,12 +6,15 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:59:26 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:19:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_EXEC_H
 # define MS_EXEC_H
+
+# define SHELLNAME ".SHELLDIVERS_"
+# define HEREDOC "minidoc>"
 
 # include <stdlib.h>
 # include "ft_bool.h"
