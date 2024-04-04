@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:04:00 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:19:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ static t_bool	s_isdir(int m)
 		return (TRUE);
 	return (FALSE);
 }
-
 
 static t_bool	ms_is_dir(struct stat buf, char **words)
 {

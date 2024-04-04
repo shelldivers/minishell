@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:23:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 22:08:27 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:18:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	ms_clear_heredoc(t_exec *exec_info)
 {
 	char	*filename;
 	int		seq;
+
 	seq = exec_info->heredoc_seq - 1;
 	while (seq >= 0)
 	{

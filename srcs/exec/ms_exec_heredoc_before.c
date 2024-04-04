@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:29:06 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:17:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include "ms_minishell.h"
 #include <readline/readline.h>
-
 
 t_bool	ms_exec_heredoc_before(t_ast *ast)
 {

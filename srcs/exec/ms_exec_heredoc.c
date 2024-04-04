@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:08:10 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:54:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:19:22 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <fcntl.h>
 #include "ms_minishell.h"
 #include <readline/readline.h>
-
 
 t_bool	ms_exec_io_here(t_exec *exec_info)
 {

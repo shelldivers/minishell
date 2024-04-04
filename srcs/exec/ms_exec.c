@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:54:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:19:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,3 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		return (ms_exec_io_here(exec_info));
 	return (TRUE);
 }
-
