@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/04 18:50:26 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:15:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ms_puterror_cmd(t_env *env, char *cmd)
 	char	*shell;
 	char	*str_error;
 
-	shell = ms_getenv(env, SHELL);
+	(void)env;
 	str_error = strerror(errno);
 	ft_dprintf(2, "%s: %s: %s\n", shell, cmd, str_error);
 	errno = 0;
@@ -43,8 +43,8 @@ void	ms_puterror_arg(t_env *env, char *arg)
 	char	*shell;
 	char	*str_error;
 
-	shell = ms_getenv(env, SHELL);
+	(void)env;
 	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", shell, arg, str_error);
+	ft_dprintf(2, "%s: %s: %s\n", "minishell", arg, str_error);
 	errno = 0;
 }

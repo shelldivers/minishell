@@ -6,12 +6,12 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 16:24:46 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:19:23 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "ms_exec.h"
+#include "ms_minishell.h"
 
 t_bool	ms_add_word(t_exec *exec_info, char *word)
 {

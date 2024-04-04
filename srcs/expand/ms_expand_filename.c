@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_filename.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:02:58 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:52:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	**ms_expand_filename(char *str)
 
 	if (!init(&queue, &depth, str))
 		return (NULL);
+	if (depth < 0)
+		return (ms_inspect_filename(queue, 1, str));
 	while (1)
 	{
 		if (queue->size <= 0 || depth-- < 0)

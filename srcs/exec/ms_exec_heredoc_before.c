@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 10:49:50 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:31:03 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,80 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "ms_exec.h"
-#include "ms_parser.h"
-#include "libft.h"
+#include "ms_minishell.h"
 #include <readline/readline.h>
 
-static char	*ms_get_heredoc_filename(t_heredoc *heredoc, int idx);
 
-t_bool	ms_exec_heredoc_before(t_heredoc **heredoc, t_ast *ast, int idx)
+t_bool	ms_exec_heredoc_before(t_ast *ast)
 {
-	static int	heredoc_idx;
+	int			pid;
 
+	pid = fork();
+	if (pid < 0)
+		ms_puterror_fork();
+	if (pid == 0)
+	{
+		if (ms_here_doc_in_order(ast, 0) == FALSE)
+			exit(1);
+		exit(0);
+	}
+	else
+		waitpid(pid, NULL, 0);
+	return (TRUE);
+}
+
+t_bool	ms_here_doc_in_order(t_ast *ast, int num)
+{
+	static int	seq;
+
+	if (!num)
+		seq = 0;
 	if (!ast)
 		return (TRUE);
-	if (!idx)
-		heredoc_idx = 0;
-	if (!ms_exec_heredoc_before(heredoc, ast->left, heredoc_idx))
+	if (ms_here_doc_in_order(ast->left, seq) == FALSE)
 		return (FALSE);
 	if (ast->op == OPIO_HERE)
 	{
-		if (!ms_set_heredoc(heredoc, ast, heredoc_idx))
+		if (ms_set_heredoc(ast, seq) == FALSE)
 			return (FALSE);
-		heredoc_idx++;
+		seq++;
 	}
-	if (!ms_exec_heredoc_before(heredoc, ast->right, heredoc_idx))
+	if (ms_here_doc_in_order(ast->right, seq) == FALSE)
 		return (FALSE);
 	return (TRUE);
 }
 
-t_bool	ms_set_heredoc(t_heredoc **heredoc, t_ast *ast, int heredoc_idx)
+t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 {
-	char		*filename;
-	t_heredoc	*new_heredoc;
+	int		fd;
+	char	*line;
+	char	*filename;
 
-	filename = ms_get_heredoc_filename(*heredoc, heredoc_idx);
-	new_heredoc = ms_new_heredoc(filename, ast->token[1]->value);
-	if (!new_heredoc)
+	filename = ms_get_heredoc_filename(seq);
+	if (!filename)
+	{
+		ms_puterror_cmd(NULL, "malloc");
 		return (FALSE);
-	ms_add_back_heredoc(heredoc, new_heredoc);
+	}
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		ms_puterror_cmd(NULL, "open");
+		return (FALSE);
+	}
+	ms_get_line_with_fd("heredoc> ", ast->token[1]->value, fd);
+	if (close(fd) == -1)
+		ms_puterror_cmd(NULL, "close");
+	free (filename);
 	return (TRUE);
 }
 
-static char	*ms_get_heredoc_filename(t_heredoc *heredoc, int idx)
+char	*ms_get_heredoc_filename(int idx)
 {
-	const char	*prefix = ".heredoc";
-	const char	suffix[8] = {'1', '2', '3', '4', '5', '6', '7', '\0'};
+	const char	*prefix = ".shelldivers";
 	char		*filename;
 
-	filename = ft_strjoin(prefix, &suffix[idx]);
+	filename = ft_sprintf("%s_%d", prefix, idx);
 	if (!filename)
 		return (NULL);
 	return (filename);

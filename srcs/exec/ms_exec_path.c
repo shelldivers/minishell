@@ -6,37 +6,43 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 16:35:21 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:18:55 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "libft.h"
-#include "ms_error.h"
-#include "ms_env.h"
-#include "ms_exec.h"
+#include <sys/stat.h>
+#include "ms_minishell.h"
 
 static char		**ms_get_paths(char **envp);
-static t_bool	ms_change_to_absolute(char **paths, char **cmd_word);
+static char		*ms_change_to_absolute(char **paths, char **cmd_word);
+static t_bool	ms_is_dir(t_exec *exec_info, struct stat buf, char **words);
 
-t_bool	ms_add_path(char **words, t_env **env)
+void	ms_add_path(char **words, t_env **env)
 {
-	char	**envp;
-	char	**paths;
+	char		*add_path;
+	char		**envp;
+	char		**paths;
+	struct stat	buf;
 
-	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
-		return (TRUE);
+	if (ms_is_dir(NULL, buf, words))
+		return ;
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
-	if (!ms_change_to_absolute(paths, &words[0]))
+	add_path = ms_change_to_absolute(paths, words);
+	if (!add_path)
 	{
-		ms_clear_sec_dimentional(envp);
-		ms_clear_sec_dimentional(paths);
-		return (FALSE);
+		ms_puterror_no_file(words[0]);
+		exit(127);
 	}
 	ms_clear_sec_dimentional(envp);
 	ms_clear_sec_dimentional(paths);
-	return (TRUE);
+	if (stat(add_path, &buf) == 0 && S_ISDIR(buf.st_mode))
+	{
+		ms_puterror_is_dir(words[0]);
+		exit(126);
+	}
+	words[0] = add_path;
 }
 
 static char	**ms_get_paths(char **envp)
@@ -64,30 +70,45 @@ static char	**ms_get_paths(char **envp)
 	return (NULL);
 }
 
-static t_bool	ms_change_to_absolute(char **paths, char **cmd_word)
+static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 {
 	char	*path;
 	char	*tmp;
 	int		i;
 
-	tmp = NULL;
-	i = 0;
-	while (paths[i])
+	i = -1;
+	while (paths && paths[++i])
 	{
 		path = ft_strjoin(paths[i], "/");
 		if (!path)
-			return (FALSE);
+		{
+			ms_puterror_cmd(NULL, "malloc");
+			exit(127);
+		}
 		tmp = ft_strjoin(path, *cmd_word);
 		free(path);
 		if (!tmp)
-			return (FALSE);
-		if (access(tmp, F_OK & X_OK) == 0)
 		{
-			*cmd_word = tmp;
-			return (TRUE);
+			ms_puterror_cmd(NULL, "malloc");
+			exit(127);
 		}
+		if (access(tmp, F_OK & X_OK) == 0)
+			return (tmp);
 		free(tmp);
-		i++;
+	}
+	return (NULL);
+}
+
+static t_bool	ms_is_dir(t_exec *exec_info, struct stat buf, char **words)
+{
+	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
+	{
+		if (stat(words[0], &buf) == 0 && S_ISDIR(buf.st_mode))
+		{
+			ms_puterror_is_dir(words[0]);
+			exit(126);
+		}
+		return (TRUE);
 	}
 	return (FALSE);
 }

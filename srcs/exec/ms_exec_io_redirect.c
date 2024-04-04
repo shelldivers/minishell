@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 14:57:19 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:45:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "libft.h"
-#include "ms_error.h"
-#include "ms_exec.h"
+#include "ms_minishell.h"
 #include <readline/readline.h>
 
 t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info)
@@ -91,4 +89,23 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 		return (FALSE);
 	}
 	return (TRUE);
+}
+
+void	dup2_fd(t_exec *exec_info)
+{
+	const int	seq = exec_info->heredoc_seq;
+
+	if (exec_info->fd[0] != -1)
+	{
+		if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
+			ms_puterror_cmd(NULL, "dup2");
+	}
+	else if (exec_info->fd[0] == -1 && exec_info->heredoc_fd[seq] > 0)
+	{
+		if (dup2(exec_info->heredoc_fd[seq], STDIN_FILENO) == -1)
+			ms_puterror_cmd(NULL, "dup2");
+	}
+	if (exec_info->fd[1] != -1)
+		if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
+			ms_puterror_cmd(NULL, "dup2");
 }

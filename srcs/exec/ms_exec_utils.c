@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 15:26:09 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:48:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "libft.h"
-#include "ms_error.h"
-#include "ms_exec.h"
 #include <readline/readline.h>
+#include "ms_minishell.h"
 
-void	get_line_with_fd(const char *type, char *end, int fd)
+void	ms_get_line_with_fd(const char *type, char *end, int fd)
 {
 	char	*line;
 
@@ -56,8 +54,8 @@ void	ms_max_heredoc(t_token **token)
 	}
 	if (cnt > 7)
 	{
-		write(2, "minishell: maximum mini-here-document count exceeded\n", 52);
-		exit(1);
+		ms_puterror_max_here_doc();
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -85,12 +83,4 @@ t_exec	*ms_new_exec_info(t_env **env)
 	}
 	ms_init_exec_info(exec_info);
 	return (exec_info);
-}
-
-void	ms_reset_exec_info(t_exec *exec_info)
-{
-	if (exec_info->words)
-		free (exec_info->words);
-	exec_info->words = NULL;
-	exec_info->words_size = 0;
 }

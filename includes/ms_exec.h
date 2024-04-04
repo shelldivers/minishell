@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 15:17:45 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:50:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,63 +36,66 @@ typedef struct s_exec
 	int			exit_code;
 	int			cmd_cnt;
 	int			execed_cmd_cnt;
-	t_heredoc	*heredoc;
-	int			heredoc_cnt;
+	int			heredoc_fd[7];
+	int			heredoc_seq;
 }				t_exec;
 
 /*================ exec ==================*/
 void		ms_exec(t_ast *ast, t_env **env);
+void		ms_after_exec(t_exec *exec_info);
 t_bool		ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env);
 int			ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env);
 
 /*================ utils ==================*/
-void		get_line_with_fd(const char *type, char *end, int fd);
+void		ms_get_line_with_fd(const char *type, char *end, int fd);
 void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
-void		ms_reset_exec_info(t_exec *exec_info);
 void		ms_max_heredoc(t_token **token);
 
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
 void		ms_clear_sec_dimentional(char **words);
+void		ms_reset_exec_info(t_exec *exec_info);
+void		ms_reset_io(t_exec *exec_info);
 
 /*================ redirect ==================*/
 t_bool		ms_exec_io_file(t_ast *ast, t_exec *exec_info);
 t_bool		ms_exec_io_file_write(t_exec *exec_info, const char *filename);
 t_bool		ms_exec_io_file_append(t_exec *exec_info, const char *filename);
 t_bool		ms_exec_io_file_read(t_exec *exec_info, const char *filename);
+void		dup2_fd(t_exec *exec_info);
 
 /*================ heredoc ==================*/
 t_bool		ms_exec_io_here(t_exec *exec_info);
 
-t_bool		ms_exec_heredoc_before(t_heredoc **heredoc, t_ast *ast, int idx);
-t_bool		ms_set_heredoc(t_heredoc **heredoc, t_ast *ast, int heredoc_idx);
-t_heredoc	*ms_new_heredoc(char *filename, char *here_end);
-void		ms_add_back_heredoc(t_heredoc **heredoc, t_heredoc *new_heredoc);
-t_heredoc	*ms_remove_heredoc_head(t_heredoc *heredoc);
+t_bool		ms_exec_heredoc_before(t_ast *ast);
+t_bool		ms_here_doc_in_order(t_ast *ast, int seq);
+t_bool		ms_set_heredoc(t_ast *ast, const int seq);
+char		*ms_get_heredoc_filename(int idx);
+void		ms_clear_heredoc(t_exec *exec_info);
 
 /*================ commands ==================*/
-t_bool		ms_exec_is_builtin(char **words);
+t_bool		ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words);
 void		ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words);
 void		ms_exec_words(t_exec *exec_info, t_env **env);
-void		ms_exec_builtin(t_exec *exec_info, t_env **env, char **words);
-void		ms_exec_builtin2(t_exec *exec_info, t_env **env, char **words);
-
+t_bool		ms_exec_builtin(t_exec *exec_info, t_env **env, \
+char **words, int (f)(int, char **, t_env **));
 t_bool		ms_add_word(t_exec *exec_info, char *word);
 size_t		ms_words_size(char **words);
 
 /*================ pipe ==================*/
 t_bool		ms_exec_pipe(t_ast *ast, t_exec *exec_info);
-t_bool		ms_dup_based_on_pipe_idx(t_exec *exec_info);
-t_bool		ms_close_parent_pipe(t_exec *exec_info);
+void		ms_dup_based_on_pipe_idx(t_exec *exec_info);
+void		ms_close_parent_pipe(t_exec *exec_info);
 
 /*================ fd ==================*/
-t_bool		ms_close_all_fd(t_exec *exec_info);
-void		ms_reset_io(t_exec *exec_info);
-void		ms_clear_heredoc(t_exec *exec_info);
-void		dup2_fd(t_exec *exec_info);
+void		ms_close_all_fd(t_exec *exec_info);
+void		ms_close_pipe(t_exec *exec_info);
+void		ms_close_pipe2(t_exec *exec_info);
+void		ms_close_stdout(t_exec *exec_info);
+void		ms_close_stdin(t_exec *exec_info);
 
 /*================ path ==================*/
-t_bool		ms_add_path(char **words, t_env **env);
+void		ms_add_path(char **words, t_env **env);
 
 #endif

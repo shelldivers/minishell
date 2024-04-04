@@ -6,14 +6,13 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 15:24:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:50:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
-#include "ms_env.h"
-#include "ms_exec.h"
+#include "ms_minishell.h"
 
 void	ms_exec(t_ast *ast, t_env **env)
 {
@@ -25,11 +24,22 @@ void	ms_exec(t_ast *ast, t_env **env)
 	exec_info = ms_new_exec_info(env);
 	if (!exec_info)
 		ms_env_clear(env);
-	ms_exec_heredoc_before(&exec_info->heredoc, ast, 0);
+	if (!ms_exec_heredoc_before(ast))
+	{
+		ms_reset_exec_info(exec_info);
+		ms_env_clear(env);
+		ms_clear_heredoc(exec_info);
+		return ;
+	}
 	ms_exec_in_order(ast, exec_info, env);
 	dup2_fd(exec_info);
 	if (exec_info->words)
 		ms_exec_words(exec_info, env);
+	ms_after_exec(exec_info);
+}
+
+void	ms_after_exec(t_exec *exec_info)
+{
 	ms_wait_child_process(exec_info);
 	ms_reset_exec_info(exec_info);
 	ms_close_all_fd(exec_info);
@@ -91,3 +101,4 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		return (ms_exec_io_here(exec_info));
 	return (TRUE);
 }
+

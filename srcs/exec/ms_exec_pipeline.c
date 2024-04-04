@@ -6,73 +6,94 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 16:11:01 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:39:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "ms_exec.h"
+#include "ms_minishell.h"
 
-//if return false, you must exit(1) and print error message "pipe"
+static void	ms_close_parent_pipe2(\
+t_exec *exec_info, int now_pipe, int prev_pipe);
+
 t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info)
 {
-	pipe(exec_info->pipe[exec_info->pipe_idx % 2]);
+	if (pipe(exec_info->pipe[exec_info->pipe_idx % 2]) == -1)
+	{
+		ms_puterror_cmd(NULL, "pipe");
+		return (FALSE);
+	}
 	exec_info->pipe_idx++;
 	exec_info->pipe_cnt++;
 	return (TRUE);
 }
 
-//if return false, you must exit(1) and print error message "dup2"
-t_bool	ms_dup_based_on_pipe_idx(t_exec *exec_info)
+void	ms_dup_based_on_pipe_idx(t_exec *exec_info)
 {
 	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;
 	const int	prev_pipe = exec_info->pipe_idx % 2;
 
 	if (exec_info->pipe_cnt == 2)
 	{
-		dup2(exec_info->pipe[prev_pipe][0], STDIN_FILENO);
+		if (dup2(exec_info->pipe[prev_pipe][0], STDIN_FILENO) == -1)
+			ms_puterror_cmd(NULL, "dup2");
 		if (exec_info->fd[1] == -1)
-			dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO);
+			if (dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO) == -1)
+				ms_puterror_cmd(NULL, "dup2");
 	}
 	else if (exec_info->pipe_cnt == 1 \
 	&& exec_info->pipe_idx < exec_info->cmd_cnt)
 	{
-		dup2(exec_info->pipe[now_pipe][STDIN_FILENO], STDIN_FILENO);
+		if (dup2(exec_info->pipe[now_pipe][STDIN_FILENO], STDIN_FILENO) == -1)
+			ms_puterror_cmd(NULL, "dup2");
 	}
 	else if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1)
 	{
 		if (exec_info->fd[1] == -1)
-			dup2(exec_info->pipe[now_pipe][STDOUT_FILENO], STDOUT_FILENO);
+			if (dup2(exec_info->pipe[now_pipe][STDOUT_FILENO], \
+			STDOUT_FILENO) == -1)
+				ms_puterror_cmd(NULL, "dup2");
 	}
-	return (TRUE);
 }
 
 //if return false, you must exec_code = 1 and print error message "close"
-t_bool	ms_close_parent_pipe(t_exec *exec_info)
+void	ms_close_parent_pipe(t_exec *exec_info)
 {
 	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;
 	const int	prev_pipe = exec_info->pipe_idx % 2;
 
 	if (exec_info->pipe_cnt == 2)
 	{
-		close(exec_info->pipe[prev_pipe][STDIN_FILENO]);
+		if (close(exec_info->pipe[prev_pipe][STDIN_FILENO]) == -1)
+			ms_puterror_cmd(NULL, "close");
 		exec_info->pipe[prev_pipe][0] = -1;
-		close(exec_info->pipe[now_pipe][STDOUT_FILENO]);
+		if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
+			ms_puterror_cmd(NULL, "close");
 		exec_info->pipe[now_pipe][1] = -1;
 		exec_info->pipe_cnt--;
 	}
-	else if (exec_info->pipe_cnt == 1 \
+	else
+		ms_close_parent_pipe2(exec_info, now_pipe, prev_pipe);
+	if (dup2(exec_info->origin_fd[STDIN_FILENO], STDIN_FILENO) == -1)
+		ms_puterror_cmd(NULL, "dup2");
+	if (dup2(exec_info->origin_fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
+		ms_puterror_cmd(NULL, "dup2");
+}
+
+static void	ms_close_parent_pipe2(\
+t_exec *exec_info, int now_pipe, int prev_pipe)
+{
+	if (exec_info->pipe_cnt == 1 \
 	&& exec_info->pipe_idx < exec_info->cmd_cnt)
 	{
-		close(exec_info->pipe[now_pipe][STDIN_FILENO]);
+		if (close(exec_info->pipe[now_pipe][STDIN_FILENO]) == -1)
+			ms_puterror_cmd(NULL, "close");
 		exec_info->pipe[now_pipe][STDIN_FILENO] = -1;
 	}
 	else if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1)
 	{
-		close(exec_info->pipe[now_pipe][STDOUT_FILENO]);
+		if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
+			ms_puterror_cmd(NULL, "close");
 		exec_info->pipe[now_pipe][STDOUT_FILENO] = -1;
 	}
-	dup2(exec_info->origin_fd[STDIN_FILENO], STDIN_FILENO);
-	dup2(exec_info->origin_fd[STDOUT_FILENO], STDOUT_FILENO);
-	return (TRUE);
 }

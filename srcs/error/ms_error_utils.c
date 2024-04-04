@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/27 21:07:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:31:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,37 @@ void	ms_puterror_syntax(t_env **env, char *value)
 
 	shell = ms_getenv(*env, SHELL);
 	ft_dprintf(2, "%s: %s `%s'\n", shell, msg, value);
+	errno = 0;
+}
+
+void	ms_puterror_is_dir(char *path)
+{
+	const char	*msg = "is a directory";
+
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
+	errno = 0;
+}
+
+void	ms_puterror_no_file(char *path)
+{
+	const char	*msg = "No such file or directory";
+
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
+	errno = 0;
+}
+
+void	ms_puterror_fork(void)
+{
+	const char	*msg = "fork failed";
+
+	ft_dprintf(2, "minishell: %s\n", msg);
+	errno = 0;
+}
+
+void	ms_puterror_max_here_doc(void)
+{
+	const char	*msg = "maximum here-document count exceeded";
+
+	ft_dprintf(2, "minishell: %s\n", msg);
 	errno = 0;
 }
