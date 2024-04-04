@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 20:20:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:28:35 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "ms_expand.h"
 
 static char		*get_pos(const char *str);
-static t_bool	is_cspn(char ch, const char *cspn);
+static t_bool	is_cspn(char ch);
 
 /**
  * @details parameter expansion\n
@@ -68,23 +68,16 @@ static char	*get_pos(const char *str)
 		else if (!dquote && *pos == '\'')
 			quote = (t_bool) !quote;
 		else if (!quote && *pos == '$' && *(pos + 1) != '\0'
-			&& !is_cspn(*(pos + 1), CSPN))
+			&& is_cspn(*(pos + 1)))
 			return (pos);
 		pos++;
 	}
 	return (NULL);
 }
 
-static t_bool	is_cspn(char ch, const char *cspn)
+static t_bool   is_cspn(char ch)
 {
-	int	i;
-
-	i = 0;
-	while (cspn[i])
-	{
-		if (cspn[i] == ch)
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
+    if (ft_isalnum(ch) || ch == '_' || ch == '?')
+       return (TRUE);
+    return (FALSE);
 }
