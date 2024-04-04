@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:23:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:17:22 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:08:27 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ void	ms_init_exec_info(t_exec *exec_info)
 {
 	int	i;
 
-	i = 0;
-	exec_info->words = NULL;
-	exec_info->words_size = 0;
+	ft_memset(exec_info, 0, sizeof(t_exec));
 	exec_info->origin_fd[0] = dup(STDIN_FILENO);
 	exec_info->origin_fd[1] = dup(STDOUT_FILENO);
 	exec_info->fd[0] = -1;
@@ -28,12 +26,7 @@ void	ms_init_exec_info(t_exec *exec_info)
 	exec_info->pipe[0][1] = -1;
 	exec_info->pipe[1][0] = -1;
 	exec_info->pipe[1][1] = -1;
-	exec_info->pipe_idx = 0;
-	exec_info->pipe_cnt = 0;
-	exec_info->exit_code = 0;
-	exec_info->cmd_cnt = 0;
-	exec_info->execed_cmd_cnt = 0;
-	exec_info->heredoc_seq = 0;
+	i = 0;
 	while (i < 7)
 		exec_info->heredoc_fd[i++] = -1;
 }
@@ -55,28 +48,28 @@ void	ms_clear_sec_dimentional(char **words)
 
 void	ms_clear_heredoc(t_exec *exec_info)
 {
-	char		*filename;
-
-	while (exec_info->heredoc_seq)
+	char	*filename;
+	int		seq;
+	seq = exec_info->heredoc_seq - 1;
+	while (seq >= 0)
 	{
-		exec_info->heredoc_seq--;
-		filename = ms_get_heredoc_filename(exec_info->heredoc_seq);
+		filename = ms_get_heredoc_filename(seq);
 		if (!filename)
 		{
 			ms_puterror_cmd(NULL, "malloc");
 			return ;
 		}
-		if (exec_info->heredoc_fd[exec_info->heredoc_seq] != -1)
-		{
-			if (close(exec_info->heredoc_fd[exec_info->heredoc_seq]) == -1)
-				ms_puterror_cmd(NULL, "close");
-			exec_info->heredoc_fd[exec_info->heredoc_seq] = -1;
-		}
-		if (access(filename, F_OK & X_OK) == 0)
-			if (unlink(filename) == -1)
-				ms_puterror_cmd(NULL, "unlink");
+		if (access(filename, F_OK) == 0)
+			unlink(filename);
 		free(filename);
+		if (exec_info->heredoc_fd[seq] != -1)
+		{
+			close(exec_info->heredoc_fd[seq]);
+			exec_info->heredoc_fd[seq] = -1;
+		}
+		seq--;
 	}
+	exec_info->heredoc_seq = 0;
 }
 
 void	ms_reset_exec_info(t_exec *exec_info)

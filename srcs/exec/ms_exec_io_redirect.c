@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:09:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:56:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 
 void	dup2_fd(t_exec *exec_info)
 {
-	const int	seq = exec_info->heredoc_seq;
+	const int	seq = exec_info->heredoc_seq - 1;
 
 	if (exec_info->fd[0] != -1)
 	{
