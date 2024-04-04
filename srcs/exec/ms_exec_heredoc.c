@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:08:10 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 10:48:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:55:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,20 @@ t_bool	ms_exec_io_here(t_exec *exec_info)
 	int			cnt;
 	t_heredoc	*heredoc;
 
-	cnt = 1;
+	cnt = 0;
 	heredoc = exec_info->heredoc;
 	while (cnt < exec_info->heredoc_cnt)
 	{
 		heredoc = heredoc->next;
 		cnt++;
 	}
-	dup2(heredoc->fd, STDIN_FILENO);
+	if (exec_info->fd[0] != -1)
+	{
+		close(exec_info->fd[0]);
+		exec_info->fd[0] = -1;
+	}
+	close(heredoc->fd);
+	heredoc->fd = open(heredoc->filename, O_RDONLY);
 	exec_info->heredoc_cnt++;
 	return (TRUE);
 }
@@ -66,20 +72,7 @@ t_heredoc	*ms_new_heredoc(char *filename, char *here_end)
 	heredoc->filename = filename;
 	heredoc->fd = fd;
 	heredoc->next = NULL;
-	while (1)
-	{
-		line = readline("minidoc> ");
-		if (!line)
-			break ;
-		else if (!ft_strcmp(line, here_end))
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
+	get_line_with_fd("minidoc> ", here_end, fd);
 	return (heredoc);
 }
 

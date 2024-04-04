@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 10:42:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:14:41 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 {
 	if (ast->op == OPAND_IF || ast->op == OPOR_IF)
 	{
+		dup2_fd(exec_info);
 		ms_exec_words(exec_info, env);
 		ms_wait_child_process(exec_info);
+		ms_reset_io(exec_info);
 		if (ast->op == OPAND_IF && exec_info->exit_code != 0)
 			return (-1);
 		else if (ast->op == OPOR_IF && exec_info->exit_code == 0)
@@ -76,8 +78,10 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 	}
 	else if (ast->op == OPPIPE)
 	{
+		dup2_fd(exec_info);
 		ms_exec_pipe(ast, exec_info);
 		ms_exec_words(exec_info, env);
+		ms_reset_io(exec_info);
 	}
 	else if (ast->op == OPIO_FILE)
 		return (ms_exec_io_file(ast, exec_info));

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 17:39:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 11:18:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,11 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env, char **words)
 {
 	int		pid;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		write(2, "fork in builtin\n", 16);
-		return ;
-	}
-	else if (pid == 0)
-	{
-		ms_dup_based_on_pipe_idx(exec_info);
-		ms_close_all_fd(exec_info);
-		ms_exec_builtin2(exec_info, env, words);
-		exit(exec_info->exit_code);
-	}
-	else
-	{
-		ms_close_parent_pipe(exec_info);
-	}
+	ms_dup_based_on_pipe_idx(exec_info);
+	ms_close_all_fd(exec_info);
+	ms_exec_builtin2(exec_info, env, words);
+	exit(exec_info->exit_code);
+	ms_close_parent_pipe(exec_info);
 }
 
 void	ms_exec_builtin2(t_exec *exec_info, t_env **env, char **words)

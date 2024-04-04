@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:07:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 17:01:15 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:57:53 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,12 @@ static t_bool	ms_close_all_fd2(t_exec *exec_info)
 {
 	if (exec_info->fd[0] != -1)
 	{
-		if (close(exec_info->fd[0]) == -1)
-			return (FALSE);
+		close(exec_info->fd[0]);
 		exec_info->fd[0] = -1;
 	}
 	if (exec_info->fd[1] != -1)
 	{
-		if (close(exec_info->fd[1]) == -1)
-			return (FALSE);
+		close(exec_info->fd[1]);
 		exec_info->fd[1] = -1;
 	}
 	return (TRUE);
@@ -63,12 +61,28 @@ static t_bool	ms_close_all_fd2(t_exec *exec_info)
 
 void	ms_reset_io(t_exec *exec_info)
 {
-	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == -1)
+	dup2(exec_info->origin_fd[0], STDIN_FILENO);
+	dup2(exec_info->origin_fd[1], STDOUT_FILENO);
+}
+
+void	dup2_fd(t_exec *exec_info)
+{
+	int			cnt;
+	t_heredoc	*heredoc;
+
+	if (exec_info->fd[0] != -1)
+		dup2(exec_info->fd[0], STDIN_FILENO);
+	else if (exec_info->fd[0] == -1)
 	{
-		write(2, "function : reset_io, dup2\n", 27);
+		cnt = 1;
+		heredoc = exec_info->heredoc;
+		while (cnt < exec_info->heredoc_cnt)
+		{
+			heredoc = heredoc->next;
+			cnt++;
+		}
+		dup2(heredoc->fd, STDIN_FILENO);
 	}
-	if (dup2(exec_info->origin_fd[1], STDOUT_FILENO) == -1)
-	{
-		write(2, "function : reset_io, dup2\n", 27);
-	}
+	if (exec_info->fd[1] != -1)
+		dup2(exec_info->fd[1], STDOUT_FILENO);
 }

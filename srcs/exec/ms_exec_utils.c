@@ -6,15 +6,38 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 16:59:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 11:29:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "libft.h"
 #include "ms_error.h"
-#include "ms_env.h"
 #include "ms_exec.h"
+#include <readline/readline.h>
+
+void	get_line_with_fd(const char *type, char *end, int fd)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline(type);
+		if (!line)
+			break ;
+		if (end && !ft_strcmp(line, end))
+		{
+			free(line);
+			break ;
+		}
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+}
 
 void	ms_max_heredoc(t_ast *ast)
 {

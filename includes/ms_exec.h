@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 10:44:52 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:14:18 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_bool		ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env);
 int			ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env);
 
 /*================ utils ==================*/
+void		get_line_with_fd(const char *type, char *end, int fd);
 void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
 void		ms_reset_exec_info(t_exec *exec_info);
@@ -89,6 +90,7 @@ t_bool		ms_close_parent_pipe(t_exec *exec_info);
 t_bool		ms_close_all_fd(t_exec *exec_info);
 void		ms_reset_io(t_exec *exec_info);
 void		ms_clear_heredoc(t_exec *exec_info);
+void		dup2_fd(t_exec *exec_info);
 
 /*================ path ==================*/
 t_bool		ms_add_path(char **words, t_env **env);

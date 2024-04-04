@@ -6,15 +6,18 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 18:34:15 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 14:57:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "libft.h"
 #include "ms_error.h"
 #include "ms_exec.h"
+#include <readline/readline.h>
 
 t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info)
 {
@@ -35,11 +38,7 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
 {
 	if (exec_info->fd[1] != -1)
 	{
-		if (close(exec_info->fd[1]))
-		{
-			write (2, "close\n", 6);
-			return (FALSE);
-		}
+		close(exec_info->fd[1]);
 		exec_info->fd[1] = -1;
 	}
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -51,12 +50,6 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
-	if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-	{
-		write(2, "dup2\n", 5);
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
 	return (TRUE);
 }
 
@@ -65,11 +58,7 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 {
 	if (exec_info->fd[1] != -1)
 	{
-		if (close(exec_info->fd[1]))
-		{
-			write (2, "close\n", 6);
-			return (FALSE);
-		}
+		close(exec_info->fd[1]);
 		exec_info->fd[1] = -1;
 	}
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -81,21 +70,6 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
-	if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-	{
-		write (2, "dup2\n", 5);
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	// while (1)
-	// {
-	// 	line = readline(NULL);
-	// 	if (line == 0)
-	// 		break ;
-	// 	write(exec_info->fd[0], line, ft_strlen(line));
-	// 	write(exec_info->fd[0], "\n", 1);
-	// 	free(line);
-	// }
 	return (TRUE);
 }
 
@@ -104,11 +78,7 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 {
 	if (exec_info->fd[0] != -1)
 	{
-		if (close(exec_info->fd[0]))
-		{
-			write (2, "close\n", 6);
-			return (FALSE);
-		}
+		close(exec_info->fd[0]);
 		exec_info->fd[0] = -1;
 	}
 	exec_info->fd[0] = open(filename, O_RDONLY);
@@ -117,12 +87,6 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 		write (2, "No such file or directory : ", 29);
 		write(2, filename, ft_strlen(filename));
 		write(2, "\n", 1);
-		exec_info->exit_code = 1;
-		return (FALSE);
-	}
-	if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
-	{
-		write(2, "dup2\n", 5);
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
