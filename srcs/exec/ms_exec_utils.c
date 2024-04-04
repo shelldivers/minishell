@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 15:20:45 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:26:09 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,19 @@ void	get_line_with_fd(const char *type, char *end, int fd)
 void	ms_max_heredoc(t_token **token)
 {
 	size_t	i;
+	size_t	cnt;
 
 	i = 0;
+	cnt = 0;
 	if (!token || !*token)
 		return ;
 	while (token[i])
 	{
 		if (token[i]->type == TDLESS)
-			i++;
+			cnt++;
+		i++;
 	}
-	if (i > 7)
+	if (cnt > 7)
 	{
 		write(2, "minishell: maximum mini-here-document count exceeded\n", 52);
 		exit(1);
