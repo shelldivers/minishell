@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 20:38:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:09:13 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (exec_info->fd[1] == -1)
 	{
-		ms_puterror_cmd(NULL, "open");
+		ms_puterror_cmd(NULL, "filename");
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
@@ -60,7 +60,7 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (exec_info->fd[1] == -1)
 	{
-		ms_puterror_cmd(NULL, "open");
+		ms_puterror_cmd(NULL, "filename");
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
@@ -78,7 +78,7 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 	exec_info->fd[0] = open(filename, O_RDONLY);
 	if (exec_info->fd[0] == -1)
 	{
-		ms_puterror_cmd(NULL, "open");
+		ms_puterror_cmd(NULL, "filename");
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
