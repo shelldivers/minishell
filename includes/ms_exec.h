@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:50:42 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:59:26 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_bool		ms_add_word(t_exec *exec_info, char *word);
 size_t		ms_words_size(char **words);
 
 /*================ pipe ==================*/
-t_bool		ms_exec_pipe(t_ast *ast, t_exec *exec_info);
+t_bool		ms_exec_pipe(t_exec *exec_info);
 void		ms_dup_based_on_pipe_idx(t_exec *exec_info);
 void		ms_close_parent_pipe(t_exec *exec_info);
 

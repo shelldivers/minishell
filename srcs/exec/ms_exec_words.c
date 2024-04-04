@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:46 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 18:19:23 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:54:41 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 t_bool	ms_add_word(t_exec *exec_info, char *word)
 {
-	char		**new_words;
-	size_t		i;
+	char	**new_words;
+	int		i;
 
 	new_words = (char **)malloc(sizeof(char *) * (exec_info->words_size + 2));
 	if (!new_words)

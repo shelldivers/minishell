@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 16:52:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:02:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 static t_bool	init(t_queue **queue, int *depth, char *str);
 static int		get_depth(char *str);
 static void		ms_mark_asterisk(char *str);
-static t_bool	is_exist(char *str);
 
 char	**ms_expand_filename(char *str)
 {
@@ -111,22 +110,4 @@ static t_bool	init(t_queue **queue, int *depth, char *str)
 	*depth = get_depth(tmp);
 	ms_enqueue(*queue, tmp);
 	return (TRUE);
-}
-
-static t_bool	is_exist(char *str)
-{
-	DIR		*dir;
-	int		fd;
-	t_bool	result;
-
-	dir = opendir(str);
-	fd = open(str, O_RDONLY);
-	result = FALSE;
-	if (dir || fd >= 0)
-		result = TRUE;
-	if (fd >= 0)
-		close(fd);
-	if (dir)
-		closedir(dir);
-	return (result);
 }

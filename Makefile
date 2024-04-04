@@ -12,7 +12,7 @@ S_ENV = env/
 S_EXPAND = expand/
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 PARSER += ms_tokenizer.c ms_tokenizer2.c ms_init.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_parser.c 

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 18:18:55 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:56:16 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);
-static t_bool	ms_is_dir(t_exec *exec_info, struct stat buf, char **words);
+static t_bool	ms_is_dir(struct stat buf, char **words);
 
 void	ms_add_path(char **words, t_env **env)
 {
@@ -25,7 +25,8 @@ void	ms_add_path(char **words, t_env **env)
 	char		**paths;
 	struct stat	buf;
 
-	if (ms_is_dir(NULL, buf, words))
+	stat(words[0], &buf);
+	if (ms_is_dir(buf, words))
 		return ;
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
@@ -99,7 +100,7 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	return (NULL);
 }
 
-static t_bool	ms_is_dir(t_exec *exec_info, struct stat buf, char **words)
+static t_bool	ms_is_dir(struct stat buf, char **words)
 {
 	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
 	{

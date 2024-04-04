@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 18:18:40 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:57:01 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_bool	ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words)
 t_bool	ms_exec_builtin(t_exec *exec_info, t_env **env, \
 char **words, int (f)(int, char **, t_env **))
 {
-	int				pid;
 	const size_t	argc = ms_words_size(words);
 
 	ms_dup_based_on_pipe_idx(exec_info);

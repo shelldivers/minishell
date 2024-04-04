@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:50:31 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:59:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 void	ms_exec(t_ast *ast, t_env **env)
 {
-	int		pid;
 	t_exec	*exec_info;
 
 	if (!ast)
@@ -89,7 +88,7 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 	else if (ast->op == OPPIPE)
 	{
 		dup2_fd(exec_info);
-		ms_exec_pipe(ast, exec_info);
+		ms_exec_pipe(exec_info);
 		ms_exec_words(exec_info, env);
 		ms_reset_io(exec_info);
 	}

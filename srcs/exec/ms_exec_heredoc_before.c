@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:31:03 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:56:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_bool	ms_here_doc_in_order(t_ast *ast, int num)
 t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 {
 	int		fd;
-	char	*line;
 	char	*filename;
 
 	filename = ms_get_heredoc_filename(seq);

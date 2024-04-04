@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 18:39:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:59:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "ms_minishell.h"
 
 static void	ms_close_parent_pipe2(\
-t_exec *exec_info, int now_pipe, int prev_pipe);
+t_exec *exec_info, int now_pipe);
 
-t_bool	ms_exec_pipe(t_ast *ast, t_exec *exec_info)
+t_bool	ms_exec_pipe(t_exec *exec_info)
 {
 	if (pipe(exec_info->pipe[exec_info->pipe_idx % 2]) == -1)
 	{
@@ -73,7 +73,7 @@ void	ms_close_parent_pipe(t_exec *exec_info)
 		exec_info->pipe_cnt--;
 	}
 	else
-		ms_close_parent_pipe2(exec_info, now_pipe, prev_pipe);
+		ms_close_parent_pipe2(exec_info, now_pipe);
 	if (dup2(exec_info->origin_fd[STDIN_FILENO], STDIN_FILENO) == -1)
 		ms_puterror_cmd(NULL, "dup2");
 	if (dup2(exec_info->origin_fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
@@ -81,7 +81,7 @@ void	ms_close_parent_pipe(t_exec *exec_info)
 }
 
 static void	ms_close_parent_pipe2(\
-t_exec *exec_info, int now_pipe, int prev_pipe)
+t_exec *exec_info, int now_pipe)
 {
 	if (exec_info->pipe_cnt == 1 \
 	&& exec_info->pipe_idx < exec_info->cmd_cnt)
