@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 14:14:18 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:17:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		get_line_with_fd(const char *type, char *end, int fd);
 void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
 void		ms_reset_exec_info(t_exec *exec_info);
-void		ms_max_heredoc(t_ast *ast);
+void		ms_max_heredoc(t_token **token);
 
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
