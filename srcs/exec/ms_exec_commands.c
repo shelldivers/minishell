@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 11:18:28 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:08:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	ms_exec_builtin(t_exec *exec_info, t_env **env, char **words)
 	ms_dup_based_on_pipe_idx(exec_info);
 	ms_close_all_fd(exec_info);
 	ms_exec_builtin2(exec_info, env, words);
-	exit(exec_info->exit_code);
 	ms_close_parent_pipe(exec_info);
 }
 
