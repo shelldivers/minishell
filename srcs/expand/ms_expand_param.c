@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_param.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:03:06 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:20:49 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ static char	*get_pos(const char *str)
 			dquote = (t_bool) !dquote;
 		else if (!dquote && *pos == '\'')
 			quote = (t_bool) !quote;
-		else if (!quote && *pos == '$' && !is_cspn(*(pos + 1), CSPN))
+		else if (!quote && *pos == '$' && *(pos + 1) != '\0'
+			&& !is_cspn(*(pos + 1), CSPN))
 			return (pos);
 		pos++;
 	}
