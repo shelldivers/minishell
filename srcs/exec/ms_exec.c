@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 21:10:56 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 10:42:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ms_exec(t_ast *ast, t_env **env)
 	exec_info = ms_new_exec_info(env);
 	if (!exec_info)
 		ms_env_clear(env);
-	ms_exec_heredoc_before(exec_info->heredoc, ast, 0);
+	ms_exec_heredoc_before(&exec_info->heredoc, ast, 0);
 	ms_exec_in_order(ast, exec_info, env);
 	if (exec_info->words)
 		ms_exec_words(exec_info, env);
@@ -34,8 +34,7 @@ void	ms_exec(t_ast *ast, t_env **env)
 	ms_reset_exec_info(exec_info);
 	ms_close_all_fd(exec_info);
 	ms_reset_io(exec_info);
-	if (access(".heredoc", F_OK) == 0)
-		unlink(".heredoc");
+	ms_clear_heredoc(exec_info);
 	free(exec_info);
 }
 
@@ -85,6 +84,6 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 	else if (ast->op == OPWORD)
 		return (ms_add_word(exec_info, ast->token[0]->value));
 	else if (ast->op == OPIO_HERE)
-		return (ms_exec_io_here(exec_info, ast->token[1]->value));
+		return (ms_exec_io_here(exec_info));
 	return (TRUE);
 }

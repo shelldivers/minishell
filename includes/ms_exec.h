@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/03 20:57:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 10:44:52 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_exec
 	int			cmd_cnt;
 	int			execed_cmd_cnt;
 	t_heredoc	*heredoc;
+	int			heredoc_cnt;
 }				t_exec;
 
 /*================ exec ==================*/
@@ -61,13 +62,13 @@ t_bool		ms_exec_io_file_append(t_exec *exec_info, const char *filename);
 t_bool		ms_exec_io_file_read(t_exec *exec_info, const char *filename);
 
 /*================ heredoc ==================*/
-t_bool		ms_exec_io_here(t_exec *exec_info, const char *here_end);
+t_bool		ms_exec_io_here(t_exec *exec_info);
 
-t_bool	ms_exec_heredoc_before(t_heredoc *heredoc, t_ast *ast, int idx);
-t_bool	ms_set_heredoc(t_heredoc *heredoc, t_ast *ast, int heredoc_idx);
+t_bool		ms_exec_heredoc_before(t_heredoc **heredoc, t_ast *ast, int idx);
+t_bool		ms_set_heredoc(t_heredoc **heredoc, t_ast *ast, int heredoc_idx);
 t_heredoc	*ms_new_heredoc(char *filename, char *here_end);
-void	ms_add_back_heredoc(t_heredoc **heredoc, t_heredoc *new_heredoc);
-t_heredoc	*ms_remove_head(t_heredoc *heredoc);
+void		ms_add_back_heredoc(t_heredoc **heredoc, t_heredoc *new_heredoc);
+t_heredoc	*ms_remove_heredoc_head(t_heredoc *heredoc);
 
 /*================ commands ==================*/
 t_bool		ms_exec_is_builtin(char **words);
@@ -85,10 +86,11 @@ t_bool		ms_dup_based_on_pipe_idx(t_exec *exec_info);
 t_bool		ms_close_parent_pipe(t_exec *exec_info);
 
 /*================ fd ==================*/
-t_bool	ms_close_all_fd(t_exec *exec_info);
-void	ms_reset_io(t_exec *exec_info);
+t_bool		ms_close_all_fd(t_exec *exec_info);
+void		ms_reset_io(t_exec *exec_info);
+void		ms_clear_heredoc(t_exec *exec_info);
 
 /*================ path ==================*/
-t_bool	ms_add_path(char **words, t_env **env);
+t_bool		ms_add_path(char **words, t_env **env);
 
 #endif
