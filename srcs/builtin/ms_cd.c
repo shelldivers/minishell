@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:22:18 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/04 21:22:19 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:04:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "ms_builtin.h"
 #include "ms_env.h"
 #include "ms_error.h"
@@ -18,6 +19,7 @@
 
 static int		ms_cd_home(t_env **env);
 static int		ms_cd_oldpwd(t_env **env);
+static t_bool	ms_chdir_old(char *path, t_env **env);
 static t_bool	ms_chdir(char *path, t_env **env);
 
 /**
@@ -76,36 +78,45 @@ static int	ms_cd_oldpwd(t_env **env)
 	return (EXIT_SUCCESS);
 }
 
-/**
- * @errno ENOMEM
- * @errno EACCES
- * @errno EFAULT
- * @errno EIO
- * @errno ELOOP
- * @errno ENAMETOOLONG
- * @errno ENOENT
- * @errno ENOMEM
- * @errno ENOTDIR
- * @errno EACCES
- * @errno EBADF
- * @errno ENOTDIR
- */
-static t_bool	ms_chdir(char *path, t_env **env)
+static t_bool	ms_chdir_old(char *path, t_env **env)
 {
 	char	*old_pwd;
-	char	*pwd;
 
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
-		old_pwd = "";
-	if (chdir(path) == -1)
+	{
+		old_pwd = ft_strdup("");
+		if (!old_pwd)
+			return (FALSE);
+	}
+	if (chdir(path) == -1
+		|| !ms_setenv(env, OLDPWD, old_pwd))
+	{
+		free(old_pwd);
 		return (FALSE);
-	if (!ms_setenv(env, OLDPWD, old_pwd))
+	}
+	free(old_pwd);
+	return (TRUE);
+}
+
+static t_bool	ms_chdir(char *path, t_env **env)
+{
+	char	*pwd;
+
+	if (!ms_chdir_old(path, env))
 		return (FALSE);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		pwd = path;
+	{
+		pwd = ft_strdup(path);
+		if (!pwd)
+			return (FALSE);
+	}
 	if (!ms_setenv(env, PWD, pwd))
+	{
+		free(pwd);
 		return (FALSE);
+	}
+	free(pwd);
 	return (TRUE);
 }

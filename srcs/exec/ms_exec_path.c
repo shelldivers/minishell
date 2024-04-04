@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 20:49:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:04:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,19 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	return (NULL);
 }
 
+static t_bool	s_isdir(int m)
+{
+	if (((m) & S_IFMT) == S_IFDIR)
+		return (TRUE);
+	return (FALSE);
+}
+
+
 static t_bool	ms_is_dir(struct stat buf, char **words)
 {
 	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
 	{
-		if (stat(words[0], &buf) == 0 && S_ISDIR(buf.st_mode))
+		if (stat(words[0], &buf) == 0 && s_isdir(buf.st_mode))
 		{
 			ms_puterror_is_dir(words[0]);
 			exit(126);
