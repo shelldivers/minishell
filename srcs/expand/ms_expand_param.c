@@ -65,7 +65,10 @@ static char	*get_pos(const char *str)
 		if (!quote && *pos == '\"')
 			dquote = (t_bool) !dquote;
 		else if (!dquote && *pos == '\'')
-			quote = (t_bool) !quote;
+		{
+			if (quote || ft_strchr(pos + 1, '\''))
+				quote = (t_bool) !quote;
+		}
 		else if (!quote && *pos == '$' && *(pos + 1) != '\0'
 			&& is_cspn(*(pos + 1)))
 			return (pos);
