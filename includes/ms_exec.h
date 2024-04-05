@@ -12,14 +12,13 @@
 
 #ifndef MS_EXEC_H
 # define MS_EXEC_H
-
 # define SHELLNAME "/tmp/.SHELLDIVERS_"
 # define HEREDOC "minidoc> "
 # define MAX_HEREDOC 7
-# include <stdlib.h>
 # include "ft_bool.h"
 # include "ms_parser.h"
 # include "ms_env.h"
+# include <stdlib.h>
 
 typedef struct s_exec
 {

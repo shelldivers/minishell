@@ -12,9 +12,7 @@
 
 #ifndef MS_PARSER_H
 # define MS_PARSER_H
-
 # define OP_SIZE 9
-
 # include "ft_bool.h"
 # include "ms_minishell.h"
 # include <stdlib.h>
@@ -30,8 +28,6 @@ enum e_op
 	OPPIPE,
 	OPAND_IF,
 	OPOR_IF,
-	OPSUBSHELL,
-	OPCMD_WORD,
 	OPIO_HERE,
 	OPIO_FILE,
 	OPWORD,
@@ -89,7 +85,6 @@ int		ms_get_word(const char *line, const char **op);
 int		ms_close_quote(const char *line, char quote);
 char	*ms_extract_token(char *line, size_t *start, const char **op);
 char	*ms_extract_word(char *line, size_t *start, const char **op);
-/*================init.c================*/
 /*================clear.c================*/
 void	ms_clear_all(t_minishell *shell);
 void	ms_clear_syntax(t_syntax *syntax);

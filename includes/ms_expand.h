@@ -12,13 +12,7 @@
 
 #ifndef MS_EXPAND_H
 # define MS_EXPAND_H
-
-# ifdef __cplusplus
-extern "C" {
-# endif
-
 # define ASTERISK (-1)
-
 # include "ft_type.h"
 # include "ms_env.h"
 # include <dirent.h>
@@ -86,9 +80,5 @@ void	ms_destroy_queue(t_queue *queue, void *del);
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del);
 t_bool	ms_enqueue_array(t_queue *queue, char **array);
 char	**ms_queue_to_array(t_queue *queue);
-
-# ifdef __cplusplus
-}
-# endif
 
 #endif
