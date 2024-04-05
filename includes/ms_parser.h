@@ -72,6 +72,12 @@ typedef struct s_ast
 	int				token_size;
 }				t_ast;
 
+typedef struct s_drill
+{
+	int			(*f)(t_ast *, t_token **);
+	enum e_lr	lr;
+}	t_drill;
+
 /*================lex.c================*/
 t_bool	ms_tokenizer(t_syntax *syntax);
 size_t	ms_count_word(const char *line, const char **op, size_t op_size);
@@ -106,8 +112,7 @@ int		ms_is_word(t_ast *ast, t_token **token);
 /*================parser.c================*/
 void	ms_parser(t_ast **ast, t_token **token, int size);
 t_ast	*ms_new_ast(t_token **token, int size);
-int		ms_add_ast(t_ast *ast, t_token **token, \
-int (f)(t_ast *, t_token **), int size, enum e_lr lr);
+int		ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill);
 t_token	**ms_tokenndup(t_token **src, int size);
 
 void	ms_parser_error_handler(t_token **token, int curtok);

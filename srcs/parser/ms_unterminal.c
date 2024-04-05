@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include "ms_parser.h"
 
+// TODO: 변경
 int	ms_is_and_or(t_ast *ast, t_token **token)
 {
 	int	op_pos;
@@ -22,21 +23,19 @@ int	ms_is_and_or(t_ast *ast, t_token **token)
 		return (0);
 	op_pos = ms_get_op_pos(token, TAND_IF, TOR_IF);
 	curtok = 0;
-	if (op_pos && (token[op_pos]->type == TAND_IF \
-	|| token[op_pos]->type == TOR_IF))
+	if (op_pos && (token[op_pos]->type == TAND_IF || token[op_pos]->type == TOR_IF))
 	{
 		if (token[op_pos]->type == TAND_IF)
 			ast->op = OPAND_IF;
 		else
 			ast->op = OPOR_IF;
-		curtok += ms_add_ast(ast, token + op_pos + 1, ms_is_pipeline, \
-		ast->token_size - op_pos - 1, RIGHT);
+		curtok += ms_add_ast(ast, token + op_pos + 1, ast->token_size - op_pos - 1, (t_drill){ms_is_pipeline, RIGHT});
 		if (curtok)
-			curtok += ms_add_ast(ast, token, ms_is_and_or, op_pos, LEFT);
+			curtok += ms_add_ast(ast, token, op_pos, (t_drill){ms_is_and_or, LEFT});
 		curtok++;
 	}
 	else
-		curtok += ms_add_ast(ast, token, ms_is_pipeline, 0, LEFT);
+		curtok += ms_add_ast(ast, token, 0, (t_drill){ms_is_pipeline, LEFT});
 	return (curtok);
 }
 

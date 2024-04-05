@@ -16,54 +16,30 @@
 #include "libft.h"
 #include "ms_error.h"
 
-static int	ms_tokenlen(t_token **token);
-
-void	ms_parser(t_ast **ast, t_token **token, int size)
-{
-	int	curtok;
-
-	*ast = ms_new_ast(token, size);
-	if (!*ast)
-	{
-		ms_puterror_cmd(NULL, "malloc");
-		return ;
-	}
-	curtok = ms_add_ast(*ast, token, size, (t_drill){ms_is_and_or, LEFT});
-	if (curtok == -1)
-	{
-		ms_puterror_cmd(NULL, "malloc");
-		ms_clear_ast(ast);
-		return ;
-	}
-	else if (curtok != size)
-	{
-		ms_parser_error_handler(token, curtok);
-		ms_clear_ast(ast);
-	}
-}
+static int		get_token_size(t_token **token);
+static t_bool	assign_token(t_token *const *src, t_token **dst, int i);
 
 /**
  * @errno ENOMEM 메모리 할당에 실패했을 경우 -> -1 반환
  */
-int	ms_add_ast(t_ast *ast, t_token **token, \
-int (f)(t_ast *, t_token **), int size, enum e_lr lr)
+int	ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill)
 {
 	int		curtok;
 	t_ast	*new;
 
 	if (!size)
-		size = get_token_length(token);
+		size = get_token_size(token);
 	new = ms_new_ast(token, size);
 	if (!new)
 		return (ERROR);
-	curtok = (f(new, new->token));
-	if (lr == LEFT)
+	curtok = (drill.f(new, new->token));
+	if (drill.lr == LEFT)
 	{
 		if (ast->left)
 			new->left = ast->left;
 		ast->left = new;
 	}
-	else if (lr == RIGHT)
+	else if (drill.lr == RIGHT)
 	{
 		while (ast->right)
 			ast = ast->right;
@@ -110,14 +86,7 @@ t_token	**ms_tokenndup(t_token **src, int size)
 	while (i < size)
 	{
 		dst[i] = (t_token *)malloc(sizeof(t_token));
-		if (!dst[i])
-		{
-			ms_clear_token(dst);
-			return (NULL);
-		}
-		dst[i]->type = src[i]->type;
-		dst[i]->value = ft_strdup(src[i]->value);
-		if (!dst[i]->value)
+		if (!dst[i] || !assign_token(src, dst, i))
 		{
 			ms_clear_token(dst);
 			return (NULL);
@@ -128,12 +97,21 @@ t_token	**ms_tokenndup(t_token **src, int size)
 	return (dst);
 }
 
-static int	ms_tokenlen(t_token **token)
+static t_bool	assign_token(t_token *const *src, t_token **dst, int i)
 {
-	int	len;
+	dst[i]->type = src[i]->type;
+	dst[i]->value = ft_strdup(src[i]->value);
+	if (!dst[i]->value)
+		return (FALSE);
+	return (TRUE);
+}
 
-	len = 0;
-	while (token[len])
-		len++;
-	return (len);
+static int	get_token_size(t_token **token)
+{
+	int	size;
+
+	size = 0;
+	while (token[size])
+		size++;
+	return (size);
 }
