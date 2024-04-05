@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ms_minishell.h"
 #include "ms_error.h"
+#include "ms_exec.h"
+#include "ms_minishell.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 
 static t_bool	parse(t_minishell *shell);
 

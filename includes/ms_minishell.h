@@ -12,15 +12,17 @@
 
 #ifndef MS_MINISHELL_H
 # define MS_MINISHELL_H
-# include "ms_exec.h"
+# include "ms_parser.h"
 # include "ms_env.h"
 
 typedef struct s_minishell
 {
-	t_syntax	syntax;
-	t_token		**token;
-	t_env		**env;
-	t_ast		*ast;
+	struct s_syntax	syntax;
+	struct s_token	**token;
+	struct s_env	**env;
+	struct s_ast	*ast;
 }				t_minishell;
+
+void	ms_clear_all(t_minishell *shell);
 
 #endif

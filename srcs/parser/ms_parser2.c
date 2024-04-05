@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "ms_parser.h"
 #include "libft.h"
 #include "ms_error.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static int		get_token_size(t_token **token);
 static t_bool	assign_token(t_token *const *src, t_token **dst, int i);

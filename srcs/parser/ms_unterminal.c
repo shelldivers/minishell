@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ms_parser.h"
+#include <stdio.h>
 
 // TODO: 변경
 int	ms_is_and_or(t_ast *ast, t_token **token)

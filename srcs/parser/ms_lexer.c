@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ms_error.h"
 #include "ms_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +23,7 @@ static enum e_type	ms_get_tokentype(char *value);
  */
 t_token	**ms_lexer(t_syntax *syntax)
 {
-	size_t	i;
+	int		i;
 	t_token	**token;
 
 	token = (t_token **)malloc(sizeof(t_token *) * (syntax->words_cnt + 1));

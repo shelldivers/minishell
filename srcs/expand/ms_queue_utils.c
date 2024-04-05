@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ms_minishell.h"
+#include "ms_exec.h"
 #include "ms_expand.h"
 
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del)

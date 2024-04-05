@@ -12,13 +12,16 @@
 
 #ifndef FT_TYPE_H
 # define FT_TYPE_H
-
 # include "ft_bool.h"
 
 typedef unsigned int		t_uint;
+
 typedef unsigned char		t_uchar;
+
 typedef unsigned short		t_ushort;
+
 typedef unsigned long		t_ulong;
+
 typedef unsigned long long	t_ull;
 
 /* libft */

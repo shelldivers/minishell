@@ -14,7 +14,6 @@
 # define MS_PARSER_H
 # define OP_SIZE 9
 # include "ft_bool.h"
-# include "ms_minishell.h"
 # include <stdlib.h>
 
 enum e_lr
@@ -75,7 +74,7 @@ typedef struct s_drill
 {
 	int			(*f)(t_ast *, t_token **);
 	enum e_lr	lr;
-}	t_drill;
+}				t_drill;
 
 /*================lex.c================*/
 t_bool	ms_tokenizer(t_syntax *syntax);
@@ -86,7 +85,6 @@ int		ms_close_quote(const char *line, char quote);
 char	*ms_extract_token(char *line, size_t *start, const char **op);
 char	*ms_extract_word(char *line, size_t *start, const char **op);
 /*================clear.c================*/
-void	ms_clear_all(t_minishell *shell);
 void	ms_clear_syntax(t_syntax *syntax);
 void	ms_clear_ast(t_ast **ast);
 void	ms_clear_token(t_token **token);

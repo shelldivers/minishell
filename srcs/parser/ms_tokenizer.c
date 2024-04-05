@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_bool.h"
+#include "ms_exec.h"
+#include "ms_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "ms_parser.h"
 
 static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
 
@@ -26,7 +28,7 @@ static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
  */
 t_bool	ms_tokenizer(t_syntax *syntax)
 {
-	size_t		i;
+	int			i;
 	size_t		start;
 	const char	*op[OP_SIZE] = {
 		"&&", "||", "|", "(",
