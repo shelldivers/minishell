@@ -79,6 +79,7 @@ void	ms_destroy_queue(t_queue *queue, void *del);
 /* ms_queue_utils.c */
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del);
 t_bool	ms_enqueue_array(t_queue *queue, char **array);
+char	**ms_queue_to_array_dequote(t_queue *queue);
 char	**ms_queue_to_array(t_queue *queue);
 
 #endif

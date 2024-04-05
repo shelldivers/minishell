@@ -58,7 +58,7 @@ static char	**match(t_queue *queue)
 			ms_queue_remove(queue, node, free);
 		node = tmp;
 	}
-	result = ms_queue_to_array(queue);
+	result = ms_queue_to_array_dequote(queue);
 	ms_destroy_queue(queue, free);
 	return (result);
 }
