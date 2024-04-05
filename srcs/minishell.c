@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 15:58:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:11:14 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv || !envp)
 		return (1);
-	ms_init_syntax(&shell.syntax);
+	ft_memset(&shell, 0, sizeof(t_minishell));
 	shell.env = ms_env_deserialize(envp);
 	shell.ast = NULL;
 	while (1)

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:50:08 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/05 15:31:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:35:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	ms_puterror_fork(void);
 void	ms_puterror_max_here_doc(void);
 void	ms_puterror_no_command(char *path);
 void	ms_puterror_ambiguous_redirect(char *path);
+void	ms_puterror_syntax_newline();
 
 # ifdef __cplusplus
 }
