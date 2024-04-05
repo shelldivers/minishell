@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 12:11:37 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:07:43 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 static void	ms_close_parent_pipe2(\
 t_exec *exec_info, int now_pipe);
+static void	ms_dup_based_on_pipe_idx2(t_exec *exec_info, const int now_pipe);
 
 t_bool	ms_exec_pipe(t_exec *exec_info)
 {
@@ -38,10 +39,18 @@ void	ms_dup_based_on_pipe_idx(t_exec *exec_info)
 		if (dup2(exec_info->pipe[prev_pipe][0], STDIN_FILENO) == -1)
 			ms_puterror_cmd(NULL, "dup2");
 		if (exec_info->fd[1] == -1)
+		{
 			if (dup2(exec_info->pipe[now_pipe][1], STDOUT_FILENO) == -1)
 				ms_puterror_cmd(NULL, "dup2");
+		}
 	}
-	else if (exec_info->pipe_cnt == 1 \
+	else
+		ms_dup_based_on_pipe_idx2(exec_info, now_pipe);
+}
+
+static void	ms_dup_based_on_pipe_idx2(t_exec *exec_info, const int now_pipe)
+{
+	if (exec_info->pipe_cnt == 1 \
 	&& exec_info->pipe_idx < exec_info->cmd_cnt)
 	{
 		if (dup2(exec_info->pipe[now_pipe][STDIN_FILENO], STDIN_FILENO) == -1)
@@ -50,9 +59,11 @@ void	ms_dup_based_on_pipe_idx(t_exec *exec_info)
 	else if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1)
 	{
 		if (exec_info->fd[1] == -1)
+		{
 			if (dup2(exec_info->pipe[now_pipe][STDOUT_FILENO], \
 			STDOUT_FILENO) == -1)
 				ms_puterror_cmd(NULL, "dup2");
+		}
 	}
 }
 
