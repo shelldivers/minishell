@@ -93,7 +93,6 @@ static t_bool	re_syntaxing(t_queue *queue, const char *str)
 	{
 		if (!ms_enqueue(queue, re_syntax.words[i]))
 		{
-			free(re_syntax.line);
 			while (re_syntax.words[i])
 				free(re_syntax.words[i++]);
 			free(re_syntax.words);
