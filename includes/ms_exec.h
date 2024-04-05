@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 13:34:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:04:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
 void		ms_max_heredoc(t_token **token);
 
+int			wifexit(int x);
+int			wexitstatus(int x);
+
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
 void		ms_clear_sec_dimentional(char **words);
@@ -76,7 +79,7 @@ t_bool		ms_here_doc_in_order(t_ast *ast, int seq);
 t_bool		ms_set_heredoc(t_ast *ast, const int seq);
 char		*ms_get_heredoc_filename(int idx);
 void		ms_clear_heredoc(t_exec *exec_info);
-char		*ms_quote_removal(char *word, size_t i, size_t j);
+char		*ms_quote_removal_dup(char *word, size_t i, size_t j);
 
 /*================ commands ==================*/
 t_bool		ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words);

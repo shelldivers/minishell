@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:50:10 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/07 10:50:11 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:56:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,6 @@ typedef struct s_table
 
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
-
-/* ms_expand_utils.c */
-void	ms_remove_quote(char *str);
-void	ms_remove_dquote(char *_str);
 
 /* ms_expand_param.c */
 t_bool	ms_expand_param(char **argv, t_env *env, int status);

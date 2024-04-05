@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:03:11 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:05:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_minishell.h"
 #include "ms_env.h"
 #include "ms_expand.h"
 #include "ms_error.h"
@@ -61,7 +62,7 @@ static char	**ms_strsdup(char **strs)
 	i = 0;
 	while (strs[i] && i < size)
 	{
-		copy[i] = ft_strdup(strs[i]);
+		copy[i] = ms_quote_removal_dup(strs[i], 0, 0);
 		if (!copy[i])
 		{
 			while (i--)

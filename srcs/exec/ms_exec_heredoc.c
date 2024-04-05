@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:08:10 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 22:19:22 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:44:54 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ t_bool	ms_exec_io_here(t_exec *exec_info)
 	ms_close_stdin(exec_info);
 	if (exec_info->heredoc_fd[seq] == -1)
 	{
+		if (access(filename, F_OK) == -1)
+		{
+			free(filename);
+			return (TRUE);
+		}
 		exec_info->heredoc_fd[seq] = open(filename, O_RDONLY);
 		if (exec_info->heredoc_fd[seq] == -1)
-		{
 			ms_puterror_cmd(NULL, "open");
-			return (FALSE);
-		}
 	}
 	exec_info->heredoc_seq += 1;
 	free(filename);

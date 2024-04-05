@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_quote_removal.c                                 :+:      :+:    :+:   */
+/*   ms_quote_removal_dup.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 13:33:24 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 13:33:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:00:19 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_bool	ms_find_close_quote(char *word, int idx);
 
-char	*ms_quote_removal(char *word, size_t i, size_t j)
+char	*ms_quote_removal_dup(char *word, size_t i, size_t j)
 {
 	char	quote;
 	char	*new_word;

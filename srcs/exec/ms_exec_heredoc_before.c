@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 13:34:25 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:04:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 t_bool	ms_exec_heredoc_before(t_ast *ast)
 {
 	int			pid;
+	int			status;
 
 	pid = fork();
 	if (pid < 0)
@@ -31,7 +32,11 @@ t_bool	ms_exec_heredoc_before(t_ast *ast)
 		exit(0);
 	}
 	else
-		waitpid(pid, NULL, 0);
+	{
+		waitpid(pid, &status, 0);
+		if (wifexit(status) && wexitstatus(status) == 1)
+			return (FALSE);
+	}
 	return (TRUE);
 }
 
@@ -74,7 +79,7 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 		ms_puterror_cmd(NULL, "open");
 		return (FALSE);
 	}
-	here_end = ms_quote_removal(ast->token[1]->value, 0, 0);
+	here_end = ms_quote_removal_dup(ast->token[1]->value, 0, 0);
 	ms_get_line_with_fd(HEREDOC, here_end, fd);
 	if (close(fd) == -1)
 		ms_puterror_cmd(NULL, "close");

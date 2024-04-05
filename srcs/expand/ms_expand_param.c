@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 20:28:35 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:54:58 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 			free(*argv);
 			*argv = replace;
 		}
-		ms_remove_quote(*argv);
 		argv++;
 	}
 	return (TRUE);
