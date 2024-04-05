@@ -16,8 +16,8 @@
 #include "ms_minishell.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <readline/history.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 
 static t_bool	parse(t_minishell *shell);
 

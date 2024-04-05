@@ -15,7 +15,7 @@
 
 char	*ms_extract_word(char *line, int *start, const char **op)
 {
-	size_t	i;
+	int		i;
 	char	*word;
 
 	i = *start;
@@ -28,8 +28,8 @@ char	*ms_extract_word(char *line, int *start, const char **op)
 char	*ms_extract_token(char *line, int *start, const char **op)
 {
 	char	*token;
-	size_t	i;
-	size_t	op_len;
+	int		i;
+	int		op_len;
 
 	i = *start;
 	op_len = ms_get_op(line + i, op);
