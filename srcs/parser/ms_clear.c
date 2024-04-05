@@ -36,14 +36,17 @@ void	ms_clear_syntax(t_syntax *syntax)
 
 void	ms_clear_token(t_token **token)
 {
+	int	i;
+
 	if (token)
 	{
-		while (*token)
+		i = 0;
+		while (token[i])
 		{
-			free((*token)->value);
-			free(*token);
-			*token = NULL;
-			token++;
+			free(token[i]->value);
+			free(token[i]);
+			token[i] = NULL;
+			i++;
 		}
 		free(token);
 	}
