@@ -73,7 +73,7 @@ typedef struct s_ast
 }				t_ast;
 
 /*================lex.c================*/
-void	ms_tokenizer(t_syntax *syntax);
+t_bool	ms_tokenizer(t_syntax *syntax);
 size_t	ms_count_word(const char *line, const char **op, size_t op_size);
 size_t	ms_get_op(const char *s1, const char **op, size_t op_size);
 size_t	ms_get_word(const char *line, const char **op, size_t op_size);

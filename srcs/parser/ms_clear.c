@@ -11,25 +11,18 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_minishell.h"
 #include "ms_parser.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 void	ms_clear_syntax(t_syntax *syntax)
 {
-	int	i;
-
 	if (syntax)
 	{
 		if (syntax->line)
 			free (syntax->line);
 		if (syntax->words)
-		{
-			i = 0;
-			while (syntax->words[i])
-				free(syntax->words[i++]);
-			free (syntax->words);
-		}
+			ms_clear_sec_dimentional(syntax->words);
 		ft_memset(syntax, 0, sizeof(t_syntax));
 	}
 }
@@ -45,7 +38,6 @@ void	ms_clear_token(t_token **token)
 		{
 			free(token[i]->value);
 			free(token[i]);
-			token[i] = NULL;
 			i++;
 		}
 		free(token);
@@ -63,7 +55,6 @@ void	ms_clear_ast(t_ast *ast)
 		right = ast->right;
 		ms_clear_token(ast->token);
 		free(ast);
-		ast = NULL;
 		ms_clear_ast(left);
 		ms_clear_ast(right);
 	}

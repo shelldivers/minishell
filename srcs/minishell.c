@@ -18,11 +18,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	ms_clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
+void	ms_clear_all(t_minishell *shell)
 {
-	ms_clear_syntax(syntax);
-	ms_clear_token(token);
-	ms_clear_ast(ast);
+	ms_clear_syntax(&(shell->syntax));
+	ms_clear_token(shell->token);
+	shell->token = NULL;
+	ms_clear_ast(shell->ast);
+	shell->ast = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -45,17 +47,20 @@ int	main(int argc, char **argv, char **envp)
 		add_history(shell.syntax.line);
 		ms_tokenizer(&shell.syntax);
 		if (!shell.syntax.words_cnt)
+		{
+			ms_clear_all(&shell);
 			continue ;
+		}
 		shell.token = ms_lexer(&shell.syntax);
 		if (!shell.token)
 		{
-			ms_clear_all(&shell.syntax, shell.token, shell.ast);
+			ms_clear_all(&shell);
 			ms_puterror_cmd(NULL, "malloc");
 			continue ;
 		}
 		ms_parser(&shell.ast, shell.token, shell.syntax.words_cnt);
 		ms_max_heredoc(shell.token);
 		ms_exec(shell.ast, shell.env);
-		ms_clear_all(&shell.syntax, shell.token, shell.ast);
+		ms_clear_all(&shell);
 	}
 }

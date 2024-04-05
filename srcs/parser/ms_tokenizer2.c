@@ -21,7 +21,6 @@ char *line, size_t *start, const char **op, size_t op_size)
 	char	*word;
 
 	i = *start;
-	word = NULL;
 	i += ms_get_word(line + i, op, op_size);
 	word = ft_substr(line, *start, i - *start);
 	*start = i;
