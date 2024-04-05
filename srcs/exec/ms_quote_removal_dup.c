@@ -24,16 +24,14 @@ char	*ms_quote_removal_dup(char *word, size_t i, size_t j)
 		return (NULL);
 	while (word[i])
 	{
-		if (word[i] == '\'' || word[i] == '\"')
+		if ((word[i] == '\'' || word[i] == '\"')
+			&& ms_find_close_quote(word, i))
 		{
 			quote = word[i];
-			if (ms_find_close_quote(word, i) == TRUE)
-			{
-				i++;
-				while (word[i] && word[i] != quote)
-					new_word[j++] = word[i++];
-				i++;
-			}
+			i++;
+			while (word[i] && word[i] != quote)
+				new_word[j++] = word[i++];
+			i++;
 		}
 		else
 			new_word[j++] = word[i++];
@@ -53,6 +51,7 @@ static t_bool	ms_find_close_quote(char *word, int idx)
 		if (word[i] == '\'' || word[i] == '"')
 		{
 			quote = word[i];
+			i++;
 			while (word[i] && word[i] != quote)
 				i++;
 			if (!word[i])
