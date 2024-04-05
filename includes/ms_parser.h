@@ -13,8 +13,11 @@
 #ifndef MS_PARSER_H
 # define MS_PARSER_H
 
-# include <stdlib.h>
+# define OP_SIZE 9
+
 # include "ft_bool.h"
+# include "ms_minishell.h"
+# include <stdlib.h>
 
 enum e_lr
 {
@@ -54,7 +57,7 @@ typedef struct s_syntax
 {
 	char	*line;
 	char	**words;
-	size_t	words_cnt;
+	int		words_cnt;
 }				t_syntax;
 
 typedef struct s_token
@@ -80,16 +83,15 @@ typedef struct s_drill
 
 /*================lex.c================*/
 t_bool	ms_tokenizer(t_syntax *syntax);
-size_t	ms_count_word(const char *line, const char **op, size_t op_size);
-size_t	ms_get_op(const char *s1, const char **op, size_t op_size);
-size_t	ms_get_word(const char *line, const char **op, size_t op_size);
-size_t	ms_close_quote(const char *line, const char quote);
-char	*ms_extract_token(\
-char *line, size_t *start, const char **op, size_t op_size);
-char	*ms_extract_word(\
-char *line, size_t *start, const char **op, size_t op_size);
+int		ms_count_word(const char *line, const char **op);
+int		ms_get_op(const char *s1, const char **op);
+int		ms_get_word(const char *line, const char **op);
+int		ms_close_quote(const char *line, char quote);
+char	*ms_extract_token(char *line, size_t *start, const char **op);
+char	*ms_extract_word(char *line, size_t *start, const char **op);
 /*================init.c================*/
 /*================clear.c================*/
+void	ms_clear_all(t_minishell *shell);
 void	ms_clear_syntax(t_syntax *syntax);
 void	ms_clear_ast(t_ast **ast);
 void	ms_clear_token(t_token **token);
@@ -109,7 +111,7 @@ int		ms_is_io_file(t_ast *ast, t_token **token);
 int		ms_is_io_here(t_ast *ast, t_token **token);
 int		ms_is_word(t_ast *ast, t_token **token);
 /*================parser.c================*/
-void	ms_parser(t_ast **ast, t_token **token, int size);
+t_bool	ms_parser(t_ast **ast, t_token **token, int size);
 t_ast	*ms_new_ast(t_token **token, int size);
 int		ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill);
 t_token	**ms_tokenndup(t_token **src, int size);

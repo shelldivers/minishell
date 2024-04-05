@@ -18,13 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	ms_clear_all(t_minishell *shell)
-{
-	ms_clear_syntax(&(shell->syntax));
-	ms_clear_token(shell->token);
-	shell->token = NULL;
-	ms_clear_ast(&(shell->ast));
-}
+static t_bool	parse(t_minishell *shell);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -34,7 +28,6 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	ft_memset(&shell, 0, sizeof(t_minishell));
 	shell.env = ms_env_deserialize(envp);
-	shell.ast = NULL;
 	while (1)
 	{
 		shell.syntax.line = readline("minishell$ ");
@@ -44,22 +37,34 @@ int	main(int argc, char **argv, char **envp)
 			return (0);
 		}
 		add_history(shell.syntax.line);
-		ms_tokenizer(&shell.syntax);
-		if (!shell.syntax.words_cnt)
-		{
-			ms_clear_all(&shell);
-			continue ;
-		}
-		shell.token = ms_lexer(&shell.syntax);
-		if (!shell.token)
-		{
-			ms_clear_all(&shell);
-			ms_puterror_cmd(NULL, "malloc");
-			continue ;
-		}
-		ms_parser(&shell.ast, shell.token, shell.syntax.words_cnt);
-		ms_max_heredoc(shell.token);
-		ms_exec(shell.ast, shell.env);
+		if (parse(&shell))
+			ms_exec(shell.ast, shell.env);
 		ms_clear_all(&shell);
 	}
+}
+
+static t_bool	parse(t_minishell *shell)
+{
+	t_syntax	*syntax;
+	t_ast		**ast;
+
+	syntax = &(shell->syntax);
+	ast = &(shell->ast);
+	if (!ms_tokenizer(syntax))
+	{
+		ms_puterror_cmd(NULL, "malloc");
+		return (FALSE);
+	}
+	if (!syntax->words_cnt)
+		return (FALSE);
+	shell->token = ms_lexer(syntax);
+	if (!shell->token)
+	{
+		ms_puterror_cmd(NULL, "malloc");
+		return (FALSE);
+	}
+	if (!ms_parser(ast, shell->token, syntax->words_cnt))
+		return (FALSE);
+	ms_max_heredoc(shell->token);
+	return (TRUE);
 }

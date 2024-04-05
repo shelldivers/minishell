@@ -15,6 +15,14 @@
 #include "ms_parser.h"
 #include <stdlib.h>
 
+void	ms_clear_all(t_minishell *shell)
+{
+	ms_clear_syntax(&(shell->syntax));
+	ms_clear_token(shell->token);
+	shell->token = NULL;
+	ms_clear_ast(&(shell->ast));
+}
+
 void	ms_clear_syntax(t_syntax *syntax)
 {
 	if (syntax)

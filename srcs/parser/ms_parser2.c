@@ -32,7 +32,7 @@ int	ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill)
 	new = ms_new_ast(token, size);
 	if (!new)
 		return (ERROR);
-	curtok = (drill.f(new, new->token));
+	curtok = drill.f(new, new->token);
 	if (drill.lr == LEFT)
 	{
 		if (ast->left)

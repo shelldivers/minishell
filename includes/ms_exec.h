@@ -15,18 +15,12 @@
 
 # define SHELLNAME "/tmp/.SHELLDIVERS_"
 # define HEREDOC "minidoc> "
-
+# define MAX_HEREDOC 7
 # include <stdlib.h>
 # include "ft_bool.h"
 # include "ms_parser.h"
 # include "ms_env.h"
 
-typedef struct s_heredoc
-{
-	char				*filename;
-	int					fd;
-	struct s_heredoc	*next;
-}				t_heredoc;
 typedef struct s_exec
 {
 	char		**words;

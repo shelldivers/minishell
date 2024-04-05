@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_error.h"
+#include "ms_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "ms_parser.h"
-#include "libft.h"
 
 static t_token		*ms_new_token(char *value);
 static enum e_type	ms_get_tokentype(char *value);
@@ -35,9 +36,7 @@ t_token	**ms_lexer(t_syntax *syntax)
 		token[i] = ms_new_token(syntax->words[i]);
 		if (!token[i])
 		{
-			while (i--)
-				free(token[i]);
-			free(token);
+			ms_clear_token(token);
 			return (NULL);
 		}
 		i++;

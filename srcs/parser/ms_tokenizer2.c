@@ -10,46 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "ms_parser.h"
 #include "libft.h"
+#include "ms_parser.h"
 
-char	*ms_extract_word(\
-char *line, size_t *start, const char **op, size_t op_size)
+char	*ms_extract_word(char *line, size_t *start, const char **op)
 {
 	size_t	i;
 	char	*word;
 
 	i = *start;
-	i += ms_get_word(line + i, op, op_size);
+	i += ms_get_word(line + i, op);
 	word = ft_substr(line, *start, i - *start);
 	*start = i;
 	return (word);
 }
 
-char	*ms_extract_token(\
-char *line, size_t *start, const char **op, size_t op_size)
+char	*ms_extract_token(char *line, size_t *start, const char **op)
 {
 	char	*token;
 	size_t	i;
 	size_t	op_len;
 
 	i = *start;
-	op_len = ms_get_op(line + i, op, op_size);
+	op_len = ms_get_op(line + i, op);
 	token = ft_substr(line, *start, op_len);
 	*start += op_len;
 	return (token);
 }
 
-size_t	ms_get_op(const char *s1, const char **op, size_t op_size)
+int	ms_get_op(const char *s1, const char **op)
 {
-	size_t	i;
-	size_t	op_len;
+	int	i;
+	int	op_len;
 
 	i = 0;
-	while (i < op_size)
+	while (i < OP_SIZE)
 	{
-		op_len = ft_strlen(op[i]);
+		op_len = (int) ft_strlen(op[i]);
 		if (ft_strncmp(s1, op[i], op_len) == 0)
 			return (op_len);
 		i++;
@@ -57,13 +54,13 @@ size_t	ms_get_op(const char *s1, const char **op, size_t op_size)
 	return (0);
 }
 
-size_t	ms_get_word(const char *line, const char **op, size_t op_size)
+int	ms_get_word(const char *line, const char **op)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (line[i] != ' ' && line[i] != '\0' \
-	&& ms_get_op(line + i, op, op_size) == 0)
+	&& ms_get_op(line + i, op) == 0)
 	{
 		if (line[i] == '\'' || line[i] == '"')
 			i += ms_close_quote(line + i, line[i]);
@@ -73,9 +70,9 @@ size_t	ms_get_word(const char *line, const char **op, size_t op_size)
 	return (i);
 }
 
-size_t	ms_close_quote(const char *line, const char quote)
+int	ms_close_quote(const char *line, char quote)
 {
-	size_t	i;
+	int	i;
 
 	i = 1;
 	while (line[i])

@@ -54,10 +54,10 @@ void	ms_max_heredoc(t_token **token)
 			cnt++;
 		i++;
 	}
-	if (cnt > 7)
+	if (cnt > MAX_HEREDOC)
 	{
 		ms_puterror_max_here_doc();
-		exit(EXIT_FAILURE);
+		exit(2);
 	}
 }
 

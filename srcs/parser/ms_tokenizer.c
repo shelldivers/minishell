@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ms_parser.h"
-#include "ms_minishell.h"
 
 static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
 
@@ -27,13 +26,14 @@ static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
  */
 t_bool	ms_tokenizer(t_syntax *syntax)
 {
-	const char	*op[9] = {"&&", "||", "|", "(", ")", ">>", "<<", ">", "<"};
 	size_t		i;
 	size_t		start;
+	const char	*op[OP_SIZE] = {
+		"&&", "||", "|", "(",
+		")", ">>", "<<", ">", "<"
+	};
 
-	if (!syntax->line)
-		return (TRUE);
-	syntax->words_cnt = ms_count_word(syntax->line, op, 9);
+	syntax->words_cnt = ms_count_word(syntax->line, op);
 	syntax->words = (char **)malloc(sizeof(char *) * (syntax->words_cnt + 1));
 	if (!syntax->words)
 		return (FALSE);
@@ -53,22 +53,22 @@ t_bool	ms_tokenizer(t_syntax *syntax)
 	return (TRUE);
 }
 
-size_t	ms_count_word(const char *line, const char **op, size_t op_size)
+int	ms_count_word(const char *line, const char **op)
 {
-	size_t	i;
-	size_t	token_size;
-	size_t	words_cnt;
+	int	i;
+	int	token_size;
+	int	words_cnt;
 
 	i = 0;
 	words_cnt = 0;
 	while (line[i])
 	{
-		token_size = ms_get_word(line + i, op, op_size);
+		token_size = ms_get_word(line + i, op);
 		if (token_size)
 			words_cnt++;
 		else
 		{
-			token_size = ms_get_op(line + i, op, op_size);
+			token_size = ms_get_op(line + i, op);
 			if (token_size)
 				words_cnt++;
 			else
@@ -81,12 +81,15 @@ size_t	ms_count_word(const char *line, const char **op, size_t op_size)
 
 static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx)
 {
-	const char	*op[9] = {"&&", "||", "|", "(", ")", ">>", "<<", ">", "<"};
+	const char	*op[OP_SIZE] = {
+		"&&", "||", "|", "(",
+		")", ">>", "<<", ">", "<"
+	};
 
-	if (ms_get_op(syntax->line + start, op, 9))
-		syntax->words[idx] = ms_extract_token(syntax->line, &start, op, 9);
+	if (ms_get_op(syntax->line + start, op))
+		syntax->words[idx] = ms_extract_token(syntax->line, &start, op);
 	else
-		syntax->words[idx] = ms_extract_word(syntax->line, &start, op, 9);
+		syntax->words[idx] = ms_extract_word(syntax->line, &start, op);
 	if (!syntax->words[idx])
 	{
 		ms_clear_sec_dimentional(syntax->words);

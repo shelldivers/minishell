@@ -10,13 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "ms_parser.h"
-#include "libft.h"
 #include "ms_error.h"
+#include <stdio.h>
 
-void	ms_parser(t_ast **ast, t_token **token, int size)
+t_bool	ms_parser(t_ast **ast, t_token **token, int size)
 {
 	int	curtok;
 
@@ -24,18 +22,18 @@ void	ms_parser(t_ast **ast, t_token **token, int size)
 	if (!*ast)
 	{
 		ms_puterror_cmd(NULL, "malloc");
-		return ;
+		return (FALSE);
 	}
 	curtok = ms_add_ast(*ast, token, size, (t_drill){ms_is_and_or, LEFT});
 	if (curtok == -1)
 	{
 		ms_puterror_cmd(NULL, "malloc");
-		ms_clear_ast(ast);
-		return ;
+		return (FALSE);
 	}
 	else if (curtok != size)
 	{
 		ms_parser_error_handler(token, curtok);
-		ms_clear_ast(ast);
+		return (FALSE);
 	}
+	return (TRUE);
 }
