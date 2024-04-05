@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/29 19:31:18 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:58:36 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
+static t_bool	ms_extract(t_syntax *syntax, int *start, int idx);
 
 /**
  * separateWords - 주어진 문자열을 단어로 분리합니다.
@@ -29,7 +29,7 @@ static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx);
 t_bool	ms_tokenizer(t_syntax *syntax)
 {
 	int			i;
-	size_t		start;
+	int			start;
 	const char	*op[OP_SIZE] = {
 		"&&", "||", "|", "(",
 		")", ">>", "<<", ">", "<"
@@ -47,7 +47,7 @@ t_bool	ms_tokenizer(t_syntax *syntax)
 			start++;
 		if (syntax->line[start] == '\0')
 			break ;
-		if (!ms_extract(syntax, start, i))
+		if (!ms_extract(syntax, &start, i))
 			return (FALSE);
 		i++;
 	}
@@ -81,17 +81,17 @@ int	ms_count_word(const char *line, const char **op)
 	return (words_cnt);
 }
 
-static t_bool	ms_extract(t_syntax *syntax, size_t start, size_t idx)
+static t_bool	ms_extract(t_syntax *syntax, int *start, int idx)
 {
 	const char	*op[OP_SIZE] = {
 		"&&", "||", "|", "(",
 		")", ">>", "<<", ">", "<"
 	};
 
-	if (ms_get_op(syntax->line + start, op))
-		syntax->words[idx] = ms_extract_token(syntax->line, &start, op);
+	if (ms_get_op(syntax->line + *start, op))
+		syntax->words[idx] = ms_extract_token(syntax->line, start, op);
 	else
-		syntax->words[idx] = ms_extract_word(syntax->line, &start, op);
+		syntax->words[idx] = ms_extract_word(syntax->line, start, op);
 	if (!syntax->words[idx])
 	{
 		ms_clear_sec_dimentional(syntax->words);

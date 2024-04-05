@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 19:56:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:58:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ int		ms_count_word(const char *line, const char **op);
 int		ms_get_op(const char *s1, const char **op);
 int		ms_get_word(const char *line, const char **op);
 int		ms_close_quote(const char *line, char quote);
-char	*ms_extract_token(char *line, size_t *start, const char **op);
-char	*ms_extract_word(char *line, size_t *start, const char **op);
+char	*ms_extract_token(char *line, int *start, const char **op);
+char	*ms_extract_word(char *line, int *start, const char **op);
 /*================clear.c================*/
 void	ms_clear_syntax(t_syntax *syntax);
 void	ms_clear_ast(t_ast **ast);

@@ -6,14 +6,14 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/21 11:36:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:58:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ms_parser.h"
 
-char	*ms_extract_word(char *line, size_t *start, const char **op)
+char	*ms_extract_word(char *line, int *start, const char **op)
 {
 	size_t	i;
 	char	*word;
@@ -25,7 +25,7 @@ char	*ms_extract_word(char *line, size_t *start, const char **op)
 	return (word);
 }
 
-char	*ms_extract_token(char *line, size_t *start, const char **op)
+char	*ms_extract_token(char *line, int *start, const char **op)
 {
 	char	*token;
 	size_t	i;
