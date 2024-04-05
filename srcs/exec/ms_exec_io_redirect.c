@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 21:56:38 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:49:15 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,11 @@ void	dup2_fd(t_exec *exec_info)
 		if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
 			ms_puterror_cmd(NULL, "dup2");
 	}
-	else if (exec_info->fd[0] == -1 && exec_info->heredoc_fd[seq] > 0)
+	else if (exec_info->fd[0] == -1 && seq >= 0 \
+	&& exec_info->heredoc_fd[seq] > 0)
 	{
 		if (dup2(exec_info->heredoc_fd[seq], STDIN_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
+			ft_dprintf(2, "damn");
 	}
 	if (exec_info->fd[1] != -1)
 		if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 19:59:00 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:11:37 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ms_close_parent_pipe(t_exec *exec_info)
 		exec_info->pipe[prev_pipe][0] = -1;
 		if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
 			ms_puterror_cmd(NULL, "close");
-		exec_info->pipe[now_pipe][1] = -1;
+		exec_info ->pipe[now_pipe][1] = -1;
 		exec_info->pipe_cnt--;
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 22:17:53 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:34:25 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 {
 	int		fd;
 	char	*filename;
+	char	*here_end;
 
 	filename = ms_get_heredoc_filename(seq);
 	if (!filename)
@@ -73,10 +74,12 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 		ms_puterror_cmd(NULL, "open");
 		return (FALSE);
 	}
-	ms_get_line_with_fd(HEREDOC, ast->token[1]->value, fd);
+	here_end = ms_quote_removal(ast->token[1]->value, 0, 0);
+	ms_get_line_with_fd(HEREDOC, here_end, fd);
 	if (close(fd) == -1)
 		ms_puterror_cmd(NULL, "close");
 	free (filename);
+	free (here_end);
 	return (TRUE);
 }
 

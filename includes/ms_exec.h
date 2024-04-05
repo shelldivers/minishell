@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 22:12:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:34:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_bool		ms_here_doc_in_order(t_ast *ast, int seq);
 t_bool		ms_set_heredoc(t_ast *ast, const int seq);
 char		*ms_get_heredoc_filename(int idx);
 void		ms_clear_heredoc(t_exec *exec_info);
+char		*ms_quote_removal(char *word, size_t i, size_t j);
 
 /*================ commands ==================*/
 t_bool		ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words);
