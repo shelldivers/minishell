@@ -14,10 +14,11 @@
 #include "ft_printf.h"
 #include "ms_env.h"
 #include "ms_expand.h"
+#include "ms_parser.h"
 
+static t_bool	re_syntaxing(t_queue *queue, const char *str);
 static char		*get_pos(const char *str);
 static t_bool	is_cspn(char ch);
-static void		remove_empty_str(char **argv);
 
 /**
  * @details parameter expansion\n
@@ -26,45 +27,82 @@ static void		remove_empty_str(char **argv);
  * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/special-parameters
  */
-t_bool	ms_expand_param(char **argv, t_env *env, int status)
+char	**ms_expand_params(char **argv, int status, t_env *env)
+{
+	t_queue	*queue;
+	char	**expanded;
+	char	*tmp;
+
+	queue = ms_init_queue();
+	if (!queue)
+		return (NULL);
+	while (*argv)
+	{
+		tmp = ft_strdup(*argv);
+		if (!tmp)
+			return (NULL);
+		if (!ms_expand_param(queue, tmp, status, env))
+		{
+			ms_destroy_queue(queue, free);
+			return (NULL);
+		}
+		argv++;
+	}
+	expanded = ms_queue_to_array(queue);
+	ms_destroy_queue(queue, free);
+	if (!expanded)
+		return (NULL);
+	return (expanded);
+}
+
+t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env)
 {
 	char	*pos;
 	char	*replace;
+	t_bool	result;
 
-	while (*argv)
+	while (1)
 	{
-		while (1)
-		{
-			pos = get_pos(*argv);
-			if (!pos)
-				break ;
-			replace = ms_dollar_expand(*argv, pos, status, env);
-			if (!replace)
-				return (FALSE);
-			free(*argv);
-			*argv = replace;
-		}
-		if (**argv == '\0')
-			remove_empty_str(argv);
-		else
-			argv++;
+		pos = get_pos(str);
+		if (!pos)
+			break ;
+		replace = ms_dollar_expand(str, pos, status, env);
+		free(str);
+		if (!replace)
+			return (FALSE);
+		str = replace;
 	}
+	result = re_syntaxing(queue, str);
+	free(str);
+	if (!result)
+		return (FALSE);
 	return (TRUE);
 }
 
-static void	remove_empty_str(char **argv)
+static t_bool	re_syntaxing(t_queue *queue, const char *str)
 {
-	char	**dest;
-	char	*tmp;
+	t_syntax	re_syntax;
+	int			i;
 
-	tmp = *argv;
-	dest = argv;
-	while (*dest)
+	if (*str == '\0')
+		return (TRUE);
+	re_syntax = (t_syntax){(char *)str, NULL, 0};
+	ms_tokenizer(&re_syntax);
+	i = 0;
+	while (re_syntax.words[i])
 	{
-		*dest = *(dest + 1);
-		dest++;
+		if (!ms_enqueue(queue, re_syntax.words[i]))
+		{
+			free(re_syntax.line);
+			while (re_syntax.words[i])
+				free(re_syntax.words[i++]);
+			free(re_syntax.words);
+			return (FALSE);
+		}
+		i++;
 	}
-	free(tmp);
+	free(re_syntax.words);
+	return (TRUE);
 }
 
 static char	*get_pos(const char *str)

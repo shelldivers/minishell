@@ -50,7 +50,8 @@ typedef struct s_table
 char	**ms_expansion(char **argv, t_env *env, int status);
 
 /* ms_expand_param.c */
-t_bool	ms_expand_param(char **argv, t_env *env, int status);
+char	**ms_expand_params(char **argv, int status, t_env *env);
+t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env);
 /* ms_expand_param_utils.c */
 char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env);
 
