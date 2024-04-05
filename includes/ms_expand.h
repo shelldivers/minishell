@@ -52,8 +52,7 @@ char	**ms_expansion(char **argv, t_env *env, int status);
 /* ms_expand_param.c */
 t_bool	ms_expand_param(char **argv, t_env *env, int status);
 /* ms_expand_param_utils.c */
-char	*ms_status_expansion(char *str, char *pos, int status);
-char	*ms_param_expansion(char *str, char *pos, t_env *env);
+char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env);
 
 /* ms_expand_filenames.c */
 char	**ms_expand_filenames(char **argv);

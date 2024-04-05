@@ -17,6 +17,7 @@
 
 static char		*get_pos(const char *str);
 static t_bool	is_cspn(char ch);
+static void		remove_empty_str(char **argv);
 
 /**
  * @details parameter expansion\n
@@ -32,23 +33,38 @@ t_bool	ms_expand_param(char **argv, t_env *env, int status)
 
 	while (*argv)
 	{
-		while (TRUE)
+		while (1)
 		{
 			pos = get_pos(*argv);
 			if (!pos)
 				break ;
-			if (pos[1] == '?')
-				replace = ms_status_expansion(*argv, pos, status);
-			else if (ft_isalnum(pos[1]) || pos[1] == '_')
-				replace = ms_param_expansion(*argv, pos, env);
+			replace = ms_dollar_expand(*argv, pos, status, env);
 			if (!replace)
 				return (FALSE);
 			free(*argv);
 			*argv = replace;
 		}
-		argv++;
+		if (**argv == '\0')
+			remove_empty_str(argv);
+		else
+			argv++;
 	}
 	return (TRUE);
+}
+
+static void	remove_empty_str(char **argv)
+{
+	char	**dest;
+	char	*tmp;
+
+	tmp = *argv;
+	dest = argv;
+	while (*dest)
+	{
+		*dest = *(dest + 1);
+		dest++;
+	}
+	free(tmp);
 }
 
 static char	*get_pos(const char *str)
