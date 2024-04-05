@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:34:39 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/05 14:34:40 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:06:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	ms_env_exec(char **argv, char **envp)
 	int	exit_code;
 
 	exit_code = EXIT_SUCCESS;
-	status = execve(*argv, argv, envp);		// execve 전에 파싱 부분 추가
+	status = execve(*argv, argv, envp);
 	if (status == -1)
 	{
 		ms_puterror_cmd(NULL, *argv);

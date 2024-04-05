@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 20:06:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:36:08 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	ms_is_and_or(t_ast *ast, t_token **token)
 		return (0);
 	op_pos = ms_get_op_pos(token, TAND_IF, TOR_IF);
 	curtok = 0;
-	if (op_pos && (token[op_pos]->type == TAND_IF || token[op_pos]->type == TOR_IF))
+	if (op_pos && (token[op_pos]->type == TAND_IF \
+	|| token[op_pos]->type == TOR_IF))
 	{
 		if (token[op_pos]->type == TAND_IF)
 			ast->op = OPAND_IF;
@@ -119,3 +120,5 @@ int	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2)
 	}
 	return (op_idx);
 }
+
+

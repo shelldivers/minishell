@@ -17,7 +17,7 @@ RM = rm -rf
 
 PARSER += ms_tokenizer.c ms_tokenizer2.c ms_clear.c ms_lexer.c ms_unterminal.c ms_unterminal2.c ms_terminal.c ms_parser.c ms_parser2.c\
 			ms_parser_error_handler.c
-ERROR += ms_error_utils.c ms_error.c
+ERROR += ms_error_utils.c  ms_error_utils2.c  ms_error_utils3.c ms_error.c 
 EXEC += ms_exec.c ms_exec_utils.c ms_exec_utils2.c ms_exec_init_clear.c ms_exec_words.c ms_exec_path.c ms_exec_fd.c ms_quote_removal_dup.c \
 			ms_exec_pipeline.c ms_exec_commands.c ms_exec_io_redirect.c ms_exec_heredoc.c ms_exec_heredoc_before.c
 BUILTIN += ms_cd.c ms_echo.c ms_env.c ms_exit.c ms_export.c ms_pwd.c ms_unset.c
