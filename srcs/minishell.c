@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "libft.h"
 #include "ms_minishell.h"
+#include "ms_error.h"
+#include <stdio.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -23,8 +23,7 @@ void	ms_clear_all(t_minishell *shell)
 	ms_clear_syntax(&(shell->syntax));
 	ms_clear_token(shell->token);
 	shell->token = NULL;
-	ms_clear_ast(shell->ast);
-	shell->ast = NULL;
+	ms_clear_ast(&(shell->ast));
 }
 
 int	main(int argc, char **argv, char **envp)

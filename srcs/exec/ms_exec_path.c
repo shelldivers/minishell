@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "libft.h"
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <sys/stat.h>
-#include "ms_minishell.h"
+#include <unistd.h>
 
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);

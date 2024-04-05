@@ -17,6 +17,8 @@
 extern "C" {
 # endif
 
+# define ERROR (-1)
+
 # include "ms_env.h"
 
 void	ms_puterror_cmd_arg(t_env *env, char *cmd, char *arg);

@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "ft_printf.h"
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <fcntl.h>
-#include <readline/readline.h>
-#include "ms_minishell.h"
+#include <stdio.h>
+#include <unistd.h>
 
 static int	w_int(int x);
 

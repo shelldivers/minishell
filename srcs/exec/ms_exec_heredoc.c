@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_error.h"
+#include "ms_exec.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include "ms_minishell.h"
-#include <readline/readline.h>
 
 t_bool	ms_exec_io_here(t_exec *exec_info)
 {

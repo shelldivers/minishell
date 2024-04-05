@@ -69,7 +69,7 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_token	**token;
-	size_t			token_size;
+	int				token_size;
 }				t_ast;
 
 /*================lex.c================*/
@@ -86,29 +86,30 @@ char *line, size_t *start, const char **op, size_t op_size);
 void	ms_init_syntax(t_syntax *syntax);
 /*================clear.c================*/
 void	ms_clear_syntax(t_syntax *syntax);
-void	ms_clear_ast(t_ast *ast);
+void	ms_clear_ast(t_ast **ast);
 void	ms_clear_token(t_token **token);
 /*================lexer.c================*/
 t_token	**ms_lexer(t_syntax *syntax);
 /*================unterminal.c================*/
-size_t	ms_is_and_or(t_ast *ast, t_token **token);
-size_t	ms_is_pipeline(t_ast *ast, t_token **token);
-size_t	ms_is_command(t_ast *ast, t_token **token);
-size_t	ms_is_subshell(t_ast *ast, t_token **token);
-size_t	ms_is_simple_command(t_ast *ast, t_token **token);
-size_t	ms_is_redirect_list(t_ast *ast, t_token **token);
-size_t	ms_is_io_redirect(t_ast *ast, t_token **token);
-size_t	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2);
+int		ms_is_and_or(t_ast *ast, t_token **token);
+int		ms_is_pipeline(t_ast *ast, t_token **token);
+int		ms_is_command(t_ast *ast, t_token **token);
+int		ms_is_subshell(t_ast *ast, t_token **token);
+int		ms_is_simple_command(t_ast *ast, t_token **token);
+int		ms_is_redirect_list(t_ast *ast, t_token **token);
+int		ms_is_io_redirect(t_ast *ast, t_token **token);
+int		ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2);
 /*================terminal.c================*/
-size_t	ms_is_io_file(t_ast *ast, t_token **token);
-size_t	ms_is_io_here(t_ast *ast, t_token **token);
-size_t	ms_is_word(t_ast *ast, t_token **token);
+int		ms_is_io_file(t_ast *ast, t_token **token);
+int		ms_is_io_here(t_ast *ast, t_token **token);
+int		ms_is_word(t_ast *ast, t_token **token);
 /*================parser.c================*/
-t_bool	ms_parser(t_ast **ast, t_token **token, size_t size);
-t_ast	*ms_new_ast(t_token **token, size_t size);
-size_t	ms_add_ast(t_ast *ast, t_token **token, \
-size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr);
-t_token	**ms_tokenndup(t_token **src, size_t size);
-size_t	ms_tokenlen(t_token **token);
+void	ms_parser(t_ast **ast, t_token **token, int size);
+t_ast	*ms_new_ast(t_token **token, int size);
+int		ms_add_ast(t_ast *ast, t_token **token, \
+int (f)(t_ast *, t_token **), int size, enum e_lr lr);
+t_token	**ms_tokenndup(t_token **src, int size);
+
+void	ms_parser_error_handler(t_token **token, int curtok);
 
 #endif

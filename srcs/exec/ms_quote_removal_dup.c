@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ms_minishell.h"
+#include "libft.h"
+#include "ms_exec.h"
 
 static t_bool	ms_find_close_quote(char *word, int idx);
 

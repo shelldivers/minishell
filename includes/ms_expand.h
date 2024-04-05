@@ -18,7 +18,6 @@ extern "C" {
 # endif
 
 # define ASTERISK (-1)
-# define CSPN " \t\n\"'\\$"
 
 # include "ft_type.h"
 # include "ms_env.h"

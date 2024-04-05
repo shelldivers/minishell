@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include "ms_minishell.h"
+#include "ms_exec.h"
 
 void	ms_exec(t_ast *ast, t_env **env)
 {

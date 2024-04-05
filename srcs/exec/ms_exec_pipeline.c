@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <unistd.h>
-#include "ms_minishell.h"
 
 static void	ms_close_parent_pipe2(\
 t_exec *exec_info, int now_pipe);

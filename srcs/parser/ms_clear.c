@@ -44,18 +44,21 @@ void	ms_clear_token(t_token **token)
 	}
 }
 
-void	ms_clear_ast(t_ast *ast)
+void	ms_clear_ast(t_ast **ast)
 {
+	t_ast	*_ast;
 	t_ast	*left;
 	t_ast	*right;
 
-	if (ast)
+	_ast = *ast;
+	if (_ast)
 	{
-		left = ast->left;
-		right = ast->right;
-		ms_clear_token(ast->token);
-		free(ast);
-		ms_clear_ast(left);
-		ms_clear_ast(right);
+		left = _ast->left;
+		right = _ast->right;
+		ms_clear_token(_ast->token);
+		free(_ast);
+		ms_clear_ast(&left);
+		ms_clear_ast(&right);
 	}
+	*ast = NULL;
 }

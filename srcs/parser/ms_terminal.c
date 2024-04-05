@@ -12,7 +12,7 @@
 
 #include "ms_parser.h"
 
-size_t	ms_is_io_file(t_ast *ast, t_token **token)
+int	ms_is_io_file(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
 		return (0);
@@ -29,7 +29,7 @@ size_t	ms_is_io_file(t_ast *ast, t_token **token)
 	return (0);
 }
 
-size_t	ms_is_io_here(t_ast *ast, t_token **token)
+int	ms_is_io_here(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 2)
 		return (0);
@@ -43,7 +43,7 @@ size_t	ms_is_io_here(t_ast *ast, t_token **token)
 	return (0);
 }
 
-size_t	ms_is_word(t_ast *ast, t_token **token)
+int	ms_is_word(t_ast *ast, t_token **token)
 {
 	if (ast->token_size < 1)
 		return (0);

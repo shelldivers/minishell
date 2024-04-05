@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_exec.h"
 #include <stdlib.h>
-#include "ms_minishell.h"
 
 t_bool	ms_add_word(t_exec *exec_info, char *word)
 {

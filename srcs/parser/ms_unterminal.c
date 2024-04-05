@@ -13,10 +13,10 @@
 #include <stdio.h>
 #include "ms_parser.h"
 
-size_t	ms_is_and_or(t_ast *ast, t_token **token)
+int	ms_is_and_or(t_ast *ast, t_token **token)
 {
-	size_t	op_pos;
-	size_t	curtok;
+	int	op_pos;
+	int	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
@@ -40,10 +40,10 @@ size_t	ms_is_and_or(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-size_t	ms_is_pipeline(t_ast *ast, t_token **token)
+int	ms_is_pipeline(t_ast *ast, t_token **token)
 {
-	size_t	op_pos;
-	size_t	curtok;
+	int	op_pos;
+	int	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
@@ -65,9 +65,9 @@ size_t	ms_is_pipeline(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-size_t	ms_is_command(t_ast *ast, t_token **token)
+int	ms_is_command(t_ast *ast, t_token **token)
 {
-	size_t	curtok;
+	int	curtok;
 
 	if (ast->token_size < 1)
 		return (0);
@@ -88,11 +88,11 @@ size_t	ms_is_command(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-size_t	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2)
+int	ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2)
 {
-	size_t	op_idx;
-	size_t	curtok;
-	size_t	paren;
+	int	op_idx;
+	int	curtok;
+	int	paren;
 
 	if (token == NULL)
 		return (0);

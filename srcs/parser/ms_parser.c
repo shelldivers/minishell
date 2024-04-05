@@ -10,45 +10,52 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ms_parser.h"
 #include "libft.h"
-#include "ft_bool.h"
 #include "ms_error.h"
 
-t_bool	ms_parser(t_ast **ast, t_token **token, size_t size)
+static int	ms_tokenlen(t_token **token);
+
+void	ms_parser(t_ast **ast, t_token **token, int size)
 {
-	size_t	curtok;
+	int	curtok;
 
 	*ast = ms_new_ast(token, size);
 	if (!*ast)
-		return (0);
-	curtok = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
-	if (curtok != size)
 	{
-		write (2, "syntax error : ", 15);
-		write (2, token[curtok]->value, ft_strlen(token[curtok]->value));
-		write (2, "\n", 1);
-		ms_clear_ast(*ast);
-		*ast = NULL;
-		return (FALSE);
+		ms_puterror_cmd(NULL, "malloc");
+		return ;
 	}
-	return (TRUE);
+	curtok = ms_add_ast(*ast, token, ms_is_and_or, size, LEFT);
+	if (curtok == -1)
+	{
+		ms_puterror_cmd(NULL, "malloc");
+		ms_clear_ast(ast);
+		return ;
+	}
+	else if (curtok != size)
+	{
+		ms_parser_error_handler(token, curtok);
+		ms_clear_ast(ast);
+	}
 }
 
-size_t	ms_add_ast(t_ast *ast, t_token **token, \
-size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
+/**
+ * @errno ENOMEM 메모리 할당에 실패했을 경우 -> -1 반환
+ */
+int	ms_add_ast(t_ast *ast, t_token **token, \
+int (f)(t_ast *, t_token **), int size, enum e_lr lr)
 {
-	size_t	curtok;
+	int		curtok;
 	t_ast	*new;
 
 	if (!size)
 		size = ms_tokenlen(token);
 	new = ms_new_ast(token, size);
 	if (!new)
-		return (0);
+		return (ERROR);
 	curtok = (f(new, new->token));
 	if (lr == LEFT)
 	{
@@ -63,11 +70,14 @@ size_t(f)(t_ast *, t_token **), size_t size, enum e_lr lr)
 		ast->right = new;
 	}
 	else
-		ms_clear_ast(new);
+		ms_clear_ast(&new);
 	return (curtok);
 }
 
-t_ast	*ms_new_ast(t_token **token, size_t size)
+/**
+ * @errno ENOMEM 메모리 할당에 실패했을 경우
+ */
+t_ast	*ms_new_ast(t_token **token, int size)
 {
 	t_ast	*new_ast;
 
@@ -76,6 +86,7 @@ t_ast	*ms_new_ast(t_token **token, size_t size)
 	new_ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!new_ast)
 		return (NULL);
+	ft_memset(new_ast, 0, sizeof(t_ast));
 	new_ast->token = ms_tokenndup(token, size);
 	if (!new_ast->token)
 	{
@@ -84,42 +95,42 @@ t_ast	*ms_new_ast(t_token **token, size_t size)
 	}
 	new_ast->token_size = size;
 	new_ast->op = OPNONE;
-	new_ast->left = NULL;
-	new_ast->right = NULL;
 	return (new_ast);
 }
 
-t_token	**ms_tokenndup(t_token **src, size_t size)
+t_token	**ms_tokenndup(t_token **src, int size)
 {
 	t_token	**dst;
+	int		i;
 
 	dst = (t_token **)malloc(sizeof(t_token *) * (size + 1));
 	if (!dst)
 		return (NULL);
-	dst[size] = NULL;
-	while (size)
+	i = 0;
+	while (i < size)
 	{
-		size--;
-		dst[size] = (t_token *)malloc(sizeof(t_token));
-		if (!dst[size])
+		dst[i] = (t_token *)malloc(sizeof(t_token));
+		if (!dst[i])
 		{
 			ms_clear_token(dst);
 			return (NULL);
 		}
-		dst[size]->type = src[size]->type;
-		dst[size]->value = ft_strdup(src[size]->value);
-		if (!dst[size]->value)
+		dst[i]->type = src[i]->type;
+		dst[i]->value = ft_strdup(src[i]->value);
+		if (!dst[i]->value)
 		{
 			ms_clear_token(dst);
 			return (NULL);
 		}
+		i++;
 	}
+	dst[i] = NULL;
 	return (dst);
 }
 
-size_t	ms_tokenlen(t_token **token)
+static int	ms_tokenlen(t_token **token)
 {
-	size_t	len;
+	int	len;
 
 	len = 0;
 	while (token[len])

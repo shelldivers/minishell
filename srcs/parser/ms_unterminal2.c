@@ -12,12 +12,12 @@
 
 #include "ms_parser.h"
 
-static size_t	get_subshell_size(t_token **token);
+static int	get_subshell_size(t_token **token);
 
-size_t	ms_is_simple_command(t_ast *ast, t_token **token)
+int	ms_is_simple_command(t_ast *ast, t_token **token)
 {
-	size_t	beftok;
-	size_t	curtok;
+	int	beftok;
+	int	curtok;
 
 	if (ast->token_size < 1)
 		return (0);
@@ -40,10 +40,10 @@ size_t	ms_is_simple_command(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-size_t	ms_is_redirect_list(t_ast *ast, t_token **token)
+int	ms_is_redirect_list(t_ast *ast, t_token **token)
 {
-	size_t	curtok;
-	size_t	total_curtok;
+	int	curtok;
+	int	total_curtok;
 
 	if (ast->token_size == 0)
 		return (0);
@@ -61,9 +61,9 @@ size_t	ms_is_redirect_list(t_ast *ast, t_token **token)
 	return (total_curtok);
 }
 
-size_t	ms_is_io_redirect(t_ast *ast, t_token **token)
+int	ms_is_io_redirect(t_ast *ast, t_token **token)
 {
-	size_t	curtok;
+	int	curtok;
 
 	if (ast->token_size == 0)
 		return (0);
@@ -75,10 +75,10 @@ size_t	ms_is_io_redirect(t_ast *ast, t_token **token)
 	return (curtok);
 }
 
-size_t	ms_is_subshell(t_ast *ast, t_token **token)
+int	ms_is_subshell(t_ast *ast, t_token **token)
 {
-	size_t	curtok;
-	size_t	subshell_size;
+	int	curtok;
+	int	subshell_size;
 
 	curtok = 0;
 	subshell_size = get_subshell_size(token);
@@ -91,10 +91,10 @@ size_t	ms_is_subshell(t_ast *ast, t_token **token)
 	return (0);
 }
 
-static size_t	get_subshell_size(t_token **token)
+static int	get_subshell_size(t_token **token)
 {
-	size_t	curtok;
-	size_t	paren;
+	int	curtok;
+	int	paren;
 
 	curtok = 0;
 	paren = 0;

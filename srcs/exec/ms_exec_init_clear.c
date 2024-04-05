@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <unistd.h>
-#include "ms_minishell.h"
 
 void	ms_init_exec_info(t_exec *exec_info)
 {

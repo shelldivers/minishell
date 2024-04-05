@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ms_minishell.h"
+#include "ms_parser.h"
+#include "ms_error.h"
 
-void	ms_parser_error_handler(t_token **token, size_t curtok)
+void	ms_parser_error_handler(t_token **token, int curtok)
 {
 	char		*err_val;
 	enum e_type	err_type;

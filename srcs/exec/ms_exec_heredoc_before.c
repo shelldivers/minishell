@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "ft_printf.h"
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "ms_minishell.h"
-#include <readline/readline.h>
 
 t_bool	ms_exec_heredoc_before(t_ast *ast)
 {

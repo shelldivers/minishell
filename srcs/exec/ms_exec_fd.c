@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_error.h"
+#include "ms_exec.h"
 #include <unistd.h>
-#include "ms_minishell.h"
 
 void	ms_close_all_fd(t_exec *exec_info)
 {

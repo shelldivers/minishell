@@ -10,9 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_builtin.h"
+#include "ms_error.h"
+#include "ms_exec.h"
+#include "ms_expand.h"
 #include <stdio.h>
 #include <unistd.h>
-#include "ms_minishell.h"
 
 void	ms_exec_words(t_exec *exec_info, t_env **env)
 {

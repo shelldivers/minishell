@@ -10,18 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_error.h"
+#include "ms_exec.h"
+#include "ms_expand.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include "ms_minishell.h"
 #include <readline/readline.h>
 
 t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 {
 	const char	*redirect = ast->token[0]->value;
 	char		*filename;
-	
+
 	filename = ast->token[1]->value;
 	filename = check_ambiguous_redirect(exec_info, env, filename);
 	if (!filename)

@@ -10,12 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_exec.h"
+#include "ms_error.h"
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <readline/readline.h>
-#include "ms_minishell.h"
 
 void	ms_get_line_with_fd(const char *type, char *end, int fd)
 {
