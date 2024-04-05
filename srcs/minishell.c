@@ -25,7 +25,6 @@ void	ms_clear_all(t_syntax *syntax, t_token **token, t_ast *ast)
 	ms_clear_ast(ast);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
@@ -45,11 +44,18 @@ int	main(int argc, char **argv, char **envp)
 		}
 		add_history(shell.syntax.line);
 		ms_tokenizer(&shell.syntax);
+		if (!shell.syntax.words_cnt)
+			continue ;
 		shell.token = ms_lexer(&shell.syntax);
+		if (!shell.token)
+		{
+			ms_clear_all(&shell.syntax, shell.token, shell.ast);
+			ms_puterror_cmd(NULL, "malloc");
+			continue ;
+		}
 		ms_parser(&shell.ast, shell.token, shell.syntax.words_cnt);
 		ms_max_heredoc(shell.token);
 		ms_exec(shell.ast, shell.env);
 		ms_clear_all(&shell.syntax, shell.token, shell.ast);
 	}
-	return (0);
 }

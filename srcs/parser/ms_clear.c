@@ -10,51 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "ms_parser.h"
 
 void	ms_clear_syntax(t_syntax *syntax)
 {
 	int	i;
 
-	i = 0;
 	if (syntax)
 	{
 		if (syntax->line)
 			free (syntax->line);
-		syntax->line = NULL;
 		if (syntax->words)
 		{
+			i = 0;
 			while (syntax->words[i])
-			{
-				free(syntax->words[i]);
-				syntax->words[i] = NULL;
-				i++;
-			}
+				free(syntax->words[i++]);
 			free (syntax->words);
-			syntax->words = NULL;
 		}
+		ft_memset(syntax, 0, sizeof(t_syntax));
 	}
 }
 
 void	ms_clear_token(t_token **token)
 {
-	int	i;
-
-	i = 0;
 	if (token)
 	{
-		while (token[i])
+		while (*token)
 		{
-			free(token[i]->value);
-			token[i]->value = NULL;
-			free(token[i]);
-			token[i] = NULL;
-			i++;
+			free((*token)->value);
+			free(*token);
+			*token = NULL;
+			token++;
 		}
 		free(token);
-		token = NULL;
 	}
 }
 
@@ -67,11 +58,7 @@ void	ms_clear_ast(t_ast *ast)
 	{
 		left = ast->left;
 		right = ast->right;
-		if (ast->token)
-		{
-			ms_clear_token(ast->token);
-			ast->token = NULL;
-		}
+		ms_clear_token(ast->token);
 		free(ast);
 		ast = NULL;
 		ms_clear_ast(left);
