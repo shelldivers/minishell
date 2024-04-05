@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 17:25:11 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:06:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,16 @@ int	ms_is_and_or(t_ast *ast, t_token **token)
 			ast->op = OPAND_IF;
 		else
 			ast->op = OPOR_IF;
-		curtok += ms_add_ast(ast, token + op_pos + 1, ast->token_size - op_pos - 1, (t_drill){ms_is_pipeline, RIGHT});
+		curtok += ms_add_ast(ast, token + op_pos + 1, \
+		ast->token_size - op_pos - 1, (t_drill){ms_is_pipeline, RIGHT});
 		if (curtok)
-			curtok += ms_add_ast(ast, token, op_pos, (t_drill){ms_is_and_or, LEFT});
+			curtok += ms_add_ast(ast, token, \
+			op_pos, (t_drill){ms_is_and_or, LEFT});
 		curtok++;
 	}
 	else
-		curtok += ms_add_ast(ast, token, 0, (t_drill){ms_is_pipeline, LEFT});
+		curtok += ms_add_ast(ast, token, \
+		0, (t_drill){ms_is_pipeline, LEFT});
 	return (curtok);
 }
 
@@ -51,14 +54,16 @@ int	ms_is_pipeline(t_ast *ast, t_token **token)
 	if (op_pos)
 	{
 		ast->op = OPPIPE;
-		curtok += ms_add_ast(ast, token + op_pos + 1, ms_is_command, \
-		ast->token_size - op_pos - 1, RIGHT);
+		curtok += ms_add_ast(ast, token + op_pos + 1, \
+		ast->token_size - op_pos - 1, (t_drill){ms_is_pipeline, RIGHT});
 		if (curtok)
-			curtok += ms_add_ast(ast, token, ms_is_pipeline, op_pos, LEFT);
+			curtok += ms_add_ast(ast, token, \
+			op_pos, (t_drill){ms_is_command, LEFT});
 		curtok++;
 	}
 	else
-		curtok += ms_add_ast(ast, token, ms_is_command, 0, LEFT);
+		curtok += ms_add_ast(ast, token, \
+		0, (t_drill){ms_is_command, LEFT});
 	if (curtok == ast->token_size)
 		return (curtok);
 	return (curtok);
@@ -73,16 +78,17 @@ int	ms_is_command(t_ast *ast, t_token **token)
 	curtok = 0;
 	if (token[curtok] && token[curtok]->type == TLPAREN)
 	{
-		curtok += ms_add_ast(ast, token + curtok, ms_is_subshell, 0, RIGHT);
+		curtok += ms_add_ast(ast, token + curtok, \
+		0, (t_drill){ms_is_and_or, LEFT});
 		if (curtok)
 		{
-			curtok += ms_add_ast(ast, token + curtok, ms_is_redirect_list, \
-			0, LEFT);
+			curtok += ms_add_ast(ast, token + curtok, \
+			0, (t_drill){ms_is_and_or, LEFT});
 		}
 	}
 	else
-		curtok += ms_add_ast(ast, token + curtok, ms_is_simple_command, \
-		0, LEFT);
+		curtok += ms_add_ast(ast, token + curtok, \
+		0, (t_drill){ms_is_simple_command, LEFT});
 	ast->token_size = curtok;
 	return (curtok);
 }

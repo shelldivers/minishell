@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/02 15:15:31 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 19:56:59 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ char *line, size_t *start, const char **op, size_t op_size);
 char	*ms_extract_word(\
 char *line, size_t *start, const char **op, size_t op_size);
 /*================init.c================*/
-void	ms_init_syntax(t_syntax *syntax);
 /*================clear.c================*/
 void	ms_clear_syntax(t_syntax *syntax);
 void	ms_clear_ast(t_ast **ast);
@@ -114,7 +113,6 @@ void	ms_parser(t_ast **ast, t_token **token, int size);
 t_ast	*ms_new_ast(t_token **token, int size);
 int		ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill);
 t_token	**ms_tokenndup(t_token **src, int size);
-
 void	ms_parser_error_handler(t_token **token, int curtok);
 
 #endif
