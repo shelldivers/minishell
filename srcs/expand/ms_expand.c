@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ms_minishell.h"
 #include "ms_env.h"
 #include "ms_expand.h"
 #include "ms_error.h"
@@ -62,7 +61,7 @@ static char	**ms_strsdup(char **strs)
 	i = 0;
 	while (strs[i] && i < size)
 	{
-		copy[i] = ms_quote_removal_dup(strs[i], 0, 0);
+		copy[i] = ft_strdup(strs[i]);
 		if (!copy[i])
 		{
 			while (i--)

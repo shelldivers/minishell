@@ -74,9 +74,9 @@ static char	*get_pos(const char *str)
 	return (NULL);
 }
 
-static t_bool   is_cspn(char ch)
+static t_bool	is_cspn(char ch)
 {
-    if (ft_isalnum(ch) || ch == '_' || ch == '?')
-       return (TRUE);
-    return (FALSE);
+	if (ft_isalnum(ch) || ch == '_' || ch == '?')
+		return (TRUE);
+	return (FALSE);
 }

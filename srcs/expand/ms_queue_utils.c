@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_minishell.h"
 #include "ms_expand.h"
 
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del)
@@ -64,7 +65,7 @@ char	**ms_queue_to_array(t_queue *queue)
 	node = queue->head;
 	while (node)
 	{
-		array[i] = ft_strdup(node->content);
+		array[i] = ms_quote_removal_dup(node->content, 0, 0);
 		if (!array[i])
 		{
 			while (i--)
