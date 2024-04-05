@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/04 20:35:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:18:47 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 		ms_dup_based_on_pipe_idx(exec_info);
 		ms_close_all_fd(exec_info);
 		execve(words[0], words, ms_env_serialize(*env));
-		ms_puterror_arg(NULL, words[0]);
+		ms_puterror_no_command(words[0]);
 		exit(EXIT_FAILURE);
 	}
 	else
