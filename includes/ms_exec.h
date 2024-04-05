@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 14:04:12 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:59:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void		ms_max_heredoc(t_token **token);
 
 int			wifexit(int x);
 int			wexitstatus(int x);
+void		dup2_fd(t_exec *exec_info);
 
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
@@ -65,11 +66,12 @@ void		ms_reset_exec_info(t_exec *exec_info);
 void		ms_reset_io(t_exec *exec_info);
 
 /*================ redirect ==================*/
-t_bool		ms_exec_io_file(t_ast *ast, t_exec *exec_info);
-t_bool		ms_exec_io_file_write(t_exec *exec_info, const char *filename);
-t_bool		ms_exec_io_file_append(t_exec *exec_info, const char *filename);
-t_bool		ms_exec_io_file_read(t_exec *exec_info, const char *filename);
-void		dup2_fd(t_exec *exec_info);
+t_bool		ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env);
+t_bool		ms_exec_io_file_write(t_exec *exec_info, char *filename);
+t_bool		ms_exec_io_file_append(t_exec *exec_info, char *filename);
+t_bool		ms_exec_io_file_read(t_exec *exec_info, char *filename);
+char		*check_ambiguous_redirect(\
+t_exec *exec_info, t_env **env, char *filename);
 
 /*================ heredoc ==================*/
 t_bool		ms_exec_io_here(t_exec *exec_info);

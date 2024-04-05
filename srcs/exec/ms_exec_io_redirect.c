@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 11:49:15 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:01:49 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@
 #include "ms_minishell.h"
 #include <readline/readline.h>
 
-t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info)
+t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 {
 	const char	*redirect = ast->token[0]->value;
-	const char	*filename = ast->token[1]->value;
-
+	char		*filename;
+	
+	filename = ast->token[1]->value;
+	filename = check_ambiguous_redirect(exec_info, env, filename);
+	if (!filename)
+		return (FALSE);
 	if (ft_strcmp(redirect, ">") == 0)
 		return (ms_exec_io_file_write(exec_info, filename));
 	else if (ft_strcmp(redirect, ">>") == 0)
@@ -32,7 +36,7 @@ t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info)
 }
 
 // error handling in this function
-t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
+t_bool	ms_exec_io_file_write(t_exec *exec_info, char *filename)
 {
 	if (exec_info->fd[1] != -1)
 	{
@@ -42,7 +46,7 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (exec_info->fd[1] == -1)
 	{
-		ms_puterror_cmd(NULL, "filename");
+		ms_puterror_cmd(NULL, filename);
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
@@ -50,7 +54,7 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, const char *filename)
 }
 
 // error handling in this function
-t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
+t_bool	ms_exec_io_file_append(t_exec *exec_info, char *filename)
 {
 	if (exec_info->fd[1] != -1)
 	{
@@ -60,7 +64,7 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (exec_info->fd[1] == -1)
 	{
-		ms_puterror_cmd(NULL, "filename");
+		ms_puterror_cmd(NULL, filename);
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
@@ -68,7 +72,7 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, const char *filename)
 }
 
 // error handling in this function
-t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
+t_bool	ms_exec_io_file_read(t_exec *exec_info, char *filename)
 {
 	if (exec_info->fd[0] != -1)
 	{
@@ -78,29 +82,37 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, const char *filename)
 	exec_info->fd[0] = open(filename, O_RDONLY);
 	if (exec_info->fd[0] == -1)
 	{
-		ms_puterror_cmd(NULL, "filename");
+		ms_puterror_cmd(NULL, filename);
 		exec_info->exit_code = 1;
 		return (FALSE);
 	}
 	return (TRUE);
 }
 
-void	dup2_fd(t_exec *exec_info)
+char	*check_ambiguous_redirect(\
+t_exec *exec_info, t_env **env, char *filename)
 {
-	const int	seq = exec_info->heredoc_seq - 1;
+	char	**words;
+	char	**expanded_word;
 
-	if (exec_info->fd[0] != -1)
+	words = (char **)malloc(sizeof(char *) * 2);
+	if (!words)
 	{
-		if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
+		ms_puterror_cmd(NULL, "malloc");
+		exec_info->exit_code = 1;
+		return (NULL);
 	}
-	else if (exec_info->fd[0] == -1 && seq >= 0 \
-	&& exec_info->heredoc_fd[seq] > 0)
+	words[0] = filename;
+	words[1] = NULL;
+	expanded_word = ms_expansion(words, *env, exec_info->exit_code);
+	if (!expanded_word[0] || expanded_word[1])
 	{
-		if (dup2(exec_info->heredoc_fd[seq], STDIN_FILENO) == -1)
-			ft_dprintf(2, "damn");
+		ms_puterror_ambiguous_redirect(filename);
+		exec_info->exit_code = 1;
+		ms_clear_sec_dimentional(expanded_word);
+		return (FALSE);
 	}
-	if (exec_info->fd[1] != -1)
-		if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
+	free(words);
+	free(expanded_word);
+	return (expanded_word[0]);
 }
