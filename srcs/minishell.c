@@ -50,12 +50,7 @@ static void	init(t_minishell *shell, int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	ft_memset(shell, 0, sizeof(t_minishell));
 	shell->env = ms_env_deserialize(envp);
-	if (!shell->env)
-	{
-		ms_puterror_cmd(NULL, "malloc");
-		exit(EXIT_FAILURE);
-	}
-	if (!set_shlvl(shell->env))
+	if (!shell->env || !set_shlvl(shell->env))
 	{
 		ms_puterror_cmd(NULL, "malloc");
 		exit(EXIT_FAILURE);
