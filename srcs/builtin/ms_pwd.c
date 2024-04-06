@@ -29,5 +29,6 @@ int	ms_pwd(int argc, char **argv, t_env **env)
 		return (EXIT_FAILURE);
 	}
 	printf("%s\n", pwd);
+	free(pwd);
 	return (EXIT_SUCCESS);
 }
