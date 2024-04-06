@@ -12,39 +12,46 @@
 
 #include "ms_builtin.h"
 #include "ft_bool.h"
-#include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 static t_bool	is_option(char *str)
 {
-	if (!str)
+	if (!str || *str != '-')
 		return (FALSE);
-	if (ft_strncmp(str, "-n", 2) == 0)
-	{
-		if (str[2] == '\0' || str[2] == ' ')
-			return (TRUE);
-	}
+	str++;
+	while (*str && *str == 'n')
+		str++;
+	if (*str == '\0')
+		return (TRUE);
 	return (FALSE);
 }
 
 int	ms_echo(int argc, char **argv, t_env **env)
 {
-	int		i;
-	t_bool	n_flag;
+	int	i;
+	int	n_flag;
 
+	(void)argc;
 	(void)env;
-	n_flag = is_option(argv[1]);
-	i = 1;
-	if (n_flag == TRUE)
-		i++;
-	while (i < argc)
+	argv++;
+	n_flag = 0;
+	while (*argv && *argv[0] == '-')
+	{
+		if (!is_option(*argv))
+			break ;
+		n_flag++;
+		argv++;
+	}
+	i = 0;
+	while (argv[i])
 	{
 		printf("%s", argv[i]);
-		if (++i != argc)
+		if (argv[i + 1] != NULL)
 			printf(" ");
+		i++;
 	}
-	if (n_flag == FALSE)
+	if (n_flag == 0)
 		printf("\n");
 	return (EXIT_SUCCESS);
 }
