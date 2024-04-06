@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 #include "ms_error.h"
 #include "ms_exec.h"
@@ -20,7 +19,6 @@
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);
 static void		ms_is_dir(char **words);
-static t_bool	s_isdir(int m);
 
 void	ms_add_path(char **words, t_env **env)
 {
@@ -94,11 +92,9 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	return (NULL);
 }
 
-static t_bool	s_isdir(int m)
+int	s_isdir(int m)
 {
-	if (((m) & S_IFMT) == S_IFDIR)
-		return (TRUE);
-	return (FALSE);
+	return (((m) & S_IFMT) == S_IFDIR);
 }
 
 static void	ms_is_dir(char **words)

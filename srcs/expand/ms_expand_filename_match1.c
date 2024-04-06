@@ -12,6 +12,10 @@
 
 #include "libft.h"
 #include "ms_expand.h"
+#include "ms_exec.h"
+#include <sys/stat.h>
+
+static t_bool	is_dir(struct dirent *entry, t_glob *glob);
 
 t_bool	ms_match(struct dirent *entry, t_glob *glob)
 {
@@ -28,13 +32,36 @@ t_bool	match_type(struct dirent *entry, t_glob *glob)
 		return (FALSE);
 	if (ft_strcmp(entry->d_name, "..") == 0)
 		return (FALSE);
-	if (*(glob->rest) == '/' && entry->d_type != DT_DIR)
+	if (*(glob->rest) == '/' && !is_dir(entry, glob))
 		return (FALSE);
 	if (*(glob->pattern) != '.' && *(entry->d_name) == '.')
 		return (FALSE);
 	if (*(glob->pattern) == '.' && *(entry->d_name) != '.')
 		return (FALSE);
 	return (TRUE);
+}
+
+static t_bool	is_dir(struct dirent *entry, t_glob *glob)
+{
+	struct stat	buf;
+	char		*path;
+	int			result;
+
+	if (entry->d_type == DT_DIR)
+		return (TRUE);
+	if (entry->d_type == DT_LNK)
+	{
+		path = ft_strjoin(glob->path, entry->d_name);
+		if (!path)
+			return (FALSE);
+		result = stat(path, &buf);
+		free(path);
+		if (result == -1)
+			return (FALSE);
+		if (s_isdir(buf.st_mode))
+			return (TRUE);
+	}
+	return (FALSE);
 }
 
 char	*ms_join_path(t_glob *glob, char *d_name)

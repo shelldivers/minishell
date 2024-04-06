@@ -97,5 +97,5 @@ void		ms_close_stdin(t_exec *exec_info);
 
 /*================ path ==================*/
 void		ms_add_path(char **words, t_env **env);
-
+int	    	s_isdir(int m);
 #endif
