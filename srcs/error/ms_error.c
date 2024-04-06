@@ -23,7 +23,7 @@ void	ms_puterror_cmd_arg(t_env *env, char *cmd, char *arg)
 
 	(void)env;
 	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s: %s\n", "minishell", cmd, arg, str_error);
+	ft_dprintf(2, "%s: %s: %s: %s\n", SHELL, cmd, arg, str_error);
 	errno = 0;
 	g_exit = 1;
 }
@@ -34,7 +34,7 @@ void	ms_puterror_cmd(t_env *env, char *cmd)
 
 	(void)env;
 	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", cmd, str_error);
+	ft_dprintf(2, "%s: %s: %s\n", SHELL, cmd, str_error);
 	errno = 0;
 	g_exit = 1;
 }
@@ -45,7 +45,7 @@ void	ms_puterror_arg(t_env *env, char *arg)
 
 	(void)env;
 	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", arg, str_error);
+	ft_dprintf(2, "%s: %s: %s\n", SHELL, arg, str_error);
 	errno = 0;
 	g_exit = 1;
 }

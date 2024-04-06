@@ -18,11 +18,10 @@
 
 void	ms_puterror_identifier(t_env *env, char *cmd, char *arg)
 {
-	char		*shell;
 	const char	*msg = "not a valid identifier";
 
-	shell = ms_getenv(env, SHELL);
-	ft_dprintf(2, "%s: %s: `%s': %s\n", shell, cmd, arg, msg);
+	(void)env;
+	ft_dprintf(2, "%s: %s: `%s': %s\n", SHELL, cmd, arg, msg);
 	errno = 0;
 	g_exit = 1;
 }
@@ -32,29 +31,27 @@ void	ms_puterror_numeric(t_env *env, char *cmd, char *arg)
 	const char	*msg = "numeric argument required";
 
 	(void)env;
-	ft_dprintf(2, "%s: %s: %s: %s\n", "minishell", cmd, arg, msg);
+	ft_dprintf(2, "%s: %s: %s: %s\n", SHELL, cmd, arg, msg);
 	errno = 0;
 	g_exit = 1;
 }
 
 void	ms_puterror_too_many_args(t_env *env, char *cmd)
 {
-	char		*shell;
 	const char	*msg = "too many arguments";
 
-	shell = ms_getenv(env, SHELL);
-	ft_dprintf(2, "%s: %s: %s\n", shell, cmd, msg);
+	(void)env;
+	ft_dprintf(2, "%s: %s: %s\n", SHELL, cmd, msg);
 	errno = 0;
 	g_exit = 1;
 }
 
 void	ms_puterror_env_not_set(t_env *env, char *cmd, char *key)
 {
-	char		*shell;
 	const char	*msg = "not set";
 
-	shell = ms_getenv(env, SHELL);
-	ft_dprintf(2, "%s: %s: %s %s\n", shell, cmd, key, msg);
+	(void)env;
+	ft_dprintf(2, "%s: %s: %s %s\n", SHELL, cmd, key, msg);
 	errno = 0;
 	g_exit = 1;
 }
@@ -64,7 +61,7 @@ void	ms_puterror_syntax(t_env **env, char *value)
 	const char	*msg = "syntax error near unexpected value";
 
 	(void)env;
-	ft_dprintf(2, "%s: %s `%s'\n", "minishell", msg, value);
+	ft_dprintf(2, "%s: %s `%s'\n", SHELL, msg, value);
 	errno = 0;
 	g_exit = 258;
 }
