@@ -15,6 +15,7 @@
 #include "ms_error.h"
 #include "ms_exec.h"
 #include "ms_expand.h"
+#include "ms_signal.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -84,6 +85,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	}
 	if (pid == 0)
 	{
+		ms_set_signal_default();
 		ms_add_path(words, env);
 		ms_dup_based_on_pipe_idx(exec_info);
 		ms_close_all_fd(exec_info);
@@ -92,5 +94,8 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 		exit(EXIT_FAILURE);
 	}
 	else
+	{
+		ms_set_signal_fork();
 		ms_close_parent_pipe(exec_info);
+	}
 }

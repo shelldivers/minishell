@@ -1,10 +1,9 @@
+#include "ft_printf.h"
 #include "ms_signal.h"
 #include <stdio.h>
-#include <readline/readline.h>
 #include <signal.h>
 #include <unistd.h>
-
-static void	sigint(int signum);
+#include <readline/readline.h>
 
 /**
  * @signal SIGINT - Ctrl + C
@@ -14,7 +13,7 @@ static void	sigint(int signum);
 void	ms_set_signal_prompt(void)
 {
 	ms_set_echoctl_off();
-	signal(SIGINT, sigint);
+	signal(SIGINT, sigint_prompt);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -25,10 +24,10 @@ void	ms_set_signal_prompt(void)
  * @echoctl off
  * @exitcode 1
  */
-static void	sigint(int signum)
+void	sigint_prompt(int signum)
 {
 	(void)signum;
-	write(STDOUT_FILENO, "\n", 1);
+	ft_dprintf(STDERR_FILENO, "\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();

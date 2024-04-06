@@ -13,6 +13,7 @@
 #include "libft.h"
 #include "ms_exec.h"
 #include "ms_error.h"
+#include "ms_signal.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,6 +72,7 @@ void	ms_wait_child_process(t_exec *exec_info)
 		exec_info->exit_code = WEXITSTATUS(status);
 		exec_info->execed_cmd_cnt--;
 	}
+	ms_set_signal_prompt();
 }
 
 t_exec	*ms_new_exec_info(t_env **env)

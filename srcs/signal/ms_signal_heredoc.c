@@ -1,9 +1,8 @@
 #include "ft_printf.h"
 #include "ms_signal.h"
 #include <signal.h>
+#include <unistd.h>
 #include <stdlib.h>
-
-static void	sigint(int signum);
 
 /**
  * @signal SIGINT - Ctrl + C
@@ -12,7 +11,7 @@ static void	sigint(int signum);
 void	ms_set_signal_heredoc(void)
 {
 	ms_set_echoctl_off();
-	signal(SIGINT, sigint);
+	signal(SIGINT, sigint_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -23,9 +22,9 @@ void	ms_set_signal_heredoc(void)
  * @echoctl off
  * @exitcode 1
  */
-static void	sigint(int signum)
+void	sigint_heredoc(int signum)
 {
 	(void)signum;
-	ft_printf("\n");
+	ft_dprintf(STDERR_FILENO, "\n");
 	exit(1);
 }
