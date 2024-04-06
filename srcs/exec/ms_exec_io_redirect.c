@@ -104,7 +104,7 @@ char	*check_ambiguous_redirect(t_env **env, char *filename)
 	}
 	words[0] = filename;
 	words[1] = NULL;
-	expanded_word = ms_expansion(words, *env, g_exit);
+	expanded_word = ms_expansion(words, *env);
 	if (!expanded_word[0] || expanded_word[1])
 	{
 		ms_puterror_ambiguous_redirect(filename);

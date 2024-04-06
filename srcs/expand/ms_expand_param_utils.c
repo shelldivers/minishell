@@ -14,27 +14,28 @@
 #include "libft.h"
 #include "ms_env.h"
 #include "ms_expand.h"
+#include "ms_signal.h"
 
 static size_t	get_key_length(const char *str);
-static char		*ms_status_expansion(char *str, char *pos, int status);
+static char		*ms_status_expansion(char *str, char *pos);
 static char		*ms_param_expansion(char *str, char *pos, t_env *env);
 
-char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env)
+char	*ms_dollar_expand(char *str, char *pos, t_env *env)
 {
 	if (pos[1] == '?')
-		return (ms_status_expansion(str, pos, status));
+		return (ms_status_expansion(str, pos));
 	else
 		return (ms_param_expansion(str, pos, env));
 }
 
-static char	*ms_status_expansion(char *str, char *pos, int status)
+static char	*ms_status_expansion(char *str, char *pos)
 {
 	char	*nbr;
 	char	*tmp;
 	char	*tmp2;
 	char	*replace;
 
-	nbr = ft_sprintf("%d", status);
+	nbr = ft_sprintf("%d", g_exit);
 	if (!nbr)
 		return (NULL);
 	tmp = ft_strndup(str, pos - str);

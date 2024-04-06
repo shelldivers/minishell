@@ -19,13 +19,13 @@
  * parameter expansion -> filename expansion -> quote removal
  * @see https://runebook.dev/ko/docs/bash/shell-expansions
  */
-char	**ms_expansion(char **argv, t_env *env, int status)
+char	**ms_expansion(char **argv, t_env *env)
 {
 	char	**copy;
 	char	**expanded;
 	int		i;
 
-	copy = ms_expand_params(argv, status, env);
+	copy = ms_expand_params(argv, env);
 	if (!copy)
 		return (NULL);
 	expanded = ms_expand_filenames(copy);

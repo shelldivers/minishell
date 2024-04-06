@@ -40,13 +40,13 @@ typedef struct s_table
 }	t_table;
 
 /* ms_expand.c */
-char	**ms_expansion(char **argv, t_env *env, int status);
+char	**ms_expansion(char **argv, t_env *env);
 
 /* ms_expand_param.c */
-char	**ms_expand_params(char **argv, int status, t_env *env);
-t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env);
+char	**ms_expand_params(char **argv, t_env *env);
+t_bool	ms_expand_param(t_queue *queue, char *str, t_env *env);
 /* ms_expand_param_utils.c */
-char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env);
+char	*ms_dollar_expand(char *str, char *pos, t_env *env);
 
 /* ms_expand_filenames.c */
 char	**ms_expand_filenames(char **argv);

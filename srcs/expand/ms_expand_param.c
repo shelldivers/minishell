@@ -27,7 +27,7 @@ static t_bool	is_cspn(char ch);
  * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/special-parameters
  */
-char	**ms_expand_params(char **argv, int status, t_env *env)
+char	**ms_expand_params(char **argv, t_env *env)
 {
 	t_queue	*queue;
 	char	**expanded;
@@ -41,7 +41,7 @@ char	**ms_expand_params(char **argv, int status, t_env *env)
 		tmp = ft_strdup(*argv);
 		if (!tmp)
 			return (NULL);
-		if (!ms_expand_param(queue, tmp, status, env))
+		if (!ms_expand_param(queue, tmp, env))
 		{
 			ms_destroy_queue(queue, free);
 			return (NULL);
@@ -55,7 +55,7 @@ char	**ms_expand_params(char **argv, int status, t_env *env)
 	return (expanded);
 }
 
-t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env)
+t_bool	ms_expand_param(t_queue *queue, char *str, t_env *env)
 {
 	char	*pos;
 	char	*replace;
@@ -66,7 +66,7 @@ t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env)
 		pos = get_pos(str);
 		if (!pos)
 			break ;
-		replace = ms_dollar_expand(str, pos, status, env);
+		replace = ms_dollar_expand(str, pos, env);
 		free(str);
 		if (!replace)
 			return (FALSE);

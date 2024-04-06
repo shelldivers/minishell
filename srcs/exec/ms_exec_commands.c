@@ -25,7 +25,7 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 	exec_info->cmd_cnt++;
 	if (exec_info->words)
 	{
-		words = ms_expansion(exec_info->words, *env, g_exit);
+		words = ms_expansion(exec_info->words, *env);
 		if (!ms_exec_is_builtin(exec_info, env, words))
 		{
 			exec_info->execed_cmd_cnt++;
