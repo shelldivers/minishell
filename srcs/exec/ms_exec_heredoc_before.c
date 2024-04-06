@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 16:45:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:03:43 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ t_bool	ms_exec_heredoc_before(t_ast *ast)
 	{
 		ms_set_signal_heredoc();
 		if (ms_here_doc_in_order(ast, 0) == FALSE)
-			exit(1);
-		exit(0);
+			exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
 		ms_set_signal_ignore();
 		waitpid(pid, &status, 0);
 		ms_set_signal_prompt();
-		if (wifexit(status) && wexitstatus(status) == 1)
+		if (wifexit(status) && wexitstatus(status) != EXIT_SUCCESS)
 			return (FALSE);
 	}
 	return (TRUE);

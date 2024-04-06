@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 15:44:08 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:03:55 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	ms_exec(t_ast *ast, t_env **env)
 	if (!ms_exec_heredoc_before(ast))
 	{
 		ms_reset_exec_info(exec_info);
-		ms_env_clear(env);
 		ms_clear_heredoc(exec_info);
 		return ;
 	}
