@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static int		get_token_size(t_token **token);
 static t_bool	assign_token(t_token *const *src, t_token **dst, int i);
 
 /**
@@ -28,7 +27,9 @@ int	ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill)
 	t_ast	*new;
 
 	if (!size)
-		size = get_token_size(token);
+		size = ms_get_token_size(token);
+	if (!size)
+		return (0);
 	new = ms_new_ast(token, size);
 	if (!new)
 		return (ERROR);
@@ -45,8 +46,6 @@ int	ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill)
 			ast = ast->right;
 		ast->right = new;
 	}
-	else
-		ms_clear_ast(&new);
 	return (curtok);
 }
 
@@ -106,7 +105,7 @@ static t_bool	assign_token(t_token *const *src, t_token **dst, int i)
 	return (TRUE);
 }
 
-static int	get_token_size(t_token **token)
+int	ms_get_token_size(t_token **token)
 {
 	int	size;
 

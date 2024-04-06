@@ -6,69 +6,66 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 20:08:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 15:32:20 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_error.h"
 #include "ms_parser.h"
 
 static int	get_subshell_size(t_token **token);
 
 int	ms_is_simple_command(t_ast *ast, t_token **token)
 {
-	int	beftok;
-	int	curtok;
+	const int	size = ms_get_token_size(token);
+	int			curtok;
+	int			tot_curtok;
 
-	if (ast->token_size < 1)
+	if (size < 1)
 		return (0);
-	curtok = 0;
-	beftok = 0;
-	if (token[curtok] && (token[curtok]->type == TWORD))
-		curtok += ms_add_ast(ast, token, \
-		0, (t_drill){ms_is_word, LEFT});
+	tot_curtok = 0;
+	if (token[0] && (token[0]->type == TWORD))
+		curtok = ms_add_ast(ast, token, 0, (t_drill){ms_is_word, RIGHT});
 	else
-		curtok += ms_add_ast(ast, token, \
-		0, (t_drill){ms_is_io_redirect, LEFT});
-	while (token[curtok] && curtok > beftok)
+		curtok = ms_add_ast(ast, token, 0, \
+		(t_drill){ms_is_redirect_list, LEFT});
+	if (!ms_set_tot_curtok(&tot_curtok, curtok, 1))
+		return (tot_curtok);
+	if (tot_curtok < size)
 	{
-		beftok = curtok;
-		if (token[curtok]->type == TWORD)
-			curtok += ms_add_ast(ast, token + curtok, \
-			0, (t_drill){ms_is_word, LEFT});
-		else
-			curtok += ms_add_ast(ast, token + curtok, \
-			0, (t_drill){ms_is_io_redirect, LEFT});
+		curtok = ms_is_simple_command(ast, token + tot_curtok);
+		if (!ms_set_tot_curtok(&tot_curtok, curtok, size - tot_curtok))
+			return (tot_curtok);
 	}
-	ast->token_size = curtok;
-	return (curtok);
+	return (tot_curtok);
 }
 
 int	ms_is_redirect_list(t_ast *ast, t_token **token)
 {
-	int	curtok;
-	int	total_curtok;
+	const int	size = ms_get_token_size(token);
+	int			curtok;
+	int			total_curtok;
 
-	if (ast->token_size == 0)
+	if (size < 0)
 		return (0);
-	curtok = 0;
 	total_curtok = 0;
-	curtok += ms_add_ast(ast, token + total_curtok, \
-	ast->token_size - total_curtok, (t_drill){ms_is_io_redirect, LEFT});
+	curtok = ms_add_ast(ast, token, size, (t_drill){ms_is_io_redirect, LEFT});
 	while (curtok)
 	{
-		total_curtok += curtok;
-		curtok = 0;
-		curtok += ms_add_ast(ast, token + total_curtok, \
-		ast->token_size - total_curtok, (t_drill){ms_is_io_redirect, LEFT});
+		curtok = ms_add_ast(ast, token + total_curtok, \
+		0, (t_drill){ms_is_io_redirect, LEFT});
+		if (!ms_set_tot_curtok(&total_curtok, curtok, 2))
+			return (total_curtok);
 	}
 	return (total_curtok);
 }
 
 int	ms_is_io_redirect(t_ast *ast, t_token **token)
 {
-	int	curtok;
+	const int	size = ms_get_token_size(token);
+	int			curtok;
 
-	if (ast->token_size == 0)
+	if (size < 0)
 		return (0);
 	curtok = 0;
 	if (token[curtok] && (token[curtok]->type == TDLESS))
@@ -80,18 +77,23 @@ int	ms_is_io_redirect(t_ast *ast, t_token **token)
 
 int	ms_is_subshell(t_ast *ast, t_token **token)
 {
-	int	curtok;
-	int	subshell_size;
+	const int	size = ms_get_token_size(token);
+	int			curtok;
+	int			tot_curtok;
+	int			subshell_size;
 
-	curtok = 0;
+	if (size < 3)
+		return (0);
+	tot_curtok = 0;
 	subshell_size = get_subshell_size(token);
 	if (subshell_size)
 	{
-		curtok += ms_add_ast(ast, token + 1, \
+		curtok = ms_add_ast(ast, token + 1, \
 		subshell_size - 2, (t_drill){ms_is_and_or, LEFT});
-		return (curtok + 2);
+		if (!ms_set_tot_curtok(&tot_curtok, curtok, subshell_size - 2))
+			return (tot_curtok + 1);
 	}
-	return (0);
+	return (tot_curtok + 2);
 }
 
 static int	get_subshell_size(t_token **token)
