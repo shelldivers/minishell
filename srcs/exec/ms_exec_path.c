@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:43:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 21:49:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void	ms_add_path(char **words, t_env **env)
 	ms_is_dir(words);
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
+	if (!paths)
+	{
+		ms_puterror_no_file(words[0]);
+		return ;
+	}
 	add_path = ms_change_to_absolute(paths, words);
 	if (!add_path)
 		add_path = ft_strdup(words[0]);
