@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_filename.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:02:58 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:02:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_exec.h"
 #include "ms_expand.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -18,7 +19,6 @@
 static t_bool	init(t_queue **queue, int *depth, char *str);
 static int		get_depth(char *str);
 static void		ms_mark_asterisk(char *str);
-static t_bool	is_exist(char *str);
 
 char	**ms_expand_filename(char *str)
 {
@@ -27,6 +27,8 @@ char	**ms_expand_filename(char *str)
 
 	if (!init(&queue, &depth, str))
 		return (NULL);
+	if (depth < 0)
+		return (ms_inspect_filename(queue, 1, str));
 	while (1)
 	{
 		if (queue->size <= 0 || depth-- < 0)
@@ -50,17 +52,9 @@ static void	ms_mark_asterisk(char *str)
 	while (*str)
 	{
 		if (!quote && *str == '\"')
-		{
 			dquote = (t_bool) !dquote;
-			ft_memmove(str, str + 1, ft_strlen(str) + 1);
-			continue ;
-		}
 		else if (!dquote && *str == '\'')
-		{
 			quote = (t_bool) !quote;
-			ft_memmove(str, str + 1, ft_strlen(str) + 1);
-			continue ;
-		}
 		else if (!quote && !dquote && *str == '*')
 			*str = ASTERISK;
 		str++;
@@ -95,6 +89,7 @@ static int	get_depth(char *str)
 static t_bool	init(t_queue **queue, int *depth, char *str)
 {
 	char	*tmp;
+	char	*tmp2;
 
 	*queue = ms_init_queue();
 	if (!*queue)
@@ -106,25 +101,15 @@ static t_bool	init(t_queue **queue, int *depth, char *str)
 		return (FALSE);
 	}
 	ms_mark_asterisk(tmp);
-	*depth = get_depth(tmp);
-	ms_enqueue(*queue, tmp);
+	tmp2 = ms_quote_removal_dup(tmp, 0, 0);
+	if (!tmp2)
+	{
+		free(tmp);
+		ms_destroy_queue(*queue, free);
+		return (FALSE);
+	}
+	free(tmp);
+	*depth = get_depth(tmp2);
+	ms_enqueue(*queue, tmp2);
 	return (TRUE);
-}
-
-static t_bool	is_exist(char *str)
-{
-	DIR		*dir;
-	int		fd;
-	t_bool	result;
-
-	dir = opendir(str);
-	fd = open(str, O_RDONLY);
-	result = FALSE;
-	if (dir || fd >= 0)
-		result = TRUE;
-	if (fd >= 0)
-		close(fd);
-	if (dir)
-		closedir(dir);
-	return (result);
 }

@@ -12,7 +12,6 @@
 
 #ifndef FT_BOOL_H
 # define FT_BOOL_H
-
 # define TRUE 1
 # define FALSE 0
 

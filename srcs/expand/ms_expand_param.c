@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_param.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:03:06 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:54:58 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include "ft_printf.h"
 #include "ms_env.h"
 #include "ms_expand.h"
+#include "ms_parser.h"
 
+static t_bool	re_syntaxing(t_queue *queue, const char *str);
 static char		*get_pos(const char *str);
-static t_bool	is_cspn(char ch, const char *cspn);
+static t_bool	is_cspn(char ch);
 
 /**
  * @details parameter expansion\n
@@ -25,30 +27,80 @@ static t_bool	is_cspn(char ch, const char *cspn);
  * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
  * @see https://runebook.dev/ko/docs/bash/special-parameters
  */
-t_bool	ms_expand_param(char **argv, t_env *env, int status)
+char	**ms_expand_params(char **argv, int status, t_env *env)
+{
+	t_queue	*queue;
+	char	**expanded;
+	char	*tmp;
+
+	queue = ms_init_queue();
+	if (!queue)
+		return (NULL);
+	while (*argv)
+	{
+		tmp = ft_strdup(*argv);
+		if (!tmp)
+			return (NULL);
+		if (!ms_expand_param(queue, tmp, status, env))
+		{
+			ms_destroy_queue(queue, free);
+			return (NULL);
+		}
+		argv++;
+	}
+	expanded = ms_queue_to_array(queue);
+	ms_destroy_queue(queue, free);
+	if (!expanded)
+		return (NULL);
+	return (expanded);
+}
+
+t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env)
 {
 	char	*pos;
 	char	*replace;
+	t_bool	result;
 
-	while (*argv)
+	while (1)
 	{
-		while (TRUE)
-		{
-			pos = get_pos(*argv);
-			if (!pos)
-				break ;
-			if (pos[1] == '?')
-				replace = ms_status_expansion(*argv, pos, status);
-			else if (ft_isalnum(pos[1]) || pos[1] == '_')
-				replace = ms_param_expansion(*argv, pos, env);
-			if (!replace)
-				return (FALSE);
-			free(*argv);
-			*argv = replace;
-		}
-		ms_remove_quote(*argv);
-		argv++;
+		pos = get_pos(str);
+		if (!pos)
+			break ;
+		replace = ms_dollar_expand(str, pos, status, env);
+		free(str);
+		if (!replace)
+			return (FALSE);
+		str = replace;
 	}
+	result = re_syntaxing(queue, str);
+	free(str);
+	if (!result)
+		return (FALSE);
+	return (TRUE);
+}
+
+static t_bool	re_syntaxing(t_queue *queue, const char *str)
+{
+	t_syntax	re_syntax;
+	int			i;
+
+	if (*str == '\0')
+		return (TRUE);
+	re_syntax = (t_syntax){(char *)str, NULL, 0};
+	ms_tokenizer(&re_syntax);
+	i = 0;
+	while (re_syntax.words[i])
+	{
+		if (!ms_enqueue(queue, re_syntax.words[i]))
+		{
+			while (re_syntax.words[i])
+				free(re_syntax.words[i++]);
+			free(re_syntax.words);
+			return (FALSE);
+		}
+		i++;
+	}
+	free(re_syntax.words);
 	return (TRUE);
 }
 
@@ -66,24 +118,21 @@ static char	*get_pos(const char *str)
 		if (!quote && *pos == '\"')
 			dquote = (t_bool) !dquote;
 		else if (!dquote && *pos == '\'')
-			quote = (t_bool) !quote;
-		else if (!quote && *pos == '$' && !is_cspn(*(pos + 1), CSPN))
+		{
+			if (quote || ft_strchr(pos + 1, '\''))
+				quote = (t_bool) !quote;
+		}
+		else if (!quote && *pos == '$' && *(pos + 1) != '\0'
+			&& is_cspn(*(pos + 1)))
 			return (pos);
 		pos++;
 	}
 	return (NULL);
 }
 
-static t_bool	is_cspn(char ch, const char *cspn)
+static t_bool	is_cspn(char ch)
 {
-	int	i;
-
-	i = 0;
-	while (cspn[i])
-	{
-		if (cspn[i] == ch)
-			return (TRUE);
-		i++;
-	}
+	if (ft_isalnum(ch) || ch == '_' || ch == '?')
+		return (TRUE);
 	return (FALSE);
 }

@@ -10,28 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "ms_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "ms_parser.h"
-#include "libft.h"
 
 static t_token		*ms_new_token(char *value);
 static enum e_type	ms_get_tokentype(char *value);
 
+/**
+ * @errno ENOMEM
+ */
 t_token	**ms_lexer(t_syntax *syntax)
 {
-	size_t	i;
+	int		i;
 	t_token	**token;
 
-	if (!syntax->words_cnt)
-		return (NULL);
 	token = (t_token **)malloc(sizeof(t_token *) * (syntax->words_cnt + 1));
 	if (!token)
-		exit (1);
+		return (NULL);
 	i = 0;
 	while (i < syntax->words_cnt)
 	{
 		token[i] = ms_new_token(syntax->words[i]);
+		if (!token[i])
+		{
+			ms_clear_token(token);
+			return (NULL);
+		}
 		i++;
 	}
 	token[i] = NULL;
@@ -46,6 +52,11 @@ static t_token	*ms_new_token(char *value)
 	if (!token)
 		return (NULL);
 	token->value = ft_strdup(value);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
 	token->type = ms_get_tokentype(value);
 	return (token);
 }

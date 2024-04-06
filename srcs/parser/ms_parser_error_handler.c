@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ast.c                                            :+:      :+:    :+:   */
+/*   ms_parser_error_handler.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 11:24:28 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/03/11 19:12:42 by jiwojung         ###   ########.fr       */
+/*   Created: 2024/04/05 16:31:42 by jiwojung          #+#    #+#             */
+/*   Updated: 2024/04/05 16:40:10 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ms_parser.h"
 #include "ms_error.h"
-#include <stdio.h>
 
-t_bool	ms_parser(t_ast **ast, t_token **token, int size)
+void	ms_parser_error_handler(t_token **token, int curtok)
 {
-	int	curtok;
+	char		*err_val;
+	enum e_type	err_type;
 
-	*ast = ms_new_ast(token, size);
-	if (!*ast)
+	err_type = token[curtok]->type;
+	err_val = token[curtok]->value;
+	if (err_type == TDLESS || err_type == TDGREAT \
+	|| err_type == TDREAD || err_type == TDWRITE)
 	{
-		ms_puterror_cmd(NULL, "malloc");
-		return (FALSE);
+		if (!token[curtok + 1])
+		{
+			ms_puterror_syntax_newline();
+			return ;
+		}
+		else
+			err_val = token[curtok + 1]->value;
 	}
-	curtok = ms_add_ast(*ast, token, size, (t_drill){ms_is_and_or, LEFT});
-	if (curtok == -1)
-	{
-		ms_puterror_cmd(NULL, "malloc");
-		return (FALSE);
-	}
-	else if (curtok != size)
-	{
-		ms_parser_error_handler(token, curtok);
-		return (FALSE);
-	}
-	return (TRUE);
+	else
+		err_val = token[curtok]->value;
+	ms_puterror_syntax(NULL, err_val);
 }

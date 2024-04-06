@@ -33,7 +33,7 @@ char	**ms_expand_filenames(char **argv)
 		free(expanded);
 		argv++;
 	}
-	expanded = ms_queue_to_array(result);
+	expanded = ms_queue_to_array_dequote(result);
 	ms_destroy_queue(result, free);
 	return (expanded);
 }

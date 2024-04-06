@@ -10,31 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "libft.h"
+#include "ms_exec.h"
+#include "ms_minishell.h"
 #include "ms_parser.h"
+#include <stdlib.h>
+
+void	ms_clear_all(t_minishell *shell)
+{
+	ms_clear_syntax(&(shell->syntax));
+	ms_clear_token(shell->token);
+	shell->token = NULL;
+	ms_clear_ast(&(shell->ast));
+}
 
 void	ms_clear_syntax(t_syntax *syntax)
 {
-	int	i;
-
-	i = 0;
 	if (syntax)
 	{
 		if (syntax->line)
 			free (syntax->line);
-		syntax->line = NULL;
 		if (syntax->words)
-		{
-			while (syntax->words[i])
-			{
-				free(syntax->words[i]);
-				syntax->words[i] = NULL;
-				i++;
-			}
-			free (syntax->words);
-			syntax->words = NULL;
-		}
+			ms_clear_sec_dimentional(syntax->words);
+		ft_memset(syntax, 0, sizeof(t_syntax));
 	}
 }
 
@@ -42,39 +40,34 @@ void	ms_clear_token(t_token **token)
 {
 	int	i;
 
-	i = 0;
 	if (token)
 	{
+		i = 0;
 		while (token[i])
 		{
 			free(token[i]->value);
-			token[i]->value = NULL;
 			free(token[i]);
-			token[i] = NULL;
 			i++;
 		}
 		free(token);
-		token = NULL;
 	}
 }
 
-void	ms_clear_ast(t_ast *ast)
+void	ms_clear_ast(t_ast **ast)
 {
+	t_ast	*_ast;
 	t_ast	*left;
 	t_ast	*right;
 
-	if (ast)
+	_ast = *ast;
+	if (_ast)
 	{
-		left = ast->left;
-		right = ast->right;
-		if (ast->token)
-		{
-			ms_clear_token(ast->token);
-			ast->token = NULL;
-		}
-		free(ast);
-		ast = NULL;
-		ms_clear_ast(left);
-		ms_clear_ast(right);
+		left = _ast->left;
+		right = _ast->right;
+		ms_clear_token(_ast->token);
+		free(_ast);
+		ms_clear_ast(&left);
+		ms_clear_ast(&right);
 	}
+	*ast = NULL;
 }

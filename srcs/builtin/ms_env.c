@@ -3,89 +3,125 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:34:39 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/05 14:34:40 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:06:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_env.h"
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_builtin.h"
-#include "ms_env.h"
+#include "ms_exec.h"
 #include "ms_error.h"
 #include <unistd.h>
 
-static int		ms_env_exec(char **argv, char **envp);
-static char		**ms_env_convert(t_env **new_env, char **argv, t_env **env);
+static char	*ms_join_argv(char **argv);
+static char	**ms_append_envp(char **argv, t_env **env, char ***envp);
+static void	assign_envp(char *const *argv, char **new_envp, int size);
+static int	ms_env_print(char *line, char **envp);
 
 int	ms_env(int argc, char **argv, t_env **env)
 {
-	t_env	**new_env;
+	char	*line;
 	char	**envp;
+	int		result;
 
 	(void)argc;
-	new_env = (t_env **)malloc(sizeof(t_env *));
-	if (!new_env)
-		return (EXIT_FAILURE);
-	*new_env = NULL;
-	argv = ms_env_convert(new_env, argv + 1, env);
+	argv = ms_append_envp(++argv, env, &envp);
 	if (!argv)
 	{
-		free(new_env);
+		ms_puterror_cmd(*env, "env");
 		return (EXIT_FAILURE);
 	}
-	envp = ms_env_serialize_union(env, new_env);
-	if (!envp)
+	line = ms_join_argv(argv);
+	if (!line)
 	{
 		ms_puterror_cmd(*env, "env");
-		ms_env_clear(new_env);
-		free(new_env);
 		return (EXIT_FAILURE);
 	}
-	ms_env_clear(new_env);
-	free(new_env);
-	return (ms_env_exec(argv, envp));
+	if (*line == '\0')
+		result = ms_env_print(line, envp);
+	else
+		result = ms_env_exec(line, envp);
+	ms_clear_sec_dimentional(envp);
+	return (result);
 }
 
-static char	**ms_env_convert(t_env **new_env, char **argv, t_env **env)
+static char	*ms_join_argv(char **argv)
 {
-	t_env	*node;
+	char	*line;
+	int		i;
+	size_t	count;
+	size_t	len;
 
-	while (*argv)
+	i = 0;
+	count = 0;
+	while (argv[i])
+		count += ft_strlen(argv[i++]) + 1;
+	line = (char *)malloc(sizeof(char) * count);
+	if (!line)
+		return (NULL);
+	i = 0;
+	count = 0;
+	while (argv[i])
 	{
-		if (ft_strchr(*argv, '=') == NULL)
-			break ;
-		else
-		{
-			node = ms_str_to_env(*argv);
-			if (!node)
-			{
-				ms_puterror_cmd(*env, "env");
-				ms_env_clear(new_env);
-				return (NULL);
-			}
-			ms_env_push_back(new_env, node);
-		}
-		argv++;
+		len = ft_strlen(argv[i]);
+		ft_memcpy(line + count, argv[i], len);
+		count += len;
+		if (argv[i + 1] != NULL)
+			line[count++] = ' ';
+		i++;
 	}
-	return (argv);
+	line[count] = '\0';
+	return (line);
 }
 
-static int	ms_env_exec(char **argv, char **envp)
+static char	**ms_append_envp(char **argv, t_env **env, char ***envp)
 {
-	int	status;
-	int	exit_code;
+	char	**new_envp;
+	int		size;
+	t_env	**tmp;
 
-	exit_code = EXIT_SUCCESS;
-	status = execve(*argv, argv, envp);		// execve 전에 파싱 부분 추가
-	if (status == -1)
+	size = 0;
+	while (argv[size] && ft_strchr(argv[size], '=') != NULL)
+		size++;
+	new_envp = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!*new_envp)
+		return (NULL);
+	new_envp[size] = NULL;
+	assign_envp(argv, new_envp, size);
+	tmp = ms_env_deserialize(new_envp);
+	if (!tmp)
+		return (NULL);
+	free(new_envp);
+	*envp = ms_env_serialize_union(env, tmp);
+	ms_env_clear(tmp);
+	free(tmp);
+	return (&argv[size]);
+}
+
+static void	assign_envp(char *const *argv, char **new_envp, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
 	{
-		ms_puterror_cmd(NULL, *argv);
-		exit_code = EXIT_FAILURE;
+		new_envp[i] = argv[i];
+		i++;
 	}
-	while (*envp)
-		free(*envp++);
-	free(envp);
-	return (exit_code);
+}
+
+static int	ms_env_print(char *line, char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		ft_printf("%s\n", envp[i++]);
+	free(line);
+	return (EXIT_SUCCESS);
 }

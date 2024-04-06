@@ -3,23 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:50:10 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/07 10:50:11 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:56:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_EXPAND_H
 # define MS_EXPAND_H
-
-# ifdef __cplusplus
-extern "C" {
-# endif
-
 # define ASTERISK (-1)
-# define CSPN " \t\n\"'\\$"
-
 # include "ft_type.h"
 # include "ms_env.h"
 # include <dirent.h>
@@ -49,15 +42,11 @@ typedef struct s_table
 /* ms_expand.c */
 char	**ms_expansion(char **argv, t_env *env, int status);
 
-/* ms_expand_utils.c */
-void	ms_remove_quote(char *str);
-void	ms_remove_dquote(char *_str);
-
 /* ms_expand_param.c */
-t_bool	ms_expand_param(char **argv, t_env *env, int status);
+char	**ms_expand_params(char **argv, int status, t_env *env);
+t_bool	ms_expand_param(t_queue *queue, char *str, int status, t_env *env);
 /* ms_expand_param_utils.c */
-char	*ms_status_expansion(char *str, char *pos, int status);
-char	*ms_param_expansion(char *str, char *pos, t_env *env);
+char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env);
 
 /* ms_expand_filenames.c */
 char	**ms_expand_filenames(char **argv);
@@ -90,10 +79,7 @@ void	ms_destroy_queue(t_queue *queue, void *del);
 /* ms_queue_utils.c */
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del);
 t_bool	ms_enqueue_array(t_queue *queue, char **array);
+char	**ms_queue_to_array_dequote(t_queue *queue);
 char	**ms_queue_to_array(t_queue *queue);
-
-# ifdef __cplusplus
-}
-# endif
 
 #endif

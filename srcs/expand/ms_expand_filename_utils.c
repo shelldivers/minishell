@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_filename_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:02:56 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/05 13:55:18 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static char	**no_match(t_queue *queue, const char *str)
 		free(result);
 		return (NULL);
 	}
-	ms_remove_dquote(result[0]);
 	result[1] = NULL;
 	return (result);
 }
@@ -59,7 +58,7 @@ static char	**match(t_queue *queue)
 			ms_queue_remove(queue, node, free);
 		node = tmp;
 	}
-	result = ms_queue_to_array(queue);
+	result = ms_queue_to_array_dequote(queue);
 	ms_destroy_queue(queue, free);
 	return (result);
 }

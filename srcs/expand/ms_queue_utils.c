@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ms_exec.h"
 #include "ms_expand.h"
 
 void	ms_queue_remove(t_queue *queue, t_list *target, void *del)
@@ -49,6 +50,34 @@ t_bool	ms_enqueue_array(t_queue *queue, char **array)
 		i++;
 	}
 	return (TRUE);
+}
+
+char	**ms_queue_to_array_dequote(t_queue *queue)
+{
+	char	**array;
+	t_list	*node;
+	size_t	i;
+
+	array = (char **)malloc(sizeof(char *) * (queue->size + 1));
+	if (!array)
+		return (NULL);
+	i = 0;
+	node = queue->head;
+	while (node)
+	{
+		array[i] = ms_quote_removal_dup(node->content, 0, 0);
+		if (!array[i])
+		{
+			while (i--)
+				free(array[i]);
+			free(array);
+			return (NULL);
+		}
+		node = node->next;
+		i++;
+	}
+	array[i] = NULL;
+	return (array);
 }
 
 char	**ms_queue_to_array(t_queue *queue)

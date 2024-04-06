@@ -1,6 +1,7 @@
 ### Editor ###
 *.vscode
 *.idea
+.clang-format
 ### Object ###
 *.o
 ### Excute ###

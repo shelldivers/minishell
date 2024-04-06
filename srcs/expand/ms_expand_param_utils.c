@@ -16,8 +16,18 @@
 #include "ms_expand.h"
 
 static size_t	get_key_length(const char *str);
+static char		*ms_status_expansion(char *str, char *pos, int status);
+static char		*ms_param_expansion(char *str, char *pos, t_env *env);
 
-char	*ms_status_expansion(char *str, char *pos, int status)
+char	*ms_dollar_expand(char *str, char *pos, int status, t_env *env)
+{
+	if (pos[1] == '?')
+		return (ms_status_expansion(str, pos, status));
+	else
+		return (ms_param_expansion(str, pos, env));
+}
+
+static char	*ms_status_expansion(char *str, char *pos, int status)
 {
 	char	*nbr;
 	char	*tmp;
@@ -45,7 +55,7 @@ char	*ms_status_expansion(char *str, char *pos, int status)
 	return (replace);
 }
 
-char	*ms_param_expansion(char *str, char *pos, t_env *env)
+static char	*ms_param_expansion(char *str, char *pos, t_env *env)
 {
 	char	*key;
 	char	*val;

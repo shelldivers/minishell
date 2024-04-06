@@ -1,47 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_error.c                                         :+:      :+:    :+:   */
+/*   ms_error_utils3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 20:00:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:06:48 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_env.h"
-#include <string.h>
 #include <sys/errno.h>
 
-void	ms_puterror_cmd_arg(t_env *env, char *cmd, char *arg)
+void	ms_puterror_ambiguous_redirect(char *path)
 {
-	char	*str_error;
+	const char	*msg = "ambiguous redirect";
 
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s: %s\n", "minishell", cmd, arg, str_error);
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
 }
 
-void	ms_puterror_cmd(t_env *env, char *cmd)
+void	ms_puterror_syntax_newline(void)
 {
-	char	*str_error;
+	const char	*msg = "syntax error near unexpected token `newline'";
 
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", cmd, str_error);
-	errno = 0;
-}
-
-void	ms_puterror_arg(t_env *env, char *arg)
-{
-	char	*str_error;
-
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", arg, str_error);
+	ft_dprintf(2, "minishell: %s\n", msg);
 	errno = 0;
 }

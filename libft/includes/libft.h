@@ -12,15 +12,10 @@
 
 #ifndef LIBFT_H
 # define LIBFT_H
-
-# ifdef __cplusplus
-extern "C" {
-# endif
-
-# include <stdlib.h>
 # include "ft_type.h"
+# include <stdlib.h>
 
-int     ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
@@ -49,9 +44,5 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-
-# ifdef __cplusplus
-}
-# endif
 
 #endif

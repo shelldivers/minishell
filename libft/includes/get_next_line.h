@@ -12,7 +12,6 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 512
 # else
@@ -20,7 +19,6 @@
 #   error invalid BUFFER_SIZE
 #  endif
 # endif
-
 # include "ft_type.h"
 
 /* get_next_line.c */

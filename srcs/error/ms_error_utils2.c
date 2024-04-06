@@ -1,47 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_error.c                                         :+:      :+:    :+:   */
+/*   ms_error_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/04 20:00:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/05 21:03:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_env.h"
-#include <string.h>
 #include <sys/errno.h>
 
-void	ms_puterror_cmd_arg(t_env *env, char *cmd, char *arg)
+void	ms_puterror_is_dir(char *path)
 {
-	char	*str_error;
+	const char	*msg = "is a directory";
 
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s: %s\n", "minishell", cmd, arg, str_error);
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
 }
 
-void	ms_puterror_cmd(t_env *env, char *cmd)
+void	ms_puterror_no_file(char *path)
 {
-	char	*str_error;
+	const char	*msg = "No such file or directory";
 
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", cmd, str_error);
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
 }
 
-void	ms_puterror_arg(t_env *env, char *arg)
+void	ms_puterror_fork(void)
 {
-	char	*str_error;
+	const char	*msg = "fork failed";
 
-	(void)env;
-	str_error = strerror(errno);
-	ft_dprintf(2, "%s: %s: %s\n", "minishell", arg, str_error);
+	ft_dprintf(2, "minishell: %s\n", msg);
+	errno = 0;
+}
+
+void	ms_puterror_max_here_doc(void)
+{
+	const char	*msg = "maximum here-document count exceeded";
+
+	ft_dprintf(2, "minishell: %s\n", msg);
+	errno = 0;
+}
+
+void	ms_puterror_no_command(char *path)
+{
+	const char	*msg = "command not found";
+
+	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 17:21:48 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/02/29 18:33:18 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:01:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	ms_echo(int argc, char **argv, t_env **env)
 	int		i;
 	t_bool	n_flag;
 
+	(void)env;
 	n_flag = is_option(argv[1]);
 	i = 1;
 	if (n_flag == TRUE)

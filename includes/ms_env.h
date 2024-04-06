@@ -20,10 +20,6 @@
 # define OLDPWD "OLDPWD"
 # define SHELL "SHELL"
 
-# ifdef __cplusplus
-extern "C" {
-# endif
-
 typedef struct s_env
 {
 	char			*key;
@@ -52,9 +48,5 @@ t_env	**ms_env_deserialize(char **envp);
 t_bool	ms_env_move(char **envp, t_env **env, size_t start);
 t_env	*ms_str_to_env(char *str);
 char	*ms_env_to_str(t_env *env);
-
-# ifdef __cplusplus
-}
-# endif
 
 #endif
