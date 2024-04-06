@@ -12,6 +12,7 @@
 
 #ifndef MS_ERROR_H
 # define MS_ERROR_H
+# define MINISHELL "minishell"
 # define ERROR (-1)
 # include "ms_env.h"
 

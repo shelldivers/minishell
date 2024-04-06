@@ -20,7 +20,7 @@ void	ms_puterror_ambiguous_redirect(char *path)
 {
 	const char	*msg = "ambiguous redirect";
 
-	ft_dprintf(2, "%s: %s: %s\n", SHELL, path, msg);
+	ft_dprintf(2, "%s: %s: %s\n", MINISHELL, path, msg);
 	errno = 0;
 	g_exit = 1;
 }
@@ -29,7 +29,7 @@ void	ms_puterror_syntax_newline(void)
 {
 	const char	*msg = "syntax error near unexpected token `newline'";
 
-	ft_dprintf(2, "%s: %s\n", SHELL, msg);
+	ft_dprintf(2, "%s: %s\n", MINISHELL, msg);
 	errno = 0;
 	g_exit = 258;
 }
