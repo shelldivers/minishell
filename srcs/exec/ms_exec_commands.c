@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 18:30:33 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:55:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 	if (exec_info->words)
 	{
 		words = ms_expansion(exec_info->words, *env, g_exit);
-		exec_info->execed_cmd_cnt++;
 		if (!ms_exec_is_builtin(exec_info, env, words))
+		{
+			exec_info->execed_cmd_cnt++;
 			ms_exec_non_builtin(exec_info, env, words);
+		}
 		ms_clear_sec_dimentional(words);
 		free(exec_info->words);
 		exec_info->words = NULL;
@@ -40,24 +42,21 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 
 t_bool	ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words)
 {
-	char	*word;
-
-	word = words[0];
-	if (!words || !word)
+	if (!words || !words[0])
 		return (FALSE);
-	if (ft_strcmp(word, "echo") == 0)
+	if (ft_strcmp(words[0], "echo") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_echo));
-	if (ft_strcmp(word, "cd") == 0)
+	if (ft_strcmp(words[0], "cd") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_cd));
-	if (ft_strcmp(word, "pwd") == 0)
+	if (ft_strcmp(words[0], "pwd") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_pwd));
-	if (ft_strcmp(word, "export") == 0)
+	if (ft_strcmp(words[0], "export") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_export));
-	if (ft_strcmp(word, "unset") == 0)
+	if (ft_strcmp(words[0], "unset") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_unset));
-	if (ft_strcmp(word, "env") == 0)
+	if (ft_strcmp(words[0], "env") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_env));
-	if (ft_strcmp(word, "exit") == 0)
+	if (ft_strcmp(words[0], "exit") == 0)
 		return (ms_exec_builtin(exec_info, env, words, ms_exit));
 	return (FALSE);
 }

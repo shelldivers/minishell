@@ -6,10 +6,11 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 18:27:12 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:56:21 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_exec.h"
 #include "ms_error.h"
