@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:19:40 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:43:34 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);
 static void		ms_is_dir(char **words);
+static t_bool	s_isdir(int m);
 
 void	ms_add_path(char **words, t_env **env)
 {
@@ -37,7 +38,7 @@ void	ms_add_path(char **words, t_env **env)
 		add_path = ft_strdup(words[0]);
 	ms_clear_sec_dimentional(envp);
 	ms_clear_sec_dimentional(paths);
-	if (stat(add_path, &buf) == 0 && S_ISDIR(buf.st_mode))
+	if (stat(add_path, &buf) == 0 && s_isdir(buf.st_mode))
 	{
 		ms_puterror_is_dir(words[0]);
 		exit(126);
@@ -93,16 +94,16 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	return (NULL);
 }
 
-// static t_bool	s_isdir(int m)
-// {
-// 	if (((m) & S_IFMT) == S_IFDIR)
-// 		return (TRUE);
-// 	return (FALSE);
-// }
+static t_bool	s_isdir(int m)
+{
+	if (((m) & S_IFMT) == S_IFDIR)
+		return (TRUE);
+	return (FALSE);
+}
 
 static void	ms_is_dir(char **words)
 {
-	if (words[0][0] == '/' || words[0][0] == '.')
+	if (ft_strchr(words[0], '/'))
 	{
 		if (access(words[0], F_OK & X_OK) == -1)
 		{
