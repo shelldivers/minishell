@@ -31,5 +31,5 @@ void	sigint_prompt(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	set_exitcode(1);
+	g_exit = 1;
 }
