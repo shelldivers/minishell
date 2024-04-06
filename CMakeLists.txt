@@ -49,7 +49,7 @@ set(SRCS includes/ms_minishell.h
         srcs/parser/ms_clear.c
         srcs/parser/ms_terminal.c
         srcs/expand/ms_expand_param_utils.c srcs/expand/ms_expand_filenames.c srcs/expand/ms_queue.c srcs/expand/ms_queue_utils.c srcs/expand/ms_expand_filename.c srcs/expand/ms_expand_filename_search.c srcs/expand/ms_glob.c srcs/expand/ms_expand_filename_expand.c srcs/expand/ms_expand_filename_match1.c srcs/expand/ms_expand_filename_utils.c srcs/expand/ms_glob_utils.c srcs/expand/ms_expand_filename_match2.c
-        srcs/exec/ms_exec_fd.c srcs/exec/ms_exec_heredoc.c srcs/exec/ms_exec_heredoc_before.c srcs/exec/ms_exec_init_clear.c srcs/exec/ms_exec_io_redirect.c srcs/exec/ms_exec_path.c srcs/exec/ms_exec_pipeline.c srcs/exec/ms_exec_utils.c srcs/exec/ms_exec_utils2.c srcs/exec/ms_quote_removal_dup.c srcs/parser/ms_parser_error_handler.c srcs/parser/ms_unterminal2.c srcs/exec/ms_exec_words.c srcs/exec/ms_exec_commands.c srcs/exec/ms_exec.c srcs/parser/ms_parser2.c srcs/builtin/ms_env_exec.c)
+        srcs/exec/ms_exec_fd.c srcs/exec/ms_exec_heredoc.c srcs/exec/ms_exec_heredoc_before.c srcs/exec/ms_exec_init_clear.c srcs/exec/ms_exec_io_redirect.c srcs/exec/ms_exec_path.c srcs/exec/ms_exec_pipeline.c srcs/exec/ms_exec_utils.c srcs/exec/ms_exec_utils2.c srcs/exec/ms_quote_removal_dup.c srcs/parser/ms_parser_error_handler.c srcs/parser/ms_unterminal2.c srcs/exec/ms_exec_words.c srcs/exec/ms_exec_commands.c srcs/exec/ms_exec.c srcs/parser/ms_parser2.c srcs/builtin/ms_env_exec.c includes/ms_signal.h srcs/signal/ms_signal_heredoc.c srcs/signal/ms_signal_prompt.c srcs/signal/ms_signal_utils.c)
 
 add_library(${NAME} STATIC ${SRCS})
 target_include_directories(${NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/includes)

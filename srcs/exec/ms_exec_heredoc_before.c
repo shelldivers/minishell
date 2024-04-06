@@ -13,6 +13,7 @@
 #include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_exec.h"
+#include "ms_signal.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,13 +29,16 @@ t_bool	ms_exec_heredoc_before(t_ast *ast)
 		ms_puterror_fork();
 	if (pid == 0)
 	{
+		ms_set_signal_heredoc();
 		if (ms_here_doc_in_order(ast, 0) == FALSE)
 			exit(1);
 		exit(0);
 	}
 	else
 	{
+		ms_set_signal_ignore();
 		waitpid(pid, &status, 0);
+		ms_set_signal_prompt();
 		if (wifexit(status) && wexitstatus(status) == 1)
 			return (FALSE);
 	}

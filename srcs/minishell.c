@@ -14,10 +14,11 @@
 #include "ms_error.h"
 #include "ms_exec.h"
 #include "ms_minishell.h"
+#include "ms_signal.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 
 static void		init(t_minishell *shell, int argc, char **argv, char **envp);
 static void		prompt(t_syntax *syntax);
@@ -52,6 +53,7 @@ static void	init(t_minishell *shell, int argc, char **argv, char **envp)
 		ms_puterror_cmd(NULL, "malloc");
 		exit(EXIT_FAILURE);
 	}
+	ms_set_signal_prompt();
 }
 
 static void	prompt(t_syntax *syntax)
