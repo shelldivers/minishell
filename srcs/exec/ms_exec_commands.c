@@ -30,6 +30,8 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 		{
 			exec_info->execed_cmd_cnt++;
 			ms_exec_non_builtin(exec_info, env, words);
+			if (g_exit != 0)
+				exec_info->execed_cmd_cnt--;
 		}
 		ms_clear_sec_dimentional(words);
 		free(exec_info->words);
