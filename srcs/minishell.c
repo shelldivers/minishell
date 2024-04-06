@@ -19,38 +19,57 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static t_bool	parse(t_minishell *shell);
+static void		init(t_minishell *shell, int argc, char **argv, char **envp);
+static void		prompt(t_syntax *syntax);
+static t_bool	lex(t_minishell *shell);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
 
-	if (argc != 1 || !argv || !envp)
-		return (1);
-	ft_memset(&shell, 0, sizeof(t_minishell));
-	shell.env = ms_env_deserialize(envp);
+	init(&shell, argc, argv, envp);
 	while (1)
 	{
-		shell.syntax.line = readline("minishell$ ");
-		if (!shell.syntax.line)
-		{
-			write(1, "exit\n", 5);
-			return (0);
-		}
-		add_history(shell.syntax.line);
-		if (parse(&shell))
-			ms_exec(shell.ast, shell.env);
 		ms_clear_all(&shell);
+		prompt(&(shell.syntax));
+		if (!lex(&shell))
+			continue ;
+		if (!ms_parser(&(shell.ast), shell.token, shell.syntax.words_cnt))
+			continue ;
+		ms_max_heredoc(shell.token);
+		ms_exec(shell.ast, shell.env);
 	}
 }
 
-static t_bool	parse(t_minishell *shell)
+static void	init(t_minishell *shell, int argc, char **argv, char **envp)
+{
+	if (argc != 1 || !argv || !envp)
+		exit(EXIT_FAILURE);
+	ft_memset(shell, 0, sizeof(t_minishell));
+	shell->env = ms_env_deserialize(envp);
+	if (!shell->env)
+	{
+		ms_puterror_cmd(NULL, "malloc");
+		exit(EXIT_FAILURE);
+	}
+}
+
+static void	prompt(t_syntax *syntax)
+{
+	syntax->line = readline("minishell$ ");
+	if (!syntax->line)
+	{
+		write(1, "exit\n", 5);
+		exit(EXIT_SUCCESS);
+	}
+	add_history(syntax->line);
+}
+
+static t_bool	lex(t_minishell *shell)
 {
 	t_syntax	*syntax;
-	t_ast		**ast;
 
 	syntax = &(shell->syntax);
-	ast = &(shell->ast);
 	if (!ms_tokenizer(syntax))
 	{
 		ms_puterror_cmd(NULL, "malloc");
@@ -64,8 +83,5 @@ static t_bool	parse(t_minishell *shell)
 		ms_puterror_cmd(NULL, "malloc");
 		return (FALSE);
 	}
-	if (!ms_parser(ast, shell->token, syntax->words_cnt))
-		return (FALSE);
-	ms_max_heredoc(shell->token);
 	return (TRUE);
 }
