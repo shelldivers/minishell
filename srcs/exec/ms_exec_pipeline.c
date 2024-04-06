@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 19:48:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:05:02 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,15 @@ static void	ms_close_parent_pipe2(\
 t_exec *exec_info, int now_pipe)
 {
 	if (exec_info->pipe_cnt == 1 \
-	&& exec_info->pipe_idx < exec_info->cmd_cnt)
+	&& exec_info->pipe_idx < exec_info->cmd_cnt \
+	&& exec_info->pipe[now_pipe][STDIN_FILENO] != -1)
 	{
 		if (close(exec_info->pipe[now_pipe][STDIN_FILENO]) == -1)
 			ms_puterror_cmd(NULL, "close");
 		exec_info->pipe[now_pipe][STDIN_FILENO] = -1;
 	}
-	if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1)
+	if (exec_info->pipe_cnt == 1 && exec_info->pipe_idx == 1 \
+	&& exec_info->pipe[now_pipe][STDOUT_FILENO] != -1)
 	{
 		if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
 			ms_puterror_cmd(NULL, "close");

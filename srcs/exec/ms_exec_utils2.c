@@ -6,11 +6,10 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 15:44:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:08:05 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_exec.h"
 #include <fcntl.h>
@@ -47,7 +46,7 @@ void	dup2_fd(t_exec *exec_info)
 	&& exec_info->heredoc_fd[seq] > 0)
 	{
 		if (dup2(exec_info->heredoc_fd[seq], STDIN_FILENO) == -1)
-			ft_dprintf(2, "damn");
+			ms_puterror_cmd(NULL, "dup2");
 	}
 	if (exec_info->fd[1] != -1)
 		if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)

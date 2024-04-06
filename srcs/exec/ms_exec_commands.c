@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 18:55:00 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:07:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "ms_exec.h"
 #include "ms_expand.h"
 #include "ms_signal.h"
-#include <stdio.h>
 #include <unistd.h>
 
 void	ms_exec_words(t_exec *exec_info, t_env **env)

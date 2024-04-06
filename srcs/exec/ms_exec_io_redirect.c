@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 19:23:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:07:13 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 #include "ms_expand.h"
 #include "ms_signal.h"
 #include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <readline/readline.h>
 
 t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 {
