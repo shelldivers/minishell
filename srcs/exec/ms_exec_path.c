@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 15:18:27 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:26:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void	ms_add_path(char **words, t_env **env)
 	paths = ms_get_paths(envp);
 	add_path = ms_change_to_absolute(paths, words);
 	if (!add_path)
-	{
 		add_path = ft_strdup(words[0]);
-	}
 	ms_clear_sec_dimentional(envp);
 	ms_clear_sec_dimentional(paths);
 	if (stat(add_path, &buf) == 0 && S_ISDIR(buf.st_mode))
@@ -83,17 +81,11 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	{
 		path = ft_strjoin(paths[i], "/");
 		if (!path)
-		{
 			ms_puterror_cmd(NULL, "malloc");
-			exit(127);
-		}
 		tmp = ft_strjoin(path, *cmd_word);
 		free(path);
 		if (!tmp)
-		{
 			ms_puterror_cmd(NULL, "malloc");
-			exit(127);
-		}
 		if (access(tmp, F_OK & X_OK) == 0)
 			return (tmp);
 		free(tmp);
@@ -113,10 +105,7 @@ static t_bool	ms_is_dir(struct stat buf, char **words)
 	if (words[0][0] == '/' && access(words[0], F_OK & X_OK) == 0)
 	{
 		if (stat(words[0], &buf) == 0 && s_isdir(buf.st_mode))
-		{
 			ms_puterror_is_dir(words[0]);
-			exit(126);
-		}
 		return (TRUE);
 	}
 	return (FALSE);

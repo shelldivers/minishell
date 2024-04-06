@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 16:01:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:28:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ms_error.h"
 #include "ms_exec.h"
 #include "ms_expand.h"
+#include "ms_signal.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@ t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 	char		*filename;
 
 	filename = ast->token[1]->value;
-	filename = check_ambiguous_redirect(exec_info, env, filename);
+	filename = check_ambiguous_redirect(env, filename);
 	if (!filename)
 		return (FALSE);
 	if (ft_strcmp(redirect, ">") == 0)
@@ -50,7 +51,6 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, char *filename)
 	if (exec_info->fd[1] == -1)
 	{
 		ms_puterror_cmd(NULL, filename);
-		exec_info->exit_code = 1;
 		return (FALSE);
 	}
 	return (TRUE);
@@ -68,7 +68,6 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, char *filename)
 	if (exec_info->fd[1] == -1)
 	{
 		ms_puterror_cmd(NULL, filename);
-		exec_info->exit_code = 1;
 		return (FALSE);
 	}
 	return (TRUE);
@@ -86,14 +85,12 @@ t_bool	ms_exec_io_file_read(t_exec *exec_info, char *filename)
 	if (exec_info->fd[0] == -1)
 	{
 		ms_puterror_cmd(NULL, filename);
-		exec_info->exit_code = 1;
 		return (FALSE);
 	}
 	return (TRUE);
 }
 
-char	*check_ambiguous_redirect(\
-t_exec *exec_info, t_env **env, char *filename)
+char	*check_ambiguous_redirect(t_env **env, char *filename)
 {
 	char	**words;
 	char	**expanded_word;
@@ -102,16 +99,14 @@ t_exec *exec_info, t_env **env, char *filename)
 	if (!words)
 	{
 		ms_puterror_cmd(NULL, "malloc");
-		exec_info->exit_code = 1;
 		return (NULL);
 	}
 	words[0] = filename;
 	words[1] = NULL;
-	expanded_word = ms_expansion(words, *env, exec_info->exit_code);
+	expanded_word = ms_expansion(words, *env, g_exit);
 	if (!expanded_word[0] || expanded_word[1])
 	{
 		ms_puterror_ambiguous_redirect(filename);
-		exec_info->exit_code = 1;
 		ms_clear_sec_dimentional(expanded_word);
 		return (FALSE);
 	}

@@ -6,13 +6,14 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 18:50:25 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/05 21:03:04 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:21:37 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_env.h"
+#include "ms_signal.h"
 #include <sys/errno.h>
 
 void	ms_puterror_is_dir(char *path)
@@ -21,6 +22,7 @@ void	ms_puterror_is_dir(char *path)
 
 	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
+	g_exit = 126;
 }
 
 void	ms_puterror_no_file(char *path)
@@ -28,7 +30,7 @@ void	ms_puterror_no_file(char *path)
 	const char	*msg = "No such file or directory";
 
 	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
-	errno = 0;
+	errno = 127;
 }
 
 void	ms_puterror_fork(void)
@@ -37,6 +39,7 @@ void	ms_puterror_fork(void)
 
 	ft_dprintf(2, "minishell: %s\n", msg);
 	errno = 0;
+	g_exit = 1;
 }
 
 void	ms_puterror_max_here_doc(void)
@@ -45,6 +48,7 @@ void	ms_puterror_max_here_doc(void)
 
 	ft_dprintf(2, "minishell: %s\n", msg);
 	errno = 0;
+	g_exit = 2;
 }
 
 void	ms_puterror_no_command(char *path)
@@ -53,4 +57,5 @@ void	ms_puterror_no_command(char *path)
 
 	ft_dprintf(2, "minishell: %s: %s\n", path, msg);
 	errno = 0;
+	g_exit = 127;
 }

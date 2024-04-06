@@ -6,10 +6,11 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 18:03:55 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:36:15 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ms_signal.h"
 #include "ms_exec.h"
 
 void	ms_exec(t_ast *ast, t_env **env)
@@ -77,9 +78,9 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		ms_exec_words(exec_info, env);
 		ms_wait_child_process(exec_info);
 		ms_reset_io(exec_info);
-		if (ast->op == OPAND_IF && exec_info->exit_code != 0)
+		if (ast->op == OPAND_IF && g_exit != 0)
 			return (-1);
-		else if (ast->op == OPOR_IF && exec_info->exit_code == 0)
+		else if (ast->op == OPOR_IF && g_exit == 0)
 			return (-1);
 	}
 	else if (ast->op == OPPIPE)

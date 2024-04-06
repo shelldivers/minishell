@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 15:59:31 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:28:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_exec
 	int			pipe[2][2];
 	int			pipe_idx;
 	int			pipe_cnt;
-	int			exit_code;
 	int			cmd_cnt;
 	int			execed_cmd_cnt;
 	int			heredoc_fd[7];
@@ -63,8 +62,7 @@ t_bool		ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env);
 t_bool		ms_exec_io_file_write(t_exec *exec_info, char *filename);
 t_bool		ms_exec_io_file_append(t_exec *exec_info, char *filename);
 t_bool		ms_exec_io_file_read(t_exec *exec_info, char *filename);
-char		*check_ambiguous_redirect(\
-t_exec *exec_info, t_env **env, char *filename);
+char		*check_ambiguous_redirect(t_env **env, char *filename);
 
 /*================ heredoc ==================*/
 t_bool		ms_exec_io_here(t_exec *exec_info);

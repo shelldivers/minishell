@@ -14,7 +14,7 @@ void	sigint_fork(int signum)
 {
 	(void)signum;
 	ft_dprintf(STDERR_FILENO, "\n");
-	g_exit = 130;
+	g_exit = 128 + signum;
 }
 
 void	sigquit_fork(int signum)

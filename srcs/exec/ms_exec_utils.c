@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 13:59:29 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 18:27:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void	ms_max_heredoc(t_token **token)
 	if (cnt > MAX_HEREDOC)
 	{
 		ms_puterror_max_here_doc();
-		exit(2);
+		g_exit = 2;
+		exit(g_exit);
 	}
 }
 
@@ -69,7 +70,7 @@ void	ms_wait_child_process(t_exec *exec_info)
 	while (exec_info->execed_cmd_cnt)
 	{
 		waitpid(-1, &status, 0);
-		exec_info->exit_code = WEXITSTATUS(status);
+		g_exit = WEXITSTATUS(status);
 		exec_info->execed_cmd_cnt--;
 	}
 	ms_set_signal_prompt();
