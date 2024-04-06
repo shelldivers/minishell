@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 15:32:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 16:46:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	ms_is_redirect_list(t_ast *ast, t_token **token)
 		return (0);
 	total_curtok = 0;
 	curtok = ms_add_ast(ast, token, size, (t_drill){ms_is_io_redirect, LEFT});
+	if (!ms_set_tot_curtok(&total_curtok, curtok, 2))
+			return (total_curtok);
 	while (curtok)
 	{
 		curtok = ms_add_ast(ast, token + total_curtok, \

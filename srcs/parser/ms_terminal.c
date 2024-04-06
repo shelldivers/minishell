@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 14:58:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 16:43:12 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ms_is_io_file(t_ast *ast, t_token **token)
 {
-	const int size = ms_get_token_size(token);
+	const int	size = ms_get_token_size(token);
 
 	if (size < 2)
 		return (0);
@@ -33,7 +33,7 @@ int	ms_is_io_file(t_ast *ast, t_token **token)
 
 int	ms_is_io_here(t_ast *ast, t_token **token)
 {
-	const int size = ms_get_token_size(token);
+	const int	size = ms_get_token_size(token);
 
 	if (size < 2)
 		return (0);
@@ -49,7 +49,7 @@ int	ms_is_io_here(t_ast *ast, t_token **token)
 
 int	ms_is_word(t_ast *ast, t_token **token)
 {
-	const int size = ms_get_token_size(token);
+	const int	size = ms_get_token_size(token);
 
 	if (size < 1)
 		return (0);
