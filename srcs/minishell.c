@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
 #include "ms_error.h"
 #include "ms_exec.h"
@@ -23,6 +24,7 @@
 static void		init(t_minishell *shell, int argc, char **argv, char **envp);
 static void		prompt(t_syntax *syntax);
 static t_bool	lex(t_minishell *shell);
+static t_bool	set_shlvl(t_env **env);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -49,6 +51,11 @@ static void	init(t_minishell *shell, int argc, char **argv, char **envp)
 	ft_memset(shell, 0, sizeof(t_minishell));
 	shell->env = ms_env_deserialize(envp);
 	if (!shell->env)
+	{
+		ms_puterror_cmd(NULL, "malloc");
+		exit(EXIT_FAILURE);
+	}
+	if (!set_shlvl(shell->env))
 	{
 		ms_puterror_cmd(NULL, "malloc");
 		exit(EXIT_FAILURE);
@@ -85,5 +92,29 @@ static t_bool	lex(t_minishell *shell)
 		ms_puterror_cmd(NULL, "malloc");
 		return (FALSE);
 	}
+	return (TRUE);
+}
+
+static t_bool	set_shlvl(t_env **env)
+{
+	char	*shlvl;
+	char	*nextlvl;
+	int		lvl;
+	t_bool	result;
+
+	shlvl = getenv(SHLVL);
+	if (!shlvl)
+		lvl = 1;
+	else
+		lvl = ft_atoi(shlvl) + 1;
+	if (lvl < 0)
+		lvl = 0;
+	nextlvl = ft_sprintf("%d", lvl);
+	if (!nextlvl)
+		return (FALSE);
+	result = ms_setenv(env, SHLVL, nextlvl);
+	free(nextlvl);
+	if (!result)
+		return (FALSE);
 	return (TRUE);
 }
