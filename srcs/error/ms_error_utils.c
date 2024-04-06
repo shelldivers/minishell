@@ -29,11 +29,10 @@ void	ms_puterror_identifier(t_env *env, char *cmd, char *arg)
 
 void	ms_puterror_numeric(t_env *env, char *cmd, char *arg)
 {
-	char		*shell;
 	const char	*msg = "numeric argument required";
 
-	shell = ms_getenv(env, SHELL);
-	ft_dprintf(2, "%s: %s: %s: %s\n", shell, cmd, arg, msg);
+	(void)env;
+	ft_dprintf(2, "%s: %s: %s: %s\n", "minishell", cmd, arg, msg);
 	errno = 0;
 	g_exit = 1;
 }
