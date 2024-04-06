@@ -21,5 +21,6 @@ int	ms_export(int argc, char **argv, t_env **env);
 int	ms_unset(int argc, char **argv, t_env **env);
 int	ms_env(int argc, char **argv, t_env **envp);
 int	ms_exit(int argc, char **argv, t_env **env);
+int	ms_env_exec(char *line, char **envp);
 
 #endif
