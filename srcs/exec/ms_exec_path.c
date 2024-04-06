@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:12:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:19:40 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);
-static void		ms_is_dir(struct stat buf, char **words);
+static void		ms_is_dir(char **words);
 
 void	ms_add_path(char **words, t_env **env)
 {
@@ -29,7 +29,7 @@ void	ms_add_path(char **words, t_env **env)
 	struct stat	buf;
 
 	stat(words[0], &buf);
-	ms_is_dir(buf, words);
+	ms_is_dir(words);
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
 	add_path = ms_change_to_absolute(paths, words);
@@ -93,23 +93,18 @@ static char	*ms_change_to_absolute(char **paths, char **cmd_word)
 	return (NULL);
 }
 
-static t_bool	s_isdir(int m)
-{
-	if (((m) & S_IFMT) == S_IFDIR)
-		return (TRUE);
-	return (FALSE);
-}
+// static t_bool	s_isdir(int m)
+// {
+// 	if (((m) & S_IFMT) == S_IFDIR)
+// 		return (TRUE);
+// 	return (FALSE);
+// }
 
-static void	ms_is_dir(struct stat buf, char **words)
+static void	ms_is_dir(char **words)
 {
 	if (words[0][0] == '/' || words[0][0] == '.')
 	{
-		if (stat(words[0], &buf) == 0 && s_isdir(buf.st_mode))
-		{
-			ms_puterror_is_dir(words[0]);
-			exit(126);
-		}
-		else if (access(words[0], F_OK & X_OK) == -1)
+		if (access(words[0], F_OK & X_OK) == -1)
 		{
 			ms_puterror_no_file(words[0]);
 			exit(127);

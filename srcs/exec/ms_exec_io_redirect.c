@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:07:13 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/06 20:37:18 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 	else if (ft_strcmp(redirect, "<") == 0)
 		ret = ms_exec_io_file_read(exec_info, filename);
 	free(filename);
-	return (FALSE);
+	return (ret);
 }
 
 // error handling in this function
