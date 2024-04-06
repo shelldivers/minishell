@@ -41,7 +41,7 @@ static void	ms_export_env(t_env **env, char *str)
 	}
 	if (ms_is_valid_env_key(node->key) == FALSE)
 		ms_puterror_identifier(*env, "export", node->key);
-	else if (ft_strrchr(str, '=') != NULL)
+	else
 	{
 		if (!ms_setenv(env, node->key, node->value))
 			ms_puterror_cmd_arg(*env, "export", node->key);
