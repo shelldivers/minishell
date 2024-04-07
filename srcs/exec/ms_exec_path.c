@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 21:49:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 15:46:09 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ms_add_path(char **words, t_env **env)
 	if (!paths)
 	{
 		ms_puterror_no_file(words[0]);
-		return ;
+		exit(127);
 	}
 	add_path = ms_change_to_absolute(paths, words);
 	if (!add_path)
