@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 20:52:19 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:56:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 	if (exec_info->words)
 	{
 		words = ms_expansion(exec_info->words, *env);
-		if (exec_info->pipe_idx == 0)
+		if (exec_info->pipe_idx != 0)
 		{
 			exec_info->execed_cmd_cnt++;
 			ms_exec_commands_fork(exec_info, env, words);
