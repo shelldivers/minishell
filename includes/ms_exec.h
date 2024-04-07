@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 19:07:45 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 20:53:23 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,10 @@ char **words, int (f)(int, char **, t_env **));
 t_bool		ms_add_word(t_exec *exec_info, char *word);
 int			ms_words_size(char **words);
 
+void		ms_exec_commands_fork(t_exec *exec_info, t_env **env, char **words);
+void		ms_exec_is_builtin_fork(t_env **env, char **words);
+void		ms_exec_builtin_fork(t_env **env, \
+char **words, int (f)(int, char **, t_env **));
 /*================ pipe ==================*/
 t_bool		ms_exec_pipe(t_exec *exec_info);
 void		ms_dup_pipe(t_exec *exec_info);
