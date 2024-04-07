@@ -36,9 +36,9 @@ t_bool	ms_add_word(t_exec *exec_info, char *word)
 	return (TRUE);
 }
 
-size_t	ms_words_size(char **words)
+int	ms_words_size(char **words)
 {
-	size_t	size;
+	int	size;
 
 	size = 0;
 	if (!words)

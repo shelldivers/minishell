@@ -30,8 +30,6 @@ void	ms_exec_words(t_exec *exec_info, t_env **env)
 		{
 			exec_info->execed_cmd_cnt++;
 			ms_exec_non_builtin(exec_info, env, words);
-			if (g_exit != 0)
-				exec_info->execed_cmd_cnt--;
 		}
 		ms_clear_sec_dimentional(words);
 		free(exec_info->words);
@@ -65,7 +63,7 @@ t_bool	ms_exec_is_builtin(t_exec *exec_info, t_env **env, char **words)
 t_bool	ms_exec_builtin(t_exec *exec_info, t_env **env, \
 char **words, int (f)(int, char **, t_env **))
 {
-	const size_t	argc = ms_words_size(words);
+	const int	argc = ms_words_size(words);
 
 	ms_dup_based_on_pipe_idx(exec_info);
 	g_exit = f(argc, words, env);
@@ -92,7 +90,7 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	}
 	else
 	{
-		ms_set_signal_fork();
+		ms_set_signal_ignore();
 		ms_close_parent_pipe(exec_info);
 	}
 }

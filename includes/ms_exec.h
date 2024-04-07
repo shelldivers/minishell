@@ -46,10 +46,14 @@ void		ms_get_line_with_fd(const char *type, char *end, int fd);
 void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
 void		ms_max_heredoc(t_token **token);
+void ms_print_signaled(int status);
+
+void		dup2_fd(t_exec *exec_info);
 
 int			wifexit(int x);
 int			wexitstatus(int x);
-void		dup2_fd(t_exec *exec_info);
+int			wifsignaled(int x);
+int			wstatus(int x);
 
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
@@ -81,7 +85,7 @@ void		ms_exec_words(t_exec *exec_info, t_env **env);
 t_bool		ms_exec_builtin(t_exec *exec_info, t_env **env, \
 char **words, int (f)(int, char **, t_env **));
 t_bool		ms_add_word(t_exec *exec_info, char *word);
-size_t		ms_words_size(char **words);
+int			ms_words_size(char **words);
 
 /*================ pipe ==================*/
 t_bool		ms_exec_pipe(t_exec *exec_info);
@@ -97,5 +101,5 @@ void		ms_close_stdin(t_exec *exec_info);
 
 /*================ path ==================*/
 void		ms_add_path(char **words, t_env **env);
-int	    	s_isdir(int m);
+int			s_isdir(int m);
 #endif

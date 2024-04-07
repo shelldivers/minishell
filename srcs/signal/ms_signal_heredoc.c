@@ -38,5 +38,6 @@ void	sigint_heredoc(int signum)
 {
 	(void)signum;
 	ft_dprintf(STDERR_FILENO, "\n");
-	exit(1);
+	g_exit = 1;
+	exit(g_exit);
 }

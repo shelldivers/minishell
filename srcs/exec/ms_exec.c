@@ -78,9 +78,8 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		ms_exec_words(exec_info, env);
 		ms_wait_child_process(exec_info);
 		ms_reset_io(exec_info);
-		if (ast->op == OPAND_IF && g_exit != 0)
-			return (-1);
-		else if (ast->op == OPOR_IF && g_exit == 0)
+		if ((ast->op == OPAND_IF && g_exit != 0)
+			|| (ast->op == OPOR_IF && g_exit == 0))
 			return (-1);
 	}
 	else if (ast->op == OPPIPE)

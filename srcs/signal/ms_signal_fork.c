@@ -33,5 +33,5 @@ void	sigquit_fork(int signum)
 {
 	(void)signum;
 	ft_dprintf(STDERR_FILENO, "Quit: 3\n");
-	g_exit = 131;
+	g_exit = 128 + signum;
 }

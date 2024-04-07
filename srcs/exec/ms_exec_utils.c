@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "libft.h"
-#include "ms_exec.h"
 #include "ms_error.h"
+#include "ms_exec.h"
 #include "ms_signal.h"
 #include <fcntl.h>
 #include <stdio.h>
@@ -70,9 +71,11 @@ void	ms_wait_child_process(t_exec *exec_info)
 	while (exec_info->execed_cmd_cnt)
 	{
 		waitpid(-1, &status, 0);
-		g_exit = WEXITSTATUS(status);
+		if (wifexit(status) == TRUE)
+			g_exit = wexitstatus(status);
 		exec_info->execed_cmd_cnt--;
 	}
+	ms_print_signaled(status);
 	ms_set_signal_prompt();
 }
 

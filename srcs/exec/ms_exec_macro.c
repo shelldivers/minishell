@@ -10,45 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "ms_error.h"
 #include "ms_exec.h"
-#include "ms_signal.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
+#include <sys/wait.h>
 
-void	ms_print_signaled(int status)
+static int	w_int(int x);
+
+int	wifexit(int x)
 {
-	int	signum;
-
-	if (wifsignaled(status) == TRUE)
-	{
-		signum = wstatus(status);
-		if (signum == SIGINT)
-			ft_dprintf(STDERR_FILENO, "\n");
-		else if (signum == SIGQUIT)
-			ft_dprintf(STDERR_FILENO, "Quit: 3\n");
-		g_exit = 128 + signum;
-	}
+	return ((w_int(x) & 0177) == 0);
 }
 
-void	dup2_fd(t_exec *exec_info)
+int	wexitstatus(int x)
 {
-	const int	seq = exec_info->heredoc_seq - 1;
+	return ((w_int(x) >> 8) & 0x000000ff);
+}
 
-	if (exec_info->fd[0] != -1)
-	{
-		if (dup2(exec_info->fd[0], STDIN_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
-	}
-	else if (exec_info->fd[0] == -1 && seq >= 0 \
-	&& exec_info->heredoc_fd[seq] > 0)
-	{
-		if (dup2(exec_info->heredoc_fd[seq], STDIN_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
-	}
-	if (exec_info->fd[1] != -1)
-		if (dup2(exec_info->fd[1], STDOUT_FILENO) == -1)
-			ms_puterror_cmd(NULL, "dup2");
+int	wifsignaled(int x)
+{
+	return (wstatus(x) != _WSTOPPED && wstatus(x) != 0);
+}
+
+int	wstatus(int x)
+{
+	return (w_int(x) & 0177);
+}
+
+static int	w_int(int x)
+{
+	return (*(int *)&(x));
 }
