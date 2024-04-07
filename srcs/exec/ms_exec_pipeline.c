@@ -14,9 +14,8 @@
 #include "ms_exec.h"
 #include <unistd.h>
 
-static void	ms_close_parent_pipe2(\
-t_exec *exec_info, int now_pipe);
-static void	ms_dup_based_on_pipe_idx2(t_exec *exec_info, const int now_pipe);
+static void	ms_close_parent_pipe2(t_exec *exec_info, int now_pipe);
+static void	ms_dup_based_on_pipe_idx2(t_exec *exec_info, int now_pipe);
 
 t_bool	ms_exec_pipe(t_exec *exec_info)
 {
@@ -68,7 +67,6 @@ static void	ms_dup_based_on_pipe_idx2(t_exec *exec_info, const int now_pipe)
 	}
 }
 
-//if return false, you must exec_code = 1 and print error message "close"
 void	ms_close_parent_pipe(t_exec *exec_info)
 {
 	const int	now_pipe = (exec_info->pipe_idx + 1) % 2;

@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "ms_exec.h"
 
-static t_bool	ms_find_close_quote(char *word, int idx);
+static t_bool	ms_find_close_quote(const char *word, size_t idx);
 
 char	*ms_quote_removal_dup(char *word, size_t i, size_t j)
 {
@@ -41,7 +41,7 @@ char	*ms_quote_removal_dup(char *word, size_t i, size_t j)
 	return (new_word);
 }
 
-static t_bool	ms_find_close_quote(char *word, int idx)
+static t_bool	ms_find_close_quote(const char *word, size_t idx)
 {
 	char	quote;
 	size_t	i;
