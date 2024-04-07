@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 20:53:09 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:24:15 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (!ms_parser(&(shell.ast), shell.token, shell.syntax.words_cnt))
 			continue ;
-		ms_max_heredoc(shell.token);
 		ms_exec(shell.ast, shell.env);
 	}
 }

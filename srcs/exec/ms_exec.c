@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 20:03:42 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:26:16 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ms_exec(t_ast *ast, t_env **env)
 	exec_info = ms_new_exec_info(env);
 	if (!exec_info)
 		ms_env_clear(env);
-	if (!ms_exec_heredoc_before(ast))
+	if (ms_max_heredoc(ast->token) && !ms_exec_heredoc_before(ast))
 	{
 		ms_reset_exec_info(exec_info);
 		ms_clear_heredoc(exec_info);

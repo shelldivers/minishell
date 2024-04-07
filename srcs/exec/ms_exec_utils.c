@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 18:27:04 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:27:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ms_get_line_with_fd(const char *type, char *end, int fd)
 	}
 }
 
-void	ms_max_heredoc(t_token **token)
+size_t	ms_max_heredoc(t_token **token)
 {
 	size_t	i;
 	size_t	cnt;
@@ -49,7 +49,7 @@ void	ms_max_heredoc(t_token **token)
 	i = 0;
 	cnt = 0;
 	if (!token || !*token)
-		return ;
+		return (cnt);
 	while (token[i])
 	{
 		if (token[i]->type == TDLESS)
@@ -62,6 +62,7 @@ void	ms_max_heredoc(t_token **token)
 		g_exit = 2;
 		exit(g_exit);
 	}
+	return (cnt);
 }
 
 void	ms_wait_child_process(t_exec *exec_info)
