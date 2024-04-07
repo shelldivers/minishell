@@ -18,9 +18,6 @@
 
 static t_bool	assign_token(t_token *const *src, t_token **dst, int i);
 
-/**
- * @errno ENOMEM 메모리 할당에 실패했을 경우 -> -1 반환
- */
 int	ms_add_ast(t_ast *ast, t_token **token, int size, t_drill drill)
 {
 	int		curtok;

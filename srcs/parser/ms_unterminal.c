@@ -15,7 +15,6 @@
 #include "ft_bool.h"
 #include <stdio.h>
 
-// TODO: 변경
 int	ms_is_and_or(t_ast *ast, t_token **token)
 {
 	const int	size = ms_get_token_size(token);

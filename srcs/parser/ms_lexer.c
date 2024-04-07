@@ -18,9 +18,6 @@
 static t_token		*ms_new_token(char *value);
 static enum e_type	ms_get_tokentype(char *value);
 
-/**
- * @errno ENOMEM
- */
 t_token	**ms_lexer(t_syntax *syntax)
 {
 	int		i;

@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "ms_error.h"
 #include "ms_exec.h"
-#include "ms_signal.h"
 #include <unistd.h>
 
 void	ms_dup_pipe(t_exec *exec_info)

@@ -18,14 +18,6 @@
 
 static t_bool	ms_extract(t_syntax *syntax, int *start, int idx);
 
-/**
- * separateWords - 주어진 문자열을 단어로 분리합니다.
- * 
- * @param line 단어로 분리할 문자열
- * @return void
- * @errno ENOMEM 메모리 할당에 실패했을 경우
- * @todo separate_words 를 사용한 후에는 syntax.words, syntax.line 메모리를 해제해야 합니다.
- */
 t_bool	ms_tokenizer(t_syntax *syntax)
 {
 	int			i;
