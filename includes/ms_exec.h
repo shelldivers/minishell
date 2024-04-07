@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 16:01:04 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 19:07:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_exec
 	int			fd[2];
 	int			pipe[2][2];
 	int			pipe_idx;
-	int			pipe_cnt;
 	int			cmd_cnt;
 	int			execed_cmd_cnt;
 	int			heredoc_fd[7];
@@ -90,13 +89,19 @@ int			ms_words_size(char **words);
 
 /*================ pipe ==================*/
 t_bool		ms_exec_pipe(t_exec *exec_info);
-void		ms_dup_based_on_pipe_idx(t_exec *exec_info);
-void		ms_close_parent_pipe(t_exec *exec_info);
+void		ms_dup_pipe(t_exec *exec_info);
+void		ms_close_pipe(t_exec *exec_info);
+void		ms_dup_first_pipe(t_exec *exec_info);
+void		ms_dup_middle_pipe(t_exec *exec_info);
+void		ms_dup_last_pipe(t_exec *exec_info);
+void		ms_close_first_pipe(t_exec *exec_info);
+void		ms_close_middle_pipe(t_exec *exec_info);
+void		ms_close_last_pipe(t_exec *exec_info);
 
 /*================ fd ==================*/
 void		ms_close_all_fd(t_exec *exec_info);
-void		ms_close_pipe(t_exec *exec_info);
-void		ms_close_pipe2(t_exec *exec_info);
+void		ms_close_all_pipe(t_exec *exec_info);
+void		ms_close_all_pipe2(t_exec *exec_info);
 void		ms_close_stdout(t_exec *exec_info);
 void		ms_close_stdin(t_exec *exec_info);
 

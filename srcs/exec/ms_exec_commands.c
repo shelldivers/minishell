@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 16:01:14 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 19:28:11 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ char **words, int (f)(int, char **, t_env **))
 {
 	const int	argc = ms_words_size(words);
 
-	ms_dup_based_on_pipe_idx(exec_info);
+	ms_dup_pipe(exec_info);
 	g_exit = f(argc, words, env);
-	ms_close_parent_pipe(exec_info);
+	ms_close_pipe(exec_info);
 	return (TRUE);
 }
 
@@ -82,16 +82,14 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	{
 		ms_set_signal_default();
 		ms_add_path(words, env);
-		ms_dup_based_on_pipe_idx(exec_info);
-		ms_close_all_fd(exec_info);
+		ms_dup_pipe(exec_info);;
 		execve(words[0], words, ms_env_serialize(*env));
 		ms_puterror_no_command(words[0]);
 		exit(127);
 	}
 	else
 	{
-		ms_set_signal_ignore();
-		ms_close_parent_pipe(exec_info);
+		ms_close_pipe(exec_info);
 		exec_info->pid = pid;
 	}
 }

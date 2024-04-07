@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:25:35 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:06:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 18:27:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	ms_wait_child_process(t_exec *exec_info)
 			ms_set_exited(status);
 		exec_info->execed_cmd_cnt--;
 	}
+	exec_info->pipe_idx = 0;
+	exec_info->cmd_cnt = 0;
 	ms_set_signal_prompt();
 }
 

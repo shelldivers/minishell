@@ -6,10 +6,11 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 15:26:09 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 19:19:32 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "ms_signal.h"
 #include "ms_exec.h"
 
