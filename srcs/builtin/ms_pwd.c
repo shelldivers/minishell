@@ -22,13 +22,12 @@ int	ms_pwd(int argc, char **argv, t_env **env)
 
 	(void)argc;
 	(void)argv;
-	pwd = getcwd(NULL, 0);
+	pwd = ms_getenv(*env, PWD);
 	if (!pwd)
 	{
 		ms_puterror_cmd(*env, "pwd");
 		return (EXIT_FAILURE);
 	}
 	printf("%s\n", pwd);
-	free(pwd);
 	return (EXIT_SUCCESS);
 }
