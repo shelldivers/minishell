@@ -37,7 +37,8 @@ void	ms_exec(t_ast *ast, t_env **env)
 
 void	ms_after_exec(t_exec *exec_info)
 {
-	ms_wait_child_process(exec_info);
+	if (exec_info->execed_cmd_cnt)
+		ms_wait_child_process(exec_info);
 	ms_reset_exec_info(exec_info);
 	ms_reset_io(exec_info);
 	ms_close_all_fd(exec_info);

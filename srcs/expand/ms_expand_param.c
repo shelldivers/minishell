@@ -132,7 +132,20 @@ static char	*get_pos(const char *str)
 
 static t_bool	is_cspn(char ch)
 {
-	if (ft_isalnum(ch) || ch == '_' || ch == '?')
+	int			i;
+	const char	cspn[] = {
+		'*', '@', '#', '?', '-', '$',
+		'?', '!', '\'', '\"', '\0'
+	};
+
+	if (ft_isalnum(ch) || ch == '_')
 		return (TRUE);
+	i = 0;
+	while (cspn[i])
+	{
+		if (ch == cspn[i])
+			return (TRUE);
+		i++;
+	}
 	return (FALSE);
 }
