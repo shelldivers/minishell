@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:26:59 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:36:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ void		ms_close_stdin(t_exec *exec_info);
 /*================ path ==================*/
 void		ms_add_path(char **words, t_env **env);
 int			s_isdir(int m);
+void		ms_is_dir(char **words);
 
 #endif
