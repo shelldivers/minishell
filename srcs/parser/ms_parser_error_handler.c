@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:31:42 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 16:40:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 13:59:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ void	ms_parser_error_handler(t_token **token, int curtok)
 	char		*err_val;
 	enum e_type	err_type;
 
+	if (ms_get_token_size(token) < curtok)
+	{
+		ms_puterror_syntax_newline();
+		return ;
+	}
 	err_type = token[curtok]->type;
 	err_val = token[curtok]->value;
 	if (err_type == TDLESS || err_type == TDGREAT \

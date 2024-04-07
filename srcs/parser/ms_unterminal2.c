@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 20:29:24 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 14:25:44 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ int	ms_is_simple_command(t_ast *ast, t_token **token)
 	if (size < 1)
 		return (0);
 	tot_curtok = 0;
-	if (token[0] && (token[0]->type == TWORD))
-		curtok = ms_add_ast(ast, token, 0, (t_drill){ms_is_word, RIGHT});
-	else
-		curtok = ms_add_ast(ast, token, 0, \
-		(t_drill){ms_is_redirect_list, LEFT});
-	if (!ms_set_tot_curtok(&tot_curtok, curtok, 1))
-		return (tot_curtok);
-	if (tot_curtok < size)
+	while (tot_curtok < size)
 	{
-		curtok = ms_is_simple_command(ast, token + tot_curtok);
-		if (!ms_set_tot_curtok(&tot_curtok, curtok, size - tot_curtok))
+		if (token[tot_curtok] && (token[tot_curtok]->type == TWORD))
+			curtok = ms_add_ast(ast, token + tot_curtok, size - tot_curtok, \
+			(t_drill){ms_is_word, RIGHT});
+		else
+			curtok = ms_add_ast(ast, token + tot_curtok, size - tot_curtok, \
+			(t_drill){ms_is_redirect_list, LEFT});
+		if (!ms_set_tot_curtok(&tot_curtok, curtok, 1))
 			return (tot_curtok);
 	}
 	return (tot_curtok);
@@ -44,22 +42,19 @@ int	ms_is_redirect_list(t_ast *ast, t_token **token)
 {
 	const int	size = ms_get_token_size(token);
 	int			curtok;
-	int			total_curtok;
+	int			tot_curtok;
 
 	if (size < 0)
 		return (0);
-	total_curtok = 0;
-	curtok = ms_add_ast(ast, token, size, (t_drill){ms_is_io_redirect, LEFT});
-	if (!ms_set_tot_curtok(&total_curtok, curtok, 2))
-		return (total_curtok);
-	while (curtok)
+	tot_curtok = 0;
+	while (tot_curtok < size)
 	{
-		curtok = ms_add_ast(ast, token + total_curtok, \
-		0, (t_drill){ms_is_io_redirect, LEFT});
-		if (!ms_set_tot_curtok(&total_curtok, curtok, 2))
-			return (total_curtok);
+		curtok = ms_add_ast(ast, token + tot_curtok, size - tot_curtok, \
+		(t_drill){ms_is_io_redirect, LEFT});
+		if (!ms_set_tot_curtok(&tot_curtok, curtok, 2))
+			return (tot_curtok);
 	}
-	return (total_curtok);
+	return (tot_curtok);
 }
 
 int	ms_is_io_redirect(t_ast *ast, t_token **token)
@@ -71,9 +66,9 @@ int	ms_is_io_redirect(t_ast *ast, t_token **token)
 		return (0);
 	curtok = 0;
 	if (token[curtok] && (token[curtok]->type == TDLESS))
-		curtok += ms_is_io_here(ast, token);
+		curtok = ms_is_io_here(ast, token);
 	else
-		curtok += ms_is_io_file(ast, token);
+		curtok = ms_is_io_file(ast, token);
 	return (curtok);
 }
 

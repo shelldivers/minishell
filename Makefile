@@ -26,7 +26,7 @@ ENV += ms_env_lst_utils.c ms_env_lst.c ms_env_serialize_utils.c ms_env_serialize
 EXPAND += ms_expand.c ms_queue.c ms_queue_utils.c ms_glob.c ms_glob_utils.c \
 			ms_expand_param.c ms_expand_param_utils.c ms_expand_filename.c ms_expand_filenames.c ms_expand_filename_utils.c \
 			ms_expand_filename_search.c ms_expand_filename_match1.c ms_expand_filename_match2.c ms_expand_filename_expand.c
-SIGNAL += ms_signal_heredoc.c ms_signal_fork.c ms_signal_prompt.c ms_signal_utils.c
+SIGNAL += ms_signal_heredoc.c ms_signal_prompt.c ms_signal_utils.c
 
 M_FILES += minishell.c
 M_FILES += $(addprefix $(S_PARSE), $(PARSER))
