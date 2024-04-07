@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 21:39:46 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 16:01:14 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char **words, int (f)(int, char **, t_env **))
 
 void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 {
-	int			pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
@@ -92,5 +92,6 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	{
 		ms_set_signal_ignore();
 		ms_close_parent_pipe(exec_info);
+		exec_info->pid = pid;
 	}
 }

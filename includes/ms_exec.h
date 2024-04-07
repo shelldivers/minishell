@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 18:28:45 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 16:01:04 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_exec
 	int			execed_cmd_cnt;
 	int			heredoc_fd[7];
 	int			heredoc_seq;
+	pid_t		pid;
 }				t_exec;
 
 /*================ exec ==================*/
