@@ -70,7 +70,7 @@ void	ms_wait_child_process(t_exec *exec_info)
 
 	while (exec_info->execed_cmd_cnt)
 	{
-		if (exec_info->pid != waitpid(-1, &status, 0))
+		if (exec_info->pid == waitpid(-1, &status, 0))
 			ms_set_exited(status);
 		exec_info->execed_cmd_cnt--;
 	}
