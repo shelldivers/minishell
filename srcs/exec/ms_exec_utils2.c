@@ -18,11 +18,13 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void	ms_print_signaled(int status)
+void	ms_set_exited(int status)
 {
 	int	signum;
 
-	if (wifsignaled(status) == TRUE)
+	if (wifexit(status) == TRUE)
+		g_exit = wexitstatus(status);
+	else if (wifsignaled(status) == TRUE)
 	{
 		signum = wstatus(status);
 		if (signum == SIGINT)

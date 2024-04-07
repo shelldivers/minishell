@@ -46,7 +46,7 @@ void		ms_get_line_with_fd(const char *type, char *end, int fd);
 void		ms_wait_child_process(t_exec *exec_info);
 t_exec		*ms_new_exec_info(t_env **env);
 void		ms_max_heredoc(t_token **token);
-void		ms_print_signaled(int status);
+void		ms_set_exited(int status);
 
 void		dup2_fd(t_exec *exec_info);
 

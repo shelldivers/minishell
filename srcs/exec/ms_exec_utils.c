@@ -70,12 +70,10 @@ void	ms_wait_child_process(t_exec *exec_info)
 
 	while (exec_info->execed_cmd_cnt)
 	{
-		waitpid(-1, &status, 0);
-		if (wifexit(status) == TRUE)
-			g_exit = wexitstatus(status);
+		if (exec_info->pid != waitpid(-1, &status, 0))
+			ms_set_exited(status);
 		exec_info->execed_cmd_cnt--;
 	}
-	ms_print_signaled(status);
 	ms_set_signal_prompt();
 }
 
