@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_signal.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/07 13:19:49 by jeongwpa          #+#    #+#             */
+/*   Updated: 2024/04/07 13:19:50 by jeongwpa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MS_SIGNAL_H
 # define MS_SIGNAL_H
 
@@ -12,9 +24,9 @@ void	ms_set_signal_heredoc(void);
 void	sigint_heredoc(int signum);
 
 /* ms_signal_fork.c */
-void ms_set_signal_fork(void);
-void sigint_fork(int signum);
-void sigquit_fork(int signum);
+void	ms_set_signal_fork(void);
+void	sigint_fork(int signum);
+void	sigquit_fork(int signum);
 
 /* ms_signal_utils.c */
 void	ms_set_echoctl_on(void);
