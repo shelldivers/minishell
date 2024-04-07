@@ -16,7 +16,7 @@
 #include "ms_minishell.h"
 #include <stdio.h>
 
-static t_bool	init(t_minishell *shell, char *line, char **envp);
+static t_bool	init(t_minishell *shell, const char *line, char **envp);
 static t_bool	lex(t_minishell *shell);
 
 int	ms_env_exec(char *line, char **envp)
@@ -38,7 +38,7 @@ int	ms_env_exec(char *line, char **envp)
 	return (EXIT_SUCCESS);
 }
 
-static t_bool	init(t_minishell *shell, char *line, char **envp)
+static t_bool	init(t_minishell *shell, const char *line, char **envp)
 {
 	if (!line || !envp)
 		return (FALSE);

@@ -22,9 +22,6 @@ static int		ms_cd_oldpwd(t_env **env);
 static t_bool	ms_chdir_old(char *path, t_env **env);
 static t_bool	ms_chdir(char *path, t_env **env);
 
-/**
- * @notice `~` must be expaneded to the home directory
- */
 int	ms_cd(int argc, char **argv, t_env **env)
 {
 	char	*path;

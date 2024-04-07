@@ -13,9 +13,6 @@
 #include "ms_env.h"
 #include <stdlib.h>
 
-/**
- * @errno ENOMEM
- */
 char	**ms_env_serialize(t_env *env)
 {
 	char	**envp;
@@ -42,9 +39,6 @@ char	**ms_env_serialize(t_env *env)
 	return (envp);
 }
 
-/**
- * @errno ENOMEM
- */
 t_env	**ms_env_deserialize(char **envp)
 {
 	t_env	**head;
@@ -69,9 +63,6 @@ t_env	**ms_env_deserialize(char **envp)
 	return (head);
 }
 
-/**
- * @errno ENOMEM
- */
 char	**ms_env_serialize_union(t_env **env1, t_env **env2)
 {
 	char	**envp;

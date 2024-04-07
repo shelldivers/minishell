@@ -20,13 +20,6 @@ static t_bool	re_syntaxing(t_queue *queue, const char *str);
 static char		*get_pos(const char *str);
 static t_bool	is_cspn(char ch);
 
-/**
- * @details parameter expansion\n
- * - 환경 변수만 처리하고, 쉘 변수는 처리하지 않습니다.\n
- * - 중괄호(`{}`)는 처리하지 않습니다.\n
- * - `?`를 제외한 다른 특수 문자를 처리하지 않습니다.
- * @see https://runebook.dev/ko/docs/bash/special-parameters
- */
 char	**ms_expand_params(char **argv, t_env *env)
 {
 	t_queue	*queue;

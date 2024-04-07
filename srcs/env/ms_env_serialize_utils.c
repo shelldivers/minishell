@@ -17,9 +17,6 @@
 static t_bool	ms_str_assign_env(t_env *env, char *str, char *sep);
 static t_bool	ms_str_assign_empty_env(t_env *env, char *str);
 
-/**
- * @errno ENOMEM
- */
 t_bool	ms_env_move(char **envp, t_env **env, size_t start)
 {
 	char	**tmp;
@@ -41,9 +38,6 @@ t_bool	ms_env_move(char **envp, t_env **env, size_t start)
 	return (TRUE);
 }
 
-/**
- * @errno ENOMEM
- */
 char	*ms_env_to_str(t_env *env)
 {
 	char	*str;
@@ -61,9 +55,6 @@ char	*ms_env_to_str(t_env *env)
 	return (str);
 }
 
-/**
- * @errno ENOMEM
- */
 t_env	*ms_str_to_env(char *str)
 {
 	t_env	*env;

@@ -18,7 +18,6 @@
 # define HOME "HOME"
 # define PWD "PWD"
 # define OLDPWD "OLDPWD"
-# define SHELL "SHELL"
 # define SHLVL "SHLVL"
 
 typedef struct s_env

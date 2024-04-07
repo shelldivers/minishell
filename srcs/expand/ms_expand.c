@@ -14,11 +14,6 @@
 #include "ms_expand.h"
 #include "ms_error.h"
 
-/**
- * @details 쉘 확장은 다음 순서로 진행됩니다.\n
- * parameter expansion -> filename expansion -> quote removal
- * @see https://runebook.dev/ko/docs/bash/shell-expansions
- */
 char	**ms_expansion(char **argv, t_env *env)
 {
 	char	**copy;

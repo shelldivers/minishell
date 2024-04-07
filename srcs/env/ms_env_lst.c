@@ -53,10 +53,6 @@ char	*ms_getenv(t_env *env, char *key)
 	return (NULL);
 }
 
-/**
- * @errno EINVAL
- * @errno ENOMEM
- */
 t_bool	ms_setenv(t_env **head, char *key, char *value)
 {
 	t_env	*env;
@@ -81,9 +77,6 @@ t_bool	ms_setenv(t_env **head, char *key, char *value)
 	return (TRUE);
 }
 
-/**
- * @errno ENOMEM
- */
 static t_bool	ms_swap_env(t_env *env, char *value)
 {
 	char	*tmp;
@@ -96,9 +89,6 @@ static t_bool	ms_swap_env(t_env *env, char *value)
 	return (TRUE);
 }
 
-/**
- * @errno ENOMEM
- */
 static t_env	*ms_assign_env(char *key, char *value)
 {
 	t_env	*env;

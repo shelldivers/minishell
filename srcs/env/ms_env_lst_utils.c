@@ -16,9 +16,6 @@
 #include <stdio.h>
 #include <sys/errno.h>
 
-/**
- * @notice You must free head node after calling this function
- */
 void	ms_env_clear(t_env **head)
 {
 	t_env	*node;
@@ -76,9 +73,6 @@ void	ms_env_print_all(t_env *env)
 	}
 }
 
-/**
- * @errno EINVAL
- */
 t_bool	ms_is_valid_env_key(char *key)
 {
 	if (!ft_isalpha(*key) && *key != '_')
