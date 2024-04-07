@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 13:57:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 15:03:42 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,6 @@ t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 		return (FALSE);
 	if (ast->op != OPNONE)
 	{
-		if (ast->op == OPAND_IF)
-			ft_dprintf(2, "AND_IF\n");
-		else if (ast->op == OPOR_IF)
-			ft_dprintf(2, "OR_IF\n");
-		else if (ast->op == OPPIPE)
-			ft_dprintf(2, "PIPE\n");
-		else if (ast->op == OPIO_FILE)
-			ft_dprintf(2, "IO_FILE\n");
-		else if (ast->op == OPIO_HERE)
-			ft_dprintf(2, "IO_HERE\n");
 		status = ms_exec_based_on_op(ast, exec_info, env);
 		if (status == -1)
 			return (TRUE);

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 11:24:17 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/06 15:21:49 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 15:04:28 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int		ms_is_pipeline(t_ast *ast, t_token **token);
 int		ms_is_command(t_ast *ast, t_token **token);
 int		ms_is_subshell(t_ast *ast, t_token **token);
 int		ms_is_simple_command(t_ast *ast, t_token **token);
-int		ms_is_redirect_list(t_ast *ast, t_token **token);
 int		ms_is_io_redirect(t_ast *ast, t_token **token);
 int		ms_get_op_pos(t_token **token, enum e_type op1, enum e_type op2);
 /*================terminal.c================*/

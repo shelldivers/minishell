@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 14:25:44 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 15:01:27 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,8 @@ int	ms_is_simple_command(t_ast *ast, t_token **token)
 			(t_drill){ms_is_word, RIGHT});
 		else
 			curtok = ms_add_ast(ast, token + tot_curtok, size - tot_curtok, \
-			(t_drill){ms_is_redirect_list, LEFT});
+			(t_drill){ms_is_io_redirect, LEFT});
 		if (!ms_set_tot_curtok(&tot_curtok, curtok, 1))
-			return (tot_curtok);
-	}
-	return (tot_curtok);
-}
-
-int	ms_is_redirect_list(t_ast *ast, t_token **token)
-{
-	const int	size = ms_get_token_size(token);
-	int			curtok;
-	int			tot_curtok;
-
-	if (size < 0)
-		return (0);
-	tot_curtok = 0;
-	while (tot_curtok < size)
-	{
-		curtok = ms_add_ast(ast, token + tot_curtok, size - tot_curtok, \
-		(t_drill){ms_is_io_redirect, LEFT});
-		if (!ms_set_tot_curtok(&tot_curtok, curtok, 2))
 			return (tot_curtok);
 	}
 	return (tot_curtok);
