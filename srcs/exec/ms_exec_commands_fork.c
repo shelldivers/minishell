@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 19:37:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 20:53:05 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:29:20 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ms_exec_commands_fork(t_exec *exec_info, t_env **env, char **words)
 		ms_puterror_fork();
 	if (pid == 0)
 	{
+		if (!words || !words[0])
+			exit(0);
 		ms_set_signal_default();
 		ms_dup_pipe(exec_info);
 		ms_exec_is_builtin_fork(env, words);
