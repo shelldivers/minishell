@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ms_expand_filename_expand.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/03 13:02:44 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:46:14 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ms_expand.h"
+#include "ms_exec.h"
 #include <errno.h>
+#include <sys/stat.h>
 
 static t_bool	init(t_glob *glob, DIR **dir);
 static t_bool	quit(char *next, DIR *dir);
@@ -44,10 +46,21 @@ t_bool	ms_expand_filename_expand(t_queue *queue, t_glob *glob)
 
 static t_bool	init(t_glob *glob, DIR **dir)
 {
+	struct stat	buf;
+
 	if (*(glob->path) == '\0')
 		*dir = opendir(".");
 	else
-		*dir = opendir(glob->path);
+	{
+		if (stat(glob->path, &buf) == 0
+			&& (S_IROTH & buf.st_mode) && s_isdir(buf.st_mode))
+			*dir = opendir(glob->path);
+		else
+		{
+			*dir = NULL;
+			return (TRUE);
+		}
+	}
 	if (*dir)
 		return (TRUE);
 	if (!*dir && errno == ENOENT)

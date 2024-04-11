@@ -61,13 +61,13 @@ all: $(NAME) $(HEADER)
 
 $(NAME): $(OBJS)
 	make -C ./libft
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRCS) -I$(INCLUDES) -I$(LIBFT_INCLUDES) -lreadline  -Llibft -lft
+	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) -I$(INCLUDES) -I$(LIBFT_INCLUDES) -lreadline  -Llibft -lft
 
 bonus: 
 	make objs=1 all
 
 %.o: %.c
-	$(CC) -g $(CFLAGS) -c $< -o $@ -I$(INCLUDES) -I$(LIBFT_INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(INCLUDES) -I$(LIBFT_INCLUDES)
 
 clean:
 	make clean -C ./libft

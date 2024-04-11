@@ -9,3 +9,6 @@
 ### Debug ###
 *.dSYM
 cmake-build-debug
+### else ###
+CMakeLists.txt
+test/

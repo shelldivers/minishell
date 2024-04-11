@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:23 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 15:03:11 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:39:54 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	ms_is_command(t_ast *ast, t_token **token)
 	if (token[0]->type != TLPAREN)
 		return (ms_add_ast(ast, token, 0, \
 		(t_drill){ms_is_simple_command, LEFT}));
-	curtok = ms_add_ast(ast, token, 0, (t_drill){ms_is_subshell, LEFT});
+	curtok = ms_add_ast(ast, token, 0, (t_drill){ms_is_subshell, RIGHT});
 	if (!ms_set_tot_curtok(&tot_curtok, curtok, 3))
 		return (tot_curtok);
 	while (tot_curtok < size)

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:26:16 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/08 20:37:20 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	ms_exec(t_ast *ast, t_env **env)
 	}
 	ms_exec_in_order(ast, exec_info, env);
 	dup2_fd(exec_info);
-	if (exec_info->words)
-		ms_exec_words(exec_info, env);
+	ms_exec_words(exec_info, env);
 	ms_after_exec(exec_info);
 }
 
@@ -57,7 +56,8 @@ t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 		return (TRUE);
 	left = ast->left;
 	right = ast->right;
-	if (!ms_exec_in_order(left, exec_info, env))
+	if (!ms_exec_in_order(left, exec_info, env)
+		&& ast->op != OPAND_IF && ast->op != OPOR_IF && ast->op != OPPIPE)
 		return (FALSE);
 	if (ast->op != OPNONE)
 	{
@@ -67,7 +67,8 @@ t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 		else if (status == 0)
 			return (FALSE);
 	}
-	if (!ms_exec_in_order(right, exec_info, env))
+	if (!ms_exec_in_order(right, exec_info, env)
+		&& ast->op != OPAND_IF && ast->op != OPOR_IF && ast->op != OPPIPE)
 		return (FALSE);
 	return (TRUE);
 }

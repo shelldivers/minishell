@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_builtin.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:50:04 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/07 10:50:04 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/09 20:21:07 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ms_echo(int argc, char **argv, t_env **env);
 int	ms_export(int argc, char **argv, t_env **env);
 int	ms_unset(int argc, char **argv, t_env **env);
 int	ms_env(int argc, char **argv, t_env **envp);
-int	ms_exit(int argc, char **argv, t_env **env);
+int	ms_exit(int argc, char **argv, t_env **env, int pipe_idx);
 int	ms_env_exec(char *line, char **envp);
 
 #endif

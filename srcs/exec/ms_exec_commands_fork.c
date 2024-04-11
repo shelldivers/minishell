@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 19:37:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:29:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 20:24:43 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,47 +28,52 @@ void	ms_exec_commands_fork(t_exec *exec_info, t_env **env, char **words)
 	if (pid == 0)
 	{
 		if (!words || !words[0])
-			exit(0);
+			exit(g_exit);
 		ms_set_signal_default();
 		ms_dup_pipe(exec_info);
-		ms_exec_is_builtin_fork(env, words);
+		ms_exec_is_builtin_fork(exec_info, env, words);
 		ms_add_path(words, env);
+		ms_close_all_fd(exec_info);
 		execve(words[0], words, ms_env_serialize(*env));
 		ms_puterror_no_command(words[0]);
 		exit(127);
 	}
 	else
 	{
+		ms_set_signal_ignore();
 		ms_close_pipe(exec_info);
 		exec_info->pid = pid;
 	}
 }
 
-void	ms_exec_is_builtin_fork(t_env **env, char **words)
+void	ms_exec_is_builtin_fork(t_exec *exec_info, t_env **env, char **words)
 {
 	if (!words || !words[0])
 		return ;
 	if (ft_strcmp(words[0], "echo") == 0)
-		ms_exec_builtin_fork(env, words, ms_echo);
+		ms_exec_builtin_fork(exec_info, env, words, ms_echo);
 	if (ft_strcmp(words[0], "cd") == 0)
-		ms_exec_builtin_fork(env, words, ms_cd);
+		ms_exec_builtin_fork(exec_info, env, words, ms_cd);
 	if (ft_strcmp(words[0], "pwd") == 0)
-		ms_exec_builtin_fork(env, words, ms_pwd);
+		ms_exec_builtin_fork(exec_info, env, words, ms_pwd);
 	if (ft_strcmp(words[0], "export") == 0)
-		ms_exec_builtin_fork(env, words, ms_export);
+		ms_exec_builtin_fork(exec_info, env, words, ms_export);
 	if (ft_strcmp(words[0], "unset") == 0)
-		ms_exec_builtin_fork(env, words, ms_unset);
+		ms_exec_builtin_fork(exec_info, env, words, ms_unset);
 	if (ft_strcmp(words[0], "env") == 0)
-		ms_exec_builtin_fork(env, words, ms_env);
+		ms_exec_builtin_fork(exec_info, env, words, ms_env);
 	if (ft_strcmp(words[0], "exit") == 0)
-		ms_exec_builtin_fork(env, words, ms_exit);
+		ms_exec_builtin_fork(exec_info, env, words, NULL);
 }
 
-void	ms_exec_builtin_fork(t_env **env, \
+void	ms_exec_builtin_fork(t_exec *exec_info, t_env **env, \
 char **words, int (f)(int, char **, t_env **))
 {
 	const int	argc = ms_words_size(words);
 
-	g_exit = f(argc, words, env);
+	if (!f)
+		ms_exit(argc, words, env, exec_info->pipe_idx);
+	else
+		g_exit = f(argc, words, env);
 	exit (g_exit);
 }

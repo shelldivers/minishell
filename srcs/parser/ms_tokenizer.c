@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 20:58:36 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 19:21:31 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_bool	ms_tokenizer(t_syntax *syntax)
 	start = 0;
 	while (i < syntax->words_cnt)
 	{
-		while (syntax->line[start] == ' ')
+		while (syntax->line[start] == ' ' || syntax->line[start] == '\t')
 			start++;
 		if (syntax->line[start] == '\0')
 			break ;

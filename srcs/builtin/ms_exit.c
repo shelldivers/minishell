@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeongwpa <jeongwpa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:32:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/03/04 20:32:59 by jeongwpa         ###   ########.fr       */
+/*   Updated: 2024/04/09 20:20:46 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,12 @@ static char	int64_to_int8(char *str)
 	return ((char) ac);
 }
 
-int	ms_exit(int argc, char **argv, t_env **env)
+int	ms_exit(int argc, char **argv, t_env **env, int pipe_idx)
 {
 	(void)argc;
 	argv++;
-	write(1, "exit\n", 5);
+	if (pipe_idx == 0)
+		write(1, "exit\n", 5);
 	if (*argv == NULL)
 		exit(EXIT_SUCCESS);
 	if (ft_isnumeric(*argv) == 0)

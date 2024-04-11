@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:48:53 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/05 13:55:18 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:12:33 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,7 @@ static char	**match(t_queue *queue)
 
 static t_bool	is_exist(char *str)
 {
-	DIR		*dir;
-	int		fd;
-	t_bool	result;
-
-	dir = opendir(str);
-	fd = open(str, O_RDONLY);
-	result = FALSE;
-	if (dir || fd >= 0)
-		result = TRUE;
-	if (fd >= 0)
-		close(fd);
-	if (dir)
-		closedir(dir);
-	return (result);
+	if (access(str, F_OK) == 0)
+		return (TRUE);
+	return (FALSE);
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 19:48:15 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:38:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:46:51 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 
 static char		**ms_get_paths(char **envp);
 static char		*ms_change_to_absolute(char **paths, char **cmd_word);
-static void		check_path_words(char **words, char **paths);
+static void		check_path_words(char **words);
+static t_bool	check_current_path(char **words);
 
 void	ms_add_path(char **words, t_env **env)
 {
@@ -31,10 +32,15 @@ void	ms_add_path(char **words, t_env **env)
 	ms_is_dir(words);
 	envp = ms_env_serialize(*env);
 	paths = ms_get_paths(envp);
-	check_path_words(words, paths);
+	check_path_words(words);
 	add_path = ms_change_to_absolute(paths, words);
 	if (!add_path)
-		add_path = ft_strdup(words[0]);
+	{
+		if (!check_current_path(words))
+			ms_puterror_cmd(NULL, "malloc");
+	}
+	else
+		words[0] = add_path;
 	ms_clear_sec_dimentional(envp);
 	ms_clear_sec_dimentional(paths);
 	if (stat(add_path, &buf) == 0 && s_isdir(buf.st_mode))
@@ -42,17 +48,39 @@ void	ms_add_path(char **words, t_env **env)
 		ms_puterror_is_dir(words[0]);
 		exit(126);
 	}
-	words[0] = add_path;
 }
 
-static void	check_path_words(char **words, char **paths)
+static t_bool	check_current_path(char **words)
 {
-	if (ft_strlen(words[0]) == 0)
+	char	*cur_path;
+	char	*tmp;
+
+	cur_path = getcwd(NULL, 0);
+	if (!cur_path)
 	{
-		ms_puterror_no_command(words[0]);
+		ms_puterror_no_file(words[0]);
 		exit(127);
 	}
-	if (!paths || !paths[0])
+	tmp = ft_strjoin(cur_path, "/");
+	free(cur_path);
+	if (!tmp)
+		return (FALSE);
+	cur_path = ft_strjoin(tmp, words[0]);
+	free(tmp);
+	if (!cur_path)
+		return (FALSE);
+	if (access(cur_path, F_OK & X_OK) != 0)
+	{
+		ms_puterror_no_file(words[0]);
+		exit(127);
+	}
+	words[0] = cur_path;
+	return (TRUE);
+}
+
+static void	check_path_words(char **words)
+{
+	if (ft_strlen(words[0]) == 0)
 	{
 		ms_puterror_no_file(words[0]);
 		exit(127);

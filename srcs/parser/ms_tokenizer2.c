@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 18:29:36 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 20:58:10 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 19:29:13 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ms_get_word(const char *line, const char **op)
 	int	i;
 
 	i = 0;
-	while (line[i] != ' ' && line[i] != '\0' \
+	while (line[i] != ' ' && line[i] != '\t' && line[i] != '\0' \
 	&& ms_get_op(line + i, op) == 0)
 	{
 		if (line[i] == '\'' || line[i] == '"')

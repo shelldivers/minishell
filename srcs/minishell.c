@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:35:18 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:24:15 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:54:06 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static void	prompt(t_syntax *syntax)
 		write(1, "exit\n", 5);
 		exit(EXIT_SUCCESS);
 	}
-	add_history(syntax->line);
+	else if (syntax->line[0] != '\0')
+		add_history(syntax->line);
 }
 
 static t_bool	lex(t_minishell *shell)
