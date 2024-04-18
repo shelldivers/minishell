@@ -76,66 +76,93 @@ D-.->Z[Builtin]
 
 #### **`exit`** with no options
 
+### [Expand]
+### [Signal]
+
 ## [jiwojung]
 
 ### [Parse Tree]
-```bnf
-/* ------------------------------------------------------- The grammar symbols ------------------------------------------------------- */ %token WORD 
-%token ASSIGNMENT_WORD 
+### [Excute]
 
-/* The following are the operators (see XBD Operator) containing more than one character. */
+---
 
-%token AND_IF  OR_IF  PIPE  LBRACE  RBRACE 
-/*      '&&'   '||'   '|'    '('     ')'   */
+### [Error]
 
-%token DLESS  DGREAT  DREAD  DWRITE
-/*     '<<'    '>>'    '<'    '>' */
+# [GRAMMAR]
 
-/* ------------------------------------------------------- The Grammar ------------------------------------------------------- */ 
-complete_command : and_or 
-				 ; 
-and_or 			 : pipeline 
-				 | and_or AND_IF pipeline 
-				 | and_or OR_IF pipeline 
-				 ;
-pipeline 		 : simple_command 
-		 		 | pipeline PIPE simple_command 
-				 ; 
-subshell 		 : LBRACE and_or RBRACE 
-				 ; 
-simple_command 	 : cmd_prefix WORD cmd_suffix 
-				 | cmd_prefix WORD 
-				 | cmd_prefix 
-				 | WORD cmd_suffix 
-				 | WORD 
-				 ;
-cmd_prefix 		 : io_redirect 
-				 | cmd_prefix io_redirect
-				 | ASSIGNMENT_WORD
-				 | cmd_prefix ASSIGNMENT_WORD
-				 ;
-cmd_suffix 		 : io_redirect
-				 | cmd_suffix io_redirect
-				 | WORD
-				 | cmd_suffix WORD 
-				 ; 
-io_redirect 	 : io_file 
-				 | io_here 
-				 ; 
-io_file 		 : DREAD WORD 
-				 | DWRITE WORD 
-				 | DGREAT WORD 
-				 ; 
-io_here 		 : DLESS WORD 
-				 ;
+```bison
+/* -------------------------------------------------------
+   The grammar symbols
+   ------------------------------------------------------- */
+%token  WORD			// 명령어 집합
+%token	IO_NUMBER
+
+/* The following are the operators (see XBD Operator)
+   containing more than one character. */
+
+%token  AND_IF    OR_IF    PIPE    LBRACE    RBRACE
+/*      '&&'      '||'     '|'       '('       ')'    */
+
+
+%token  DLESS  DGREAT   DREAD  DWRITE   
+/*      '<<'   '>>'     '<'     '>'    */
+
+
+/* -------------------------------------------------------
+   The Grammar
+   ------------------------------------------------------- */
+%start and_or
+%%
+and_or :               		     pipeline
+                 | and_or AND_IF pipeline
+                 | and_or OR_IF  pipeline
+                 ;
+pipeline         :               command
+                 | pipeline PIPE command
+				     ;
+command          : simple_command
+                 | subshell
+				     | subshell redirect_list
+                 ;
+subshell         : LBRACE and_or RBRACE
+                 ;
+simple_command   : redirect_list cmd_word cmd_suffix
+                 | redirect_list cmd_word
+                 | redirect_list
+                 | cmd_word cmd_suffix
+                 | cmd_word
+                 ;
+cmd_word         : WORD
+                 ;
+redirect_list    :               io_redirect
+                 | redirect_list io_redirect
+                 ;
+cmd_suffix       :            io_redirect
+                 | cmd_suffix io_redirect
+                 |            WORD
+                 | cmd_suffix WORD
+                 ;
+io_redirect      :           io_file
+                 |           io_here
+                 ;
+io_file          : DREAD     filename
+                 | DWRITE    filename
+                 | DGREAT    filename
+                 ;
+filename         : WORD
+                 ;
+io_here          : DLESS     here_end
+                 ;
+here_end         : WORD
+                 ;
 ```
+
 
 # [Rules]
 
 1. 이식성이 높고 자주 사용하기 용이한 함수의 경우 ft_ 를 prefix 에 붙여서 `libft` 에 추가   
 ex) ft_strcmp   
 
-2. 단위 테스트는 필수, **CMAKE** 사용으로 Unit test
 
 
 
