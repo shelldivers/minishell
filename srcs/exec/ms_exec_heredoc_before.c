@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 19:51:45 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:21:18 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:33:40 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,14 @@ t_bool	ms_set_heredoc(t_ast *ast, const int seq)
 		return (FALSE);
 	}
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+	if (fd == FAILED)
 	{
 		ms_puterror_cmd(NULL, "open");
 		return (FALSE);
 	}
 	here_end = ms_quote_removal_dup(ast->token[1]->value, 0, 0);
 	ms_get_line_with_fd(HEREDOC, here_end, fd);
-	if (close(fd) == -1)
+	if (close(fd) == FAILED)
 		ms_puterror_cmd(NULL, "close");
 	free (filename);
 	free (here_end);

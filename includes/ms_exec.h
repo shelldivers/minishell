@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:09:43 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/09 20:24:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:28:06 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # define SHELLNAME "/tmp/.SHELLDIVERS_"
 # define HEREDOC "minidoc> "
 # define MAX_HEREDOC 7
+# define FAILED -1
+# define CLOSED -1
 # include "ft_bool.h"
 # include "ms_parser.h"
 # include "ms_env.h"
@@ -49,11 +51,6 @@ size_t		ms_max_heredoc(t_token **token);
 void		ms_set_exited(int status);
 
 void		dup2_fd(t_exec *exec_info);
-
-int			wifexit(int x);
-int			wexitstatus(int x);
-int			wifsignaled(int x);
-int			wstatus(int x);
 
 /*================ init & clear ==================*/
 void		ms_init_exec_info(t_exec *exec_info);
@@ -112,7 +109,16 @@ void		ms_close_stdin(t_exec *exec_info);
 
 /*================ path ==================*/
 void		ms_add_path(char **words, t_env **env);
+void		ms_check_path(char *path, char **words);
+char		**ms_get_paths(char **envp);
+char		*ms_change_to_absolute(char **paths, char **cmd_word);
+t_bool		ms_find_in_current_path(char **words);
+
+/*================ macro ==================*/
 int			s_isdir(int m);
-void		ms_is_dir(char **words);
+int			wifexit(int x);
+int			wexitstatus(int x);
+int			wifsignaled(int x);
+int			wstatus(int x);
 
 #endif

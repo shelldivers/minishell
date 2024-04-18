@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_exec_close_pipe.c                               :+:      :+:    :+:   */
+/*   ms_exec_open_close_pipe.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:20:34 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 20:49:03 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:36:30 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 t_bool	ms_exec_pipe(t_exec *exec_info)
 {
 	exec_info->pipe_idx++;
-	if (pipe(exec_info->pipe[exec_info->pipe_idx % 2]) == -1)
+	if (pipe(exec_info->pipe[exec_info->pipe_idx % 2]) == FAILED)
 	{
 		ms_puterror_cmd(NULL, "pipe");
 		return (FALSE);
@@ -41,31 +41,31 @@ void	ms_close_pipe(t_exec *exec_info)
 
 void	ms_close_first_pipe(t_exec *exec_info)
 {
-	const int	now_pipe = exec_info->pipe_idx % 2;
+	const int	now = exec_info->pipe_idx % 2;
 
-	if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
+	if (close(exec_info->pipe[now][STDOUT_FILENO]) == FAILED)
 		ms_puterror_cmd(NULL, "close");
-	exec_info->pipe[now_pipe][1] = -1;
+	exec_info->pipe[now][1] = CLOSED;
 }
 
 void	ms_close_middle_pipe(t_exec *exec_info)
 {
-	const int	now_pipe = exec_info->pipe_idx % 2;
-	const int	prev_pipe = (exec_info->pipe_idx + 1) % 2;
+	const int	now = exec_info->pipe_idx % 2;
+	const int	prev = (exec_info->pipe_idx + 1) % 2;
 
-	if (close(exec_info->pipe[prev_pipe][STDIN_FILENO]) == -1)
+	if (close(exec_info->pipe[prev][STDIN_FILENO]) == FAILED)
 		ms_puterror_cmd(NULL, "close");
-	exec_info->pipe[prev_pipe][0] = -1;
-	if (close(exec_info->pipe[now_pipe][STDOUT_FILENO]) == -1)
+	exec_info->pipe[prev][0] = CLOSED;
+	if (close(exec_info->pipe[now][STDOUT_FILENO]) == FAILED)
 		ms_puterror_cmd(NULL, "close");
-	exec_info->pipe[now_pipe][1] = -1;
+	exec_info->pipe[now][1] = CLOSED;
 }
 
 void	ms_close_last_pipe(t_exec *exec_info)
 {
-	const int	now_pipe = exec_info->pipe_idx % 2;
+	const int	now = exec_info->pipe_idx % 2;
 
-	if (close(exec_info->pipe[now_pipe][STDIN_FILENO]) == -1)
+	if (close(exec_info->pipe[now][STDIN_FILENO]) == FAILED)
 		ms_puterror_cmd(NULL, "close");
-	exec_info->pipe[now_pipe][0] = -1;
+	exec_info->pipe[now][0] = CLOSED;
 }

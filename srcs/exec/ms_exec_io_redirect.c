@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 19:08:04 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/08 20:34:43 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:29:01 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ t_bool	ms_exec_io_file(t_ast *ast, t_exec *exec_info, t_env **env)
 
 t_bool	ms_exec_io_file_write(t_exec *exec_info, char *filename)
 {
-	if (exec_info->fd[1] != -1)
+	if (exec_info->fd[1] != CLOSED)
 	{
 		close(exec_info->fd[1]);
-		exec_info->fd[1] = -1;
+		exec_info->fd[1] = CLOSED;
 	}
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec_info->fd[1] == -1)
+	if (exec_info->fd[1] == CLOSED)
 	{
 		ms_puterror_cmd(NULL, filename);
 		return (FALSE);
@@ -57,13 +57,13 @@ t_bool	ms_exec_io_file_write(t_exec *exec_info, char *filename)
 
 t_bool	ms_exec_io_file_append(t_exec *exec_info, char *filename)
 {
-	if (exec_info->fd[1] != -1)
+	if (exec_info->fd[1] != CLOSED)
 	{
 		close(exec_info->fd[1]);
-		exec_info->fd[1] = -1;
+		exec_info->fd[1] = CLOSED;
 	}
 	exec_info->fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (exec_info->fd[1] == -1)
+	if (exec_info->fd[1] == CLOSED)
 	{
 		ms_puterror_cmd(NULL, filename);
 		return (FALSE);
@@ -73,13 +73,13 @@ t_bool	ms_exec_io_file_append(t_exec *exec_info, char *filename)
 
 t_bool	ms_exec_io_file_read(t_exec *exec_info, char *filename)
 {
-	if (exec_info->fd[0] != -1)
+	if (exec_info->fd[0] != CLOSED)
 	{
 		close(exec_info->fd[0]);
-		exec_info->fd[0] = -1;
+		exec_info->fd[0] = CLOSED;
 	}
 	exec_info->fd[0] = open(filename, O_RDONLY);
-	if (exec_info->fd[0] == -1)
+	if (exec_info->fd[0] == CLOSED)
 	{
 		ms_puterror_cmd(NULL, filename);
 		return (FALSE);

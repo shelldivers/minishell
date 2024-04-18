@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 19:23:38 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/05 11:48:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:35:59 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ void	ms_init_exec_info(t_exec *exec_info)
 	ft_memset(exec_info, 0, sizeof(t_exec));
 	exec_info->origin_fd[0] = dup(STDIN_FILENO);
 	exec_info->origin_fd[1] = dup(STDOUT_FILENO);
-	exec_info->fd[0] = -1;
-	exec_info->fd[1] = -1;
-	exec_info->pipe[0][0] = -1;
-	exec_info->pipe[0][1] = -1;
-	exec_info->pipe[1][0] = -1;
-	exec_info->pipe[1][1] = -1;
+	exec_info->fd[0] = CLOSED;
+	exec_info->fd[1] = CLOSED;
+	exec_info->pipe[0][0] = CLOSED;
+	exec_info->pipe[0][1] = CLOSED;
+	exec_info->pipe[1][0] = CLOSED;
+	exec_info->pipe[1][1] = CLOSED;
 	i = 0;
 	while (i < 7)
-		exec_info->heredoc_fd[i++] = -1;
+		exec_info->heredoc_fd[i++] = CLOSED;
 }
 
 void	ms_clear_sec_dimentional(char **words)
@@ -65,10 +65,10 @@ void	ms_clear_heredoc(t_exec *exec_info)
 		if (access(filename, F_OK) == 0)
 			unlink(filename);
 		free(filename);
-		if (exec_info->heredoc_fd[seq] != -1)
+		if (exec_info->heredoc_fd[seq] != CLOSED)
 		{
 			close(exec_info->heredoc_fd[seq]);
-			exec_info->heredoc_fd[seq] = -1;
+			exec_info->heredoc_fd[seq] = CLOSED;
 		}
 		seq--;
 	}
@@ -85,8 +85,8 @@ void	ms_reset_exec_info(t_exec *exec_info)
 
 void	ms_reset_io(t_exec *exec_info)
 {
-	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == -1)
+	if (dup2(exec_info->origin_fd[0], STDIN_FILENO) == FAILED)
 		ms_puterror_cmd(NULL, "dup2");
-	if (dup2(exec_info->origin_fd[1], STDOUT_FILENO) == -1)
+	if (dup2(exec_info->origin_fd[1], STDOUT_FILENO) == FAILED)
 		ms_puterror_cmd(NULL, "dup2");
 }

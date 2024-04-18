@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/07 21:35:27 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/07 21:38:51 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:23:52 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,4 @@
 int	s_isdir(int m)
 {
 	return (((m) & S_IFMT) == S_IFDIR);
-}
-
-void	ms_is_dir(char **words)
-{
-	if (ft_strchr(words[0], '/'))
-	{
-		if (access(words[0], F_OK & X_OK) == -1)
-		{
-			ms_puterror_no_file(words[0]);
-			exit(127);
-		}
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 12:31:49 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/08 20:37:20 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:27:17 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ t_bool	ms_exec_in_order(t_ast *ast, t_exec *exec_info, t_env **env)
 	if (ast->op != OPNONE)
 	{
 		status = ms_exec_based_on_op(ast, exec_info, env);
-		if (status == -1)
+		if (status == FAILED)
 			return (TRUE);
-		else if (status == 0)
+		else if (status == FALSE)
 			return (FALSE);
 	}
 	if (!ms_exec_in_order(right, exec_info, env)
@@ -83,7 +83,7 @@ int	ms_exec_based_on_op(t_ast *ast, t_exec *exec_info, t_env **env)
 		ms_reset_io(exec_info);
 		if ((ast->op == OPAND_IF && g_exit != 0)
 			|| (ast->op == OPOR_IF && g_exit == 0))
-			return (-1);
+			return (FAILED);
 	}
 	else if (ast->op == OPPIPE)
 	{

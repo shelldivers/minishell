@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:12:52 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/05 13:54:58 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 19:50:45 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 #include "ms_env.h"
 #include "ms_expand.h"
 #include "ms_parser.h"
+#include "ms_exec.h"
 
-static t_bool	re_syntaxing(t_queue *queue, const char *str);
-static char		*get_pos(const char *str);
-static t_bool	is_cspn(char ch);
+static char		*check_env_val(char *val);
 
 char	**ms_expand_params(char **argv, t_env *env)
 {
@@ -31,7 +30,7 @@ char	**ms_expand_params(char **argv, t_env *env)
 		return (NULL);
 	while (*argv)
 	{
-		tmp = ft_strdup(*argv);
+		tmp = check_env_val(*argv);
 		if (!tmp)
 			return (NULL);
 		if (!ms_expand_param(queue, tmp, env))
@@ -48,97 +47,14 @@ char	**ms_expand_params(char **argv, t_env *env)
 	return (expanded);
 }
 
-t_bool	ms_expand_param(t_queue *queue, char *str, t_env *env)
+static char	*check_env_val(char *val)
 {
-	char	*pos;
-	char	*replace;
-	t_bool	result;
+	char	*tmp;
 
-	while (1)
-	{
-		pos = get_pos(str);
-		if (!pos)
-			break ;
-		replace = ms_dollar_expand(str, pos, env);
-		free(str);
-		if (!replace)
-			return (FALSE);
-		str = replace;
-	}
-	result = re_syntaxing(queue, str);
-	free(str);
-	if (!result)
-		return (FALSE);
-	return (TRUE);
-}
-
-static t_bool	re_syntaxing(t_queue *queue, const char *str)
-{
-	t_syntax	re_syntax;
-	int			i;
-
-	if (*str == '\0')
-		return (TRUE);
-	re_syntax = (t_syntax){(char *)str, NULL, 0};
-	ms_tokenizer(&re_syntax);
-	i = 0;
-	while (re_syntax.words[i])
-	{
-		if (!ms_enqueue(queue, re_syntax.words[i]))
-		{
-			while (re_syntax.words[i])
-				free(re_syntax.words[i++]);
-			free(re_syntax.words);
-			return (FALSE);
-		}
-		i++;
-	}
-	free(re_syntax.words);
-	return (TRUE);
-}
-
-static char	*get_pos(const char *str)
-{
-	char	*pos;
-	t_bool	dquote;
-	t_bool	quote;
-
-	pos = (char *) str;
-	dquote = FALSE;
-	quote = FALSE;
-	while (*pos)
-	{
-		if (!quote && *pos == '\"')
-			dquote = (t_bool) !dquote;
-		else if (!dquote && *pos == '\'')
-		{
-			if (quote || ft_strchr(pos + 1, '\''))
-				quote = (t_bool) !quote;
-		}
-		else if (!quote && *pos == '$' && *(pos + 1) != '\0'
-			&& is_cspn(*(pos + 1)))
-			return (pos);
-		pos++;
-	}
-	return (NULL);
-}
-
-static t_bool	is_cspn(char ch)
-{
-	int			i;
-	const char	cspn[] = {
-		'*', '@', '#', '?', '-', '$',
-		'?', '!', '\'', '\"', '\0'
-	};
-
-	if (ft_isalnum(ch) || ch == '_')
-		return (TRUE);
-	i = 0;
-	while (cspn[i])
-	{
-		if (ch == cspn[i])
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
+	tmp = NULL;
+	if (ft_strcmp(val, "\"$\"") == 0)
+		tmp = ms_quote_removal_dup(val, 0, 0);
+	else
+		tmp = ft_strdup(val);
+	return (tmp);
 }

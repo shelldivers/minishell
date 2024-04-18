@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:34:39 by jeongwpa          #+#    #+#             */
-/*   Updated: 2024/04/05 21:06:34 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:36:00 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static char	**ms_append_envp(char **argv, t_env **env, char ***envp)
 	while (argv[size] && ft_strchr(argv[size], '=') != NULL)
 		size++;
 	new_envp = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!*new_envp)
+	if (!new_envp)
 		return (NULL);
 	new_envp[size] = NULL;
 	assign_envp(argv, new_envp, size);

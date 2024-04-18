@@ -6,7 +6,7 @@
 /*   By: jiwojung <jiwojung@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:06:40 by jiwojung          #+#    #+#             */
-/*   Updated: 2024/04/09 20:22:27 by jiwojung         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:07:38 by jiwojung         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,11 @@ char **words, int (f)(int, char **, t_env **))
 {
 	const int	argc = ms_words_size(words);
 
-	ms_dup_pipe(exec_info);
+	(void)exec_info;
 	if (!f)
 		ms_exit(argc, words, env, 0);
 	else
 		g_exit = f(argc, words, env);
-	ms_close_pipe(exec_info);
 	return (TRUE);
 }
 
@@ -83,16 +82,16 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	pid_t	pid;
 
 	pid = fork();
-	if (pid == -1)
+	if (pid == FAILED)
 		ms_puterror_fork();
 	if (pid == 0)
 	{
-		if (!words || !words[0])
+		if (!words)
 			exit(g_exit);
+		else if (!words[0])
+			exit(0);
 		ms_set_signal_default();
 		ms_add_path(words, env);
-		ms_dup_pipe(exec_info);
-		ms_close_all_fd(exec_info);
 		execve(words[0], words, ms_env_serialize(*env));
 		ms_puterror_no_command(words[0]);
 		exit(127);
@@ -100,7 +99,6 @@ void	ms_exec_non_builtin(t_exec *exec_info, t_env **env, char **words)
 	else
 	{
 		ms_set_signal_ignore();
-		ms_close_pipe(exec_info);
 		exec_info->pid = pid;
 	}
 }
