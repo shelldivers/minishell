@@ -62,8 +62,6 @@ E-.->X[Commands]
 
 # [WORKS]
 
-We don
-
 ## [Builtins]
 
 #### **`echo`** with option -n   
@@ -81,7 +79,6 @@ We don
 #### **`exit`** with no options
 
 ## [Expands]
-
 
 #### Handle environment variables ($ followed by a sequence of characters) which should expand to their values   
 
@@ -121,6 +118,16 @@ We don
 ## [GRAMMAR](grammar.md)
 
 ## [Warning!]
+
+### usage
+
+We do not handle unclosed quotes!   
+
+If a quote remains unclosed and leaves an odd number of quotes, the remaining quote is interpreted as a single character!   
+
+Please be mindful of this when using   
+
+### compatibility
 
 The program is compiled by `clang 12` with `Mac OS`   
 You can use our makefile for compile, but it requires GNU's readline library!
