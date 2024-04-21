@@ -74,8 +74,7 @@ Assignment to the name within a returned ASSIGNMENT_WORD token shall occur as sp
 /* -------------------------------------------------------
    The grammar symbols
    ------------------------------------------------------- */
-%token  WORD			// 명령어 집합
-%token	IO_NUMBER
+%token  WORD
 
 /* The following are the operators (see XBD Operator)
    containing more than one character. */
