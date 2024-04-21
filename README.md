@@ -1,19 +1,13 @@
 ## [Introdution](#creating-a-simple-shell-shell)
 ## [Work Flow](#work-flow-1)
 ## [Architecture](#architecture-1)
-
 ## [Works](#works-1)
-
-### [**jeongwpa**]
-#### [Builtins](#builtins-1)
-#### [Expands](#expands-1)
-#### [Signals](#signals-1)
-#### [Bonus](#bonus-2)
-
-### [**jiwojung**]
-#### [Parser](#parser-1)
-#### [Excution](#excution-1)
-#### [Bonus](#bonus-2)
+[Builtins](#builtins-1)   
+[Expands](#expands-1)   
+[Signals](#signals-1)   
+[Parser](#parser-1)   
+[Excution](#excution-1)   
+[Bonus](#bonus-1)   
 
 ## [Warning!](#warning-1)
 
@@ -122,7 +116,7 @@ We don
 
 ### [Error]
 
-Handling exit status, error messages   
+#### Handling exit status, error messages   
 
 ## [GRAMMAR](grammar.md)
 
@@ -131,7 +125,7 @@ Handling exit status, error messages
 The program is compiled by `clang 12` with `Mac OS`   
 You can use our makefile for compile, but it requires GNU's readline library!
 
-***enjoy our shell***:troll:
+***enjoy our shell***:trollface:
 
 
 
