@@ -1,6 +1,25 @@
-# creating a simple shell :shell:
+## [Introdution](#creating-a-simple-shell-shell)
+## [Work Flow](#work-flow-1)
+## [Architecture](#architecture-1)
 
-This project is about creating a simple shell by simple [rules](SUBJECT.md)   
+## [Works](#works-1)
+
+### [**jeongwpa**]
+#### [Builtins](#builtins-1)
+#### [Expands](#expands-1)
+#### [Signals](#signals-1)
+#### [Bonus](#bonus-2)
+
+### [**jiwojung**]
+#### [Parser](#parser-1)
+#### [Excution](#excution-1)
+#### [Bonus](#bonus-2)
+
+## [Warning!](#warning-1)
+
+# [creating a simple shell] :shell:
+
+This project is about creating a simple shell by simple [rules](minishell.pdf)   
 
 Minishell is a project to creating a lightweight shell capable of parsing and executing **simple commands**, **pipe line**, **redirections** from a single line input.   
 
@@ -9,20 +28,6 @@ It features custom-built built-in commands(`cd`, `echo` ...), handles environmen
 This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-106/doc/bashref.html)   
 
 Yeah, we make own little bash :trollface:
-
-
-## [Work Flow](#work-flow)
-## [Architecture](#design)
-
-## [Works](#todo-1)
-
-### [**jeongwpa**](#jeongwpa)
-#### [Builtins](#Builtins)
-
-### [**jiwojung**](#jiwojung)
-#### [Parse Tree](#parse-tree)
-
-## [Rules](#rules)
 ---
 
 ## [WORK FLOW]
@@ -33,24 +38,29 @@ dateFormat YYYY-MM-DD
 title minishell
 
 section jeongwpa
-	Builtin : active, 2024-02-19, 2024-02-23
-	add dev : done, 2024-02-20, 1d
+	Builtins : done, des1, after sideline1, 14d
+   Expand : done, des2, after des1, 7d
+   Signals : done, des3, after des2, 2d
+   bonus( * ) : done, des4, after des3, 14d
 
 section jiwojung
-	Parse Tree : active, 2024-02-19, 2024-02-23
-	set main : done, 2024-02-19, 1d
+   parser : done, des5, after sideline1, 21d
+	excution : done, des6, after des5, 14d
+   bonus( &&, ||, () ) : done, des7, after des6, 5d
 
-section works
-	start : milestone, 2024-02-19, 0d
-	goal : milestone, 2024-02-29, 0d
+section sideline
+   understanding functions : done, sideline1, 2024-02-19, 1d
+   grammar summary : done, sideline2, 2024-02-22, 2d
+   code review, refactoring : after des4, 7d
+   final test, fix bugs : crit, 2024-04-04, 11d
 ```
 
-## [Design]
+## [Architecture]
 ```mermaid
 flowchart LR
-A[Tokenize]-->B[Parse Tree]-->C[Expand]-->D[Execute]
-D-.->Z[Builtin]
-
+A[Lexer]-->B[Tokenizer]-->C[Parser]-->D[Expands]-->E[Excute]
+E-.->Z[Builtins]
+E-.->X[Commands]
 
 ```
 
@@ -58,9 +68,9 @@ D-.->Z[Builtin]
 
 # [WORKS]
 
-## [jeongwpa]
+We don
 
-### [Builtins 구현]
+## [Builtins]
 
 #### **`echo`** with option -n   
 
@@ -76,94 +86,52 @@ D-.->Z[Builtin]
 
 #### **`exit`** with no options
 
-### [Expand]
-### [Signal]
+## [Expands]
 
-## [jiwojung]
 
-### [Parse Tree]
-### [Excute]
+#### Handle environment variables ($ followed by a sequence of characters) which should expand to their values   
+
+## [Signals]
+
+#### ctrl-C displays a new prompt on a new line   
+#### ctrl-D exits the shell   
+#### ctrl-\ does nothing   
+
+#### also it works differently with **`cat`**
+
+## [Parser]
+
+#### Create own `AST`
+
+#### Create it with reference to [grammar](#grammar)   
+
+## [Excution]
+
+#### Implement **redirections** ( <, >, <<, >> )
+
+#### Implement **pipes** ( | character )
+
+## [Bonus]
+
+#### Implement `&&`, `||`, `parenthesis for priorities`   
+[example](https://github.com/orgs/shelldivers/discussions/13)
+
+#### Implement wildcards `*`    
 
 ---
 
 ### [Error]
 
-# [GRAMMAR]
+Handling exit status, error messages   
 
-```bison
-/* -------------------------------------------------------
-   The grammar symbols
-   ------------------------------------------------------- */
-%token  WORD			// 명령어 집합
-%token	IO_NUMBER
+## [GRAMMAR](grammar.md)
 
-/* The following are the operators (see XBD Operator)
-   containing more than one character. */
+## [Warning!]
 
-%token  AND_IF    OR_IF    PIPE    LBRACE    RBRACE
-/*      '&&'      '||'     '|'       '('       ')'    */
+The program is compiled by `clang 12` with `Mac OS`   
+You can use our makefile for compile, but it requires GNU's readline library!
 
-
-%token  DLESS  DGREAT   DREAD  DWRITE   
-/*      '<<'   '>>'     '<'     '>'    */
-
-
-/* -------------------------------------------------------
-   The Grammar
-   ------------------------------------------------------- */
-%start and_or
-%%
-and_or :               		     pipeline
-                 | and_or AND_IF pipeline
-                 | and_or OR_IF  pipeline
-                 ;
-pipeline         :               command
-                 | pipeline PIPE command
-				     ;
-command          : simple_command
-                 | subshell
-				     | subshell redirect_list
-                 ;
-subshell         : LBRACE and_or RBRACE
-                 ;
-simple_command   : redirect_list cmd_word cmd_suffix
-                 | redirect_list cmd_word
-                 | redirect_list
-                 | cmd_word cmd_suffix
-                 | cmd_word
-                 ;
-cmd_word         : WORD
-                 ;
-redirect_list    :               io_redirect
-                 | redirect_list io_redirect
-                 ;
-cmd_suffix       :            io_redirect
-                 | cmd_suffix io_redirect
-                 |            WORD
-                 | cmd_suffix WORD
-                 ;
-io_redirect      :           io_file
-                 |           io_here
-                 ;
-io_file          : DREAD     filename
-                 | DWRITE    filename
-                 | DGREAT    filename
-                 ;
-filename         : WORD
-                 ;
-io_here          : DLESS     here_end
-                 ;
-here_end         : WORD
-                 ;
-```
-
-
-# [Rules]
-
-1. 이식성이 높고 자주 사용하기 용이한 함수의 경우 ft_ 를 prefix 에 붙여서 `libft` 에 추가   
-ex) ft_strcmp   
-
-
+***enjoy our shell***:troll:
 
 
 
