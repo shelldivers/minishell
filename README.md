@@ -2,12 +2,12 @@
 ## [Work Flow](#work-flow-1)
 ## [Architecture](#architecture-1)
 ## [Works](#works-1)
-[Builtins](#builtins-1)   
-[Expands](#expands-1)   
-[Signals](#signals-1)   
-[Parser](#parser-1)   
-[Excution](#excution-1)   
-[Bonus](#bonus-1)   
+[Builtins](#builtins)   
+[Expands](#expands)   
+[Signals](#signals)   
+[Parser](#parser)   
+[Excution](#excution)   
+[Bonus](#bonus)   
 
 ## [Warning!](#warning-1)
 
