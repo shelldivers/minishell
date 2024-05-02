@@ -24,7 +24,7 @@ This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-
 Yeah, we make own little bash :trollface:
 ---
 
-## [WORK FLOW]
+## WORK FLOW
 
 ```mermaid
 gantt
@@ -49,7 +49,7 @@ section sideline
    final test, fix bugs : crit, 2024-04-04, 11d
 ```
 
-## [Architecture]
+## Architecture
 ```mermaid
 flowchart LR
 A[Lexer]-->B[Tokenizer]-->C[Parser]-->D[Expands]-->E[Excute]
@@ -60,66 +60,66 @@ E-.->X[Commands]
 
 ---
 
-# [WORKS]
+# WORKS
 
-## [Builtins]
+## Builtins
 
-#### **`echo`** with option -n   
+**`echo`** with option -n   
 
-#### **`cd`** with only a relative or absolute path
+**`cd`** with only a relative or absolute path
 
-#### **`pwd`** with no options
+**`pwd`** with no options
 
-#### **`export`** with no options
+**`export`** with no options
 
-#### **`unset`** with no options
+**`unset`** with no options
 
-#### **`env`** with no options or arguments
+**`env`** with no options or arguments
 
-#### **`exit`** with no options
+**`exit`** with no options
 
-## [Expands]
+## Expands
 
-#### Handle environment variables ($ followed by a sequence of characters) which should expand to their values   
+**Handle environment variables ($ followed by a sequence of characters) which should expand to their values**   
 
-## [Signals]
+## Signals
 
-#### ctrl-C displays a new prompt on a new line   
-#### ctrl-D exits the shell   
-#### ctrl-\ does nothing   
+**ctrl-C displays a new prompt on a new line**   
+**ctrl-D exits the shell**   
+**ctrl-\ does nothing**   
 
-#### also it works differently with **`cat`**
+**also it works differently with **`cat`****
 
-## [Parser]
+## Parser
 
-#### Lexer & Tokenizer includes
+**Lexer & Tokenizer includes**
 
-#### Create own `AST`
+**Create own `AST`**
 
-#### Create it with reference to [grammar](#grammar)   
+**Create it with reference to [grammar](#grammar)**   
 
-## [Excution]
+## Excution
 
-#### Implement **redirections** ( <, >, <<, >> )
+**Implement **redirections** ( <, >, <<, >> )**
 
-#### Implement **pipes** ( | character )
+**Implement **pipes** ( | character )**
 
-## [Bonus]
+## Bonus
 
-#### Implement `&&`, `||`, `parenthesis for priorities`   
+**Implement `&&`, `||`, `parenthesis for priorities`**   
 [example](https://github.com/orgs/shelldivers/discussions/13)
 
-#### Implement wildcards `*`    
+**Implement wildcards `*`**    
 
 ---
 
-### [Error]
+### Error
 
-#### Handling exit status, error messages   
+**Handling exit status, error messages**   
 
 ## [GRAMMAR](grammar.md)
 
-## [Warning!]
+## Warning!
 
 ### usage
 
