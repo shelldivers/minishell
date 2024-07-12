@@ -5,8 +5,8 @@
   - [compatibility](#compatibility)
   - [Grammar](#grammar)
   - [Architecture](#architecture)
+  - [Work Flow](#work-flow)
   - [Works](#works)
-    - [Work Flow](#work-flow)
     - [Builtins](#builtins)
     - [Expands](#expands)
     - [Signals](#signals)
@@ -52,9 +52,7 @@ flowchart LR
     E-.->X[Commands]
 ```
 
-## Works
-
-### Work Flow
+## Work Flow
 
 ```mermaid
 gantt
@@ -78,6 +76,8 @@ section sideline
 	code review, refactoring : after des4, 7d
 	final test, fix bugs : crit, 2024-04-04, 11d
 ```
+
+## Works
 
 ### Builtins
 
