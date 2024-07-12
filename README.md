@@ -91,7 +91,7 @@ section sideline
 
 ### Expands
 
-* Handle environment variables ($ followed by a sequence of characters) which should expand to their values   
+* Handle environment variables (`$` followed by a sequence of characters) which should expand to their values
 
 ### Signals
 
