@@ -95,9 +95,9 @@ section sideline
 
 ### Signals
 
-* ctrl-C displays a new prompt on a new line   
-* ctrl-D exits the shell   
-* ctrl-\ does nothing
+* `ctrl - C` displays a new prompt on a new line   
+* `ctrl - D` exits the shell   
+* `ctrl - \` does nothing
 
 > also it works differently with `cat`
 
