@@ -1,9 +1,12 @@
 # Creating a simple Shell :shell:
 
 - [Creating a simple Shell :shell:](#creating-a-simple-shell-shell)
-  - [WorkFlow](#workflow)
+  - [usage](#usage)
+  - [compatibility](#compatibility)
+  - [Grammar](#grammar)
   - [Architecture](#architecture)
   - [Works](#works)
+    - [Work Flow](#work-flow)
     - [Builtins](#builtins)
     - [Expands](#expands)
     - [Signals](#signals)
@@ -11,10 +14,6 @@
     - [Excution](#excution)
     - [Bonus](#bonus)
     - [Error](#error)
-  - [Grammar](#grammar)
-  - [Warning!](#warning)
-    - [usage](#usage)
-    - [compatibility](#compatibility)
 
 This project is about creating a simple shell by simple [rules](minishell.pdf)   
 
@@ -26,7 +25,36 @@ This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-
 
 > Yeah, we make own little bash :trollface:
 
-## WorkFlow
+## usage
+
+We do not handle unclosed quotes!   
+
+If a quote remains unclosed and leaves an odd number of quotes, the remaining quote is interpreted as a single character!   
+
+Please be mindful of this when using   
+
+## compatibility
+
+The program is compiled by `clang 12` with `Mac OS`   
+You can use our makefile for compile, but it requires GNU's readline library!
+
+***enjoy our shell***:trollface:
+
+## Grammar
+
+↗️ [grammar.md](grammar.md)
+
+## Architecture
+```mermaid
+flowchart LR
+    A[Lexer]-->B[Tokenizer]-->C[Parser]-->D[Expands]-->E[Excute]
+    E-.->Z[Builtins]
+    E-.->X[Commands]
+```
+
+## Works
+
+### Work Flow
 
 ```mermaid
 gantt
@@ -50,16 +78,6 @@ section sideline
 	code review, refactoring : after des4, 7d
 	final test, fix bugs : crit, 2024-04-04, 11d
 ```
-
-## Architecture
-```mermaid
-flowchart LR
-    A[Lexer]-->B[Tokenizer]-->C[Parser]-->D[Expands]-->E[Excute]
-    E-.->Z[Builtins]
-    E-.->X[Commands]
-```
-
-## Works
 
 ### Builtins
 
@@ -102,25 +120,4 @@ flowchart LR
 
 ### Error
 
-**Handling exit status, error messages**   
-
-## Grammar
-
-↗️ [grammar.md](grammar.md)
-
-## Warning!
-
-### usage
-
-We do not handle unclosed quotes!   
-
-If a quote remains unclosed and leaves an odd number of quotes, the remaining quote is interpreted as a single character!   
-
-Please be mindful of this when using   
-
-### compatibility
-
-The program is compiled by `clang 12` with `Mac OS`   
-You can use our makefile for compile, but it requires GNU's readline library!
-
-***enjoy our shell***:trollface:
+**Handling exit status, error messages**
