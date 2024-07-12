@@ -1,8 +1,8 @@
 # Creating a simple Shell :shell:
 
 - [Creating a simple Shell :shell:](#creating-a-simple-shell-shell)
-  - [usage](#usage)
-  - [compatibility](#compatibility)
+  - [Usage](#usage)
+  - [Compatibility](#compatibility)
   - [Grammar](#grammar)
   - [Architecture](#architecture)
   - [Work Flow](#work-flow)
@@ -25,7 +25,7 @@ This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-
 
 > Yeah, we make own little bash :trollface:
 
-## usage
+## Usage
 
 We do not handle unclosed quotes!   
 
@@ -33,7 +33,7 @@ If a quote remains unclosed and leaves an odd number of quotes, the remaining qu
 
 Please be mindful of this when using   
 
-## compatibility
+## Compatibility
 
 The program is compiled by `clang 12` with `Mac OS`   
 You can use our makefile for compile, but it requires GNU's readline library!
