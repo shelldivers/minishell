@@ -120,4 +120,4 @@ section sideline
 
 ### Error
 
-**Handling exit status, error messages**
+* Handling exit status, error messages
