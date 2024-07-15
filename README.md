@@ -38,7 +38,7 @@ Please be mindful of this when using
 The program is compiled by `clang 12` with `Mac OS`   
 You can use our makefile for compile, but it requires GNU's readline library!
 
-***enjoy our shell***:trollface:
+***enjoy our shell*** :trollface:
 
 ## Grammar
 
