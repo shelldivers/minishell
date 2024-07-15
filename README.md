@@ -23,7 +23,7 @@ It features custom-built built-in commands(`cd`, `echo` ...), handles environmen
 
 This minishell is based on [bash](https://opensource.apple.com/source/bash/bash-106/doc/bashref.html)   
 
-> Yeah, we make own little bash :trollface:
+***Yeah, we make own little bash*** :trollface:
 
 ## Usage
 
